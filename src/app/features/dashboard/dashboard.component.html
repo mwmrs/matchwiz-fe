@@ -1,0 +1,116 @@
+<ng-container *transloco="let t">
+  <div class="dashboard">
+    <header class="page-header">
+      <h1>{{ t('dashboard.title') }}</h1>
+      <p class="greeting">Welcome back, <strong>{{ authStore.user()?.username }}</strong></p>
+    </header>
+
+    <!-- Missing predictions warning -->
+    @if (missingPredictionsCount() > 0 && upcomingMatchday()) {
+      <div class="alert-card warn-card" role="alert">
+        <mat-icon>warning</mat-icon>
+        <div class="alert-content">
+          <strong>{{ t('dashboard.missingPredictions') }}</strong>
+          <p>{{ t('dashboard.missingPredictionsHint', { count: missingPredictionsCount() }) }}</p>
+        </div>
+        <a
+          mat-flat-button
+          class="accent-btn"
+          [routerLink]="['/predictions', upcomingMatchday()!.id]"
+        >
+          {{ t('dashboard.submitNow') }}
+        </a>
+      </div>
+    }
+
+    <!-- Upcoming matchday -->
+    @if (upcomingMatchday()) {
+      <section class="section">
+        <h2 class="section-title">{{ t('dashboard.upcomingMatchday') }}</h2>
+        <div class="info-card">
+          <div class="info-row">
+            <mat-icon>sports_soccer</mat-icon>
+            <span>{{ t('dashboard.matchday', { number: upcomingMatchday()!.number }) }}</span>
+          </div>
+          <div class="info-row deadline-row">
+            <mat-icon>schedule</mat-icon>
+            <span class="deadline-label">{{ t('dashboard.deadline') }}:</span>
+            <span class="deadline-value">{{ formatDeadline(upcomingMatchday()!.deadline) }}</span>
+          </div>
+          <a
+            mat-stroked-button
+            class="view-btn"
+            [routerLink]="['/predictions', upcomingMatchday()!.id]"
+          >
+            {{ t('nav.predictions') }}
+          </a>
+        </div>
+      </section>
+    }
+
+    <!-- Active competition -->
+    @if (competition()) {
+      <section class="section">
+        <h2 class="section-title">{{ t('dashboard.activeCompetition') }}</h2>
+        <div class="info-card">
+          <div class="comp-info">
+            <span class="comp-name">{{ competition()!.name }}</span>
+            <span class="comp-season">{{ competition()!.season }}</span>
+          </div>
+          <span class="status-badge" [class]="'status-' + competition()!.status.toLowerCase()">
+            {{ t('competition.status.' + competition()!.status) }}
+          </span>
+        </div>
+      </section>
+    }
+
+    <!-- My groups -->
+    <section class="section">
+      <h2 class="section-title">{{ t('dashboard.myGroups') }}</h2>
+      @if (groups().length === 0) {
+        <p class="empty-msg">{{ t('dashboard.noGroups') }}</p>
+      } @else {
+        <div class="groups-grid">
+          @for (group of groups(); track group.id) {
+            <a class="group-card" [routerLink]="['/rankings', group.id]">
+              <mat-icon>group</mat-icon>
+              <div class="group-info">
+                <span class="group-name">{{ group.name }}</span>
+                @if (group.description) {
+                  <span class="group-desc">{{ group.description }}</span>
+                }
+              </div>
+              <mat-icon class="chevron">chevron_right</mat-icon>
+            </a>
+          }
+        </div>
+      }
+    </section>
+
+    <!-- Notifications -->
+    <section class="section">
+      <h2 class="section-title">{{ t('dashboard.notifications') }}</h2>
+      @if (getUnreadNotifications().length === 0) {
+        <p class="empty-msg">{{ t('dashboard.noNotifications') }}</p>
+      } @else {
+        <div class="notifications-list">
+          @for (notification of getUnreadNotifications(); track notification.id) {
+            <div class="notification-item" [class.unread]="!notification.read">
+              <div class="notification-content">
+                <strong class="notification-title">{{ notification.title }}</strong>
+                <p class="notification-msg">{{ notification.message }}</p>
+              </div>
+              <button
+                mat-icon-button
+                [attr.aria-label]="'Mark as read'"
+                (click)="markRead(notification.id)"
+              >
+                <mat-icon>check</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </section>
+  </div>
+</ng-container>

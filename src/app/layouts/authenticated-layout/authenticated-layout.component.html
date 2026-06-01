@@ -1,0 +1,89 @@
+<ng-container *transloco="let t">
+  <mat-sidenav-container class="layout-container">
+    <!-- Desktop sidenav -->
+    <mat-sidenav class="sidenav" mode="side" [opened]="true" position="start">
+      <div class="sidenav-header">
+        <span class="logo-icon">⚽</span>
+        <span class="logo-text">MatchWiz</span>
+      </div>
+      <mat-nav-list>
+        @for (item of navItems; track item.path) {
+          <a mat-list-item [routerLink]="item.path" routerLinkActive="active-link">
+            <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+            <span matListItemTitle>{{ t(item.labelKey) }}</span>
+          </a>
+        }
+        @if (authStore.isAdmin()) {
+          <a mat-list-item routerLink="/admin/competitions" routerLinkActive="active-link">
+            <mat-icon matListItemIcon>admin_panel_settings</mat-icon>
+            <span matListItemTitle>{{ t('nav.admin') }}</span>
+          </a>
+        }
+      </mat-nav-list>
+      <div class="sidenav-footer">
+        <button mat-list-item (click)="logout()">
+          <mat-icon matListItemIcon>logout</mat-icon>
+          <span matListItemTitle>{{ t('auth.logout') }}</span>
+        </button>
+      </div>
+    </mat-sidenav>
+
+    <!-- Main content -->
+    <mat-sidenav-content class="main-content">
+      <!-- Top bar (mobile) -->
+      <mat-toolbar class="top-bar" role="banner">
+        <span class="toolbar-logo">⚽ MatchWiz</span>
+        <span class="spacer"></span>
+        <button
+          mat-icon-button
+          routerLink="/notifications"
+          [attr.aria-label]="t('dashboard.notifications')"
+          [matBadge]="notificationStore.unreadCount() > 0 ? notificationStore.unreadCount() : null"
+          matBadgeColor="warn"
+          matBadgeSize="small"
+        >
+          <mat-icon>notifications</mat-icon>
+        </button>
+        <button mat-icon-button [matMenuTriggerFor]="userMenu" [attr.aria-label]="authStore.user()?.username">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <div class="menu-username">{{ authStore.user()?.username }}</div>
+          <a mat-menu-item routerLink="/preferences">
+            <mat-icon>settings</mat-icon>
+            {{ t('preferences.title') }}
+          </a>
+          @if (authStore.isAdmin()) {
+            <a mat-menu-item routerLink="/admin/competitions">
+              <mat-icon>admin_panel_settings</mat-icon>
+              {{ t('nav.admin') }}
+            </a>
+          }
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            {{ t('auth.logout') }}
+          </button>
+        </mat-menu>
+      </mat-toolbar>
+
+      <div class="content-area">
+        <router-outlet />
+      </div>
+
+      <!-- Bottom navigation (mobile) -->
+      <nav class="bottom-nav" aria-label="Main navigation">
+        @for (item of navItems; track item.path) {
+          <a
+            class="bottom-nav-item"
+            [routerLink]="item.path"
+            routerLinkActive="active"
+            [attr.aria-label]="t(item.labelKey)"
+          >
+            <mat-icon>{{ item.icon }}</mat-icon>
+            <span class="bottom-nav-label">{{ t(item.labelKey) }}</span>
+          </a>
+        }
+      </nav>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</ng-container>

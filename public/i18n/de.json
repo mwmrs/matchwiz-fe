@@ -1,0 +1,139 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "predictions": "Tipps",
+    "rankings": "Rangliste",
+    "profile": "Profil",
+    "admin": "Verwaltung"
+  },
+  "auth": {
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "logout": "Abmelden",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "email": "E-Mail-Adresse (optional)",
+    "loginBtn": "Anmelden",
+    "registerBtn": "Konto erstellen",
+    "noAccount": "Noch kein Konto?",
+    "hasAccount": "Bereits registriert?",
+    "pendingApproval": "Registrierung eingereicht! Dein Konto wartet auf Freischaltung.",
+    "invalidCredentials": "Ungültiger Benutzername oder Passwort.",
+    "usernameTaken": "Dieser Benutzername ist bereits vergeben."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "myGroups": "Meine Gruppen",
+    "activeCompetition": "Aktiver Wettbewerb",
+    "upcomingMatchday": "Nächster Spieltag",
+    "missingPredictions": "Fehlende Tipps",
+    "missingPredictionsHint": "Du hast noch {{ count }} Tipps offen.",
+    "submitNow": "Jetzt tippen",
+    "noGroups": "Du bist noch in keiner Gruppe.",
+    "notifications": "Benachrichtigungen",
+    "noNotifications": "Keine Benachrichtigungen.",
+    "deadline": "Abgabeschluss",
+    "matchday": "Spieltag {{ number }}"
+  },
+  "predictions": {
+    "title": "Spieltag {{ number }}",
+    "submitBtn": "Tipps speichern",
+    "submitted": "Tipps gespeichert!",
+    "lockedHint": "Dieses Spiel hat bereits begonnen.",
+    "home": "Heim",
+    "away": "Auswärts",
+    "kickoff": "Anstoß"
+  },
+  "rankings": {
+    "title": "Rangliste",
+    "rank": "Rang",
+    "player": "Spieler",
+    "points": "Punkte",
+    "exact": "Exakt",
+    "tendency": "Tendenz",
+    "noData": "Noch keine Rangliste verfügbar."
+  },
+  "preferences": {
+    "title": "Einstellungen",
+    "language": "Sprache",
+    "timezone": "Zeitzone",
+    "theme": "Design",
+    "themeLight": "Hell",
+    "themeDark": "Dunkel",
+    "themeSystem": "System",
+    "emailAddress": "E-Mail-Adresse",
+    "emailNotifications": "E-Mail-Benachrichtigungen",
+    "matchdayReminders": "Spieltag-Erinnerungen",
+    "twoFactor": "Zwei-Faktor-Authentifizierung",
+    "saveBtn": "Änderungen speichern",
+    "saved": "Einstellungen gespeichert."
+  },
+  "admin": {
+    "title": "Verwaltung",
+    "competitions": "Wettbewerbe",
+    "groups": "Gruppen",
+    "matches": "Spiele",
+    "createCompetition": "Neuer Wettbewerb",
+    "createGroup": "Neue Gruppe",
+    "createTeam": "Neues Team",
+    "createMatchday": "Neuer Spieltag",
+    "createMatch": "Neues Spiel",
+    "name": "Name",
+    "season": "Saison",
+    "startDate": "Startdatum",
+    "endDate": "Enddatum",
+    "status": "Status",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "invite": "Einladen",
+    "inviteEmail": "E-Mail-Adresse zum Einladen",
+    "sendInvitation": "Einladung senden",
+    "invitationSent": "Einladung gesendet!",
+    "pendingMembers": "Ausstehende Genehmigungen",
+    "approve": "Genehmigen",
+    "approved": "Genehmigt",
+    "teams": "Teams",
+    "matchdays": "Spieltage",
+    "shortName": "Kürzel",
+    "number": "Spieltagnummer",
+    "deadline": "Tippschluss",
+    "homeTeam": "Heimteam",
+    "awayTeam": "Auswärtsteam",
+    "kickoff": "Anstoßzeit",
+    "homeGoals": "Tore Heim",
+    "awayGoals": "Tore Auswärts",
+    "result": "Ergebnis",
+    "enterResult": "Ergebnis eintragen",
+    "scoringRules": "Punkteregeln",
+    "exactResultPoints": "Exaktes Ergebnis (Punkte)",
+    "goalDifferencePoints": "Richtiges Torverhältnis (Punkte)",
+    "tendencyPoints": "Richtige Tendenz (Punkte)"
+  },
+  "competition": {
+    "status": {
+      "DRAFT": "Entwurf",
+      "ACTIVE": "Aktiv",
+      "CLOSED": "Beendet",
+      "ARCHIVED": "Archiviert"
+    }
+  },
+  "match": {
+    "status": {
+      "SCHEDULED": "Geplant",
+      "LIVE": "Live",
+      "FINISHED": "Beendet",
+      "CANCELLED": "Abgesagt"
+    }
+  },
+  "common": {
+    "loading": "Laden...",
+    "error": "Ein Fehler ist aufgetreten. Bitte versuche es erneut.",
+    "noData": "Keine Daten verfügbar.",
+    "back": "Zurück",
+    "close": "Schließen",
+    "confirm": "Bestätigen",
+    "vs": "vs"
+  }
+}

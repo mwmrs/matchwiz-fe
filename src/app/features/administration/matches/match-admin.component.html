@@ -1,0 +1,224 @@
+<ng-container *transloco="let t">
+  <div class="admin-section">
+    <!-- Tab bar -->
+    <div class="tab-bar">
+      <button
+        class="tab-btn"
+        [class.active]="activeTab() === 'teams'"
+        (click)="setTab('teams')"
+      >{{ t('admin.teams') }}</button>
+      <button
+        class="tab-btn"
+        [class.active]="activeTab() === 'matchdays'"
+        (click)="setTab('matchdays')"
+      >{{ t('admin.matchdays') }}</button>
+      <button
+        class="tab-btn"
+        [class.active]="activeTab() === 'matches'"
+        (click)="setTab('matches')"
+      >{{ t('admin.matches') }}</button>
+    </div>
+
+    <!-- Teams tab -->
+    @if (activeTab() === 'teams') {
+      <div class="section-header">
+        <h2>{{ t('admin.teams') }}</h2>
+        <button mat-flat-button class="create-btn" (click)="openCreateTeam()">
+          <mat-icon>add</mat-icon>
+          {{ t('admin.createTeam') }}
+        </button>
+      </div>
+
+      @if (showTeamForm()) {
+        <form [formGroup]="teamForm" (ngSubmit)="saveTeam()" class="admin-form" style="margin-bottom: 16px">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ t('admin.name') }}</mat-label>
+            <input matInput formControlName="name" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ t('admin.shortName') }}</mat-label>
+            <input matInput formControlName="shortName" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Logo URL</mat-label>
+            <input matInput formControlName="logoUrl" />
+          </mat-form-field>
+          <div class="form-actions">
+            <button mat-stroked-button type="button" (click)="cancelTeam()">{{ t('admin.cancel') }}</button>
+            <button mat-flat-button type="submit" class="create-btn" [disabled]="teamForm.invalid">{{ t('admin.save') }}</button>
+          </div>
+        </form>
+      }
+
+      <div class="list">
+        @for (team of teams(); track team.id) {
+          <div class="list-item">
+            <div class="list-item-info">
+              <span class="list-item-name">{{ team.name }}</span>
+              <span class="list-item-sub">{{ team.shortName }}</span>
+            </div>
+            <button mat-icon-button (click)="openEditTeam(team)"><mat-icon>edit</mat-icon></button>
+            <button mat-icon-button (click)="deleteTeam(team.id)"><mat-icon>delete</mat-icon></button>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Matchdays tab -->
+    @if (activeTab() === 'matchdays') {
+      <div class="section-header">
+        <h2>{{ t('admin.matchdays') }}</h2>
+        <button mat-flat-button class="create-btn" (click)="openCreateMatchday()">
+          <mat-icon>add</mat-icon>
+          {{ t('admin.createMatchday') }}
+        </button>
+      </div>
+
+      <mat-form-field appearance="outline" style="max-width: 300px; margin-bottom: 16px">
+        <mat-label>Competition</mat-label>
+        <mat-select (valueChange)="loadMatchdays($event)">
+          @for (comp of competitions(); track comp.id) {
+            <mat-option [value]="comp.id">{{ comp.name }} ({{ comp.season }})</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      @if (showMatchdayForm()) {
+        <form [formGroup]="matchdayForm" (ngSubmit)="saveMatchday()" class="admin-form" style="margin-bottom: 16px">
+          <mat-form-field appearance="outline">
+            <mat-label>Competition</mat-label>
+            <mat-select formControlName="competitionId">
+              @for (comp of competitions(); track comp.id) {
+                <mat-option [value]="comp.id">{{ comp.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ t('admin.number') }}</mat-label>
+            <input matInput type="number" formControlName="number" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ t('admin.deadline') }}</mat-label>
+            <input matInput type="datetime-local" formControlName="deadline" />
+          </mat-form-field>
+          <div class="form-actions">
+            <button mat-stroked-button type="button" (click)="cancelMatchday()">{{ t('admin.cancel') }}</button>
+            <button mat-flat-button type="submit" class="create-btn" [disabled]="matchdayForm.invalid">{{ t('admin.save') }}</button>
+          </div>
+        </form>
+      }
+
+      <div class="list">
+        @for (md of matchdays(); track md.id) {
+          <div class="list-item" (click)="selectMatchday(md)" style="cursor: pointer" [class.selected]="selectedMatchday()?.id === md.id">
+            <div class="list-item-info">
+              <span class="list-item-name">{{ t('dashboard.matchday', { number: md.number }) }}</span>
+              <span class="list-item-sub">{{ t('admin.deadline') }}: {{ formatKickoff(md.deadline) }}</span>
+            </div>
+            <mat-icon>chevron_right</mat-icon>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Matches tab -->
+    @if (activeTab() === 'matches') {
+      <div class="section-header">
+        <h2>{{ t('admin.matches') }}</h2>
+        @if (selectedMatchday()) {
+          <button mat-flat-button class="create-btn" (click)="openCreateMatch()">
+            <mat-icon>add</mat-icon>
+            {{ t('admin.createMatch') }}
+          </button>
+        }
+      </div>
+
+      <mat-form-field appearance="outline" style="max-width: 300px; margin-bottom: 16px">
+        <mat-label>{{ t('admin.matchdays') }}</mat-label>
+        <mat-select (valueChange)="selectMatchday($event)">
+          @for (md of matchdays(); track md.id) {
+            <mat-option [value]="md">{{ t('dashboard.matchday', { number: md.number }) }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      @if (!selectedMatchday()) {
+        <p class="empty-msg">Select a matchday to view matches.</p>
+      }
+
+      @if (showMatchForm() && selectedMatchday()) {
+        <form [formGroup]="matchForm" (ngSubmit)="saveMatch()" class="admin-form" style="margin-bottom: 16px">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ t('admin.homeTeam') }}</mat-label>
+            <mat-select formControlName="homeTeamId">
+              @for (team of teams(); track team.id) {
+                <mat-option [value]="team.id">{{ team.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ t('admin.awayTeam') }}</mat-label>
+            <mat-select formControlName="awayTeamId">
+              @for (team of teams(); track team.id) {
+                <mat-option [value]="team.id">{{ team.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ t('admin.kickoff') }}</mat-label>
+            <input matInput type="datetime-local" formControlName="kickoffTime" />
+          </mat-form-field>
+          <div class="form-actions">
+            <button mat-stroked-button type="button" (click)="cancelMatch()">{{ t('admin.cancel') }}</button>
+            <button mat-flat-button type="submit" class="create-btn" [disabled]="matchForm.invalid">{{ t('admin.save') }}</button>
+          </div>
+        </form>
+      }
+
+      <div class="list">
+        @for (match of matches(); track match.id) {
+          <div class="list-item">
+            <div class="list-item-info">
+              <span class="list-item-name">
+                {{ match.homeTeam?.shortName }} {{ t('common.vs') }} {{ match.awayTeam?.shortName }}
+              </span>
+              <span class="list-item-sub">{{ formatKickoff(match.kickoffTime) }}</span>
+            </div>
+            @if (match.homeGoals !== null && match.homeGoals !== undefined) {
+              <span class="score-chip">{{ match.homeGoals }} : {{ match.awayGoals }}</span>
+            }
+            <button mat-stroked-button (click)="enterResult(match)">{{ t('admin.enterResult') }}</button>
+          </div>
+        }
+      </div>
+
+      @if (editingMatch()) {
+        <div class="result-modal">
+          <h3>{{ t('admin.enterResult') }} — {{ editingMatch()!.homeTeam?.shortName }} vs {{ editingMatch()!.awayTeam?.shortName }}</h3>
+          <form [formGroup]="resultForm" (ngSubmit)="saveResult()" class="result-form">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ t('admin.homeGoals') }}</mat-label>
+              <input matInput type="number" min="0" formControlName="homeGoals" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ t('admin.awayGoals') }}</mat-label>
+              <input matInput type="number" min="0" formControlName="awayGoals" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ t('admin.status') }}</mat-label>
+              <mat-select formControlName="status">
+                @for (s of matchStatuses; track s) {
+                  <mat-option [value]="s">{{ t('match.status.' + s) }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <div class="form-actions">
+              <button mat-stroked-button type="button" (click)="editingMatch.set(null)">{{ t('admin.cancel') }}</button>
+              <button mat-flat-button type="submit" class="create-btn">{{ t('admin.save') }}</button>
+            </div>
+          </form>
+        </div>
+      }
+    }
+  </div>
+</ng-container>

@@ -1,0 +1,78 @@
+<ng-container *transloco="let t">
+  <div class="predictions-page">
+    <header class="page-header">
+      @if (matchday()) {
+        <h1>{{ t('predictions.title', { number: matchday()!.number }) }}</h1>
+      }
+    </header>
+
+    @if (!form) {
+      <div class="loading">
+        <mat-spinner diameter="40" />
+      </div>
+    } @else if (matches().length === 0) {
+      <p class="empty-msg">{{ t('common.noData') }}</p>
+    } @else {
+      <form [formGroup]="form" (ngSubmit)="submit()" class="matches-list">
+        @for (match of matches(); track match.id) {
+          <div class="match-card" [class.locked]="isLocked(match)">
+            <div class="match-kickoff">
+              <mat-icon>schedule</mat-icon>
+              {{ formatKickoff(match.kickoffTime) }}
+              @if (isLocked(match)) {
+                <span class="locked-badge">{{ t('predictions.lockedHint') }}</span>
+              }
+            </div>
+
+            <div class="match-row" [formGroupName]="'match_' + match.id">
+              <div class="team home-team">
+                <span class="team-short">{{ match.homeTeam?.shortName }}</span>
+                <span class="team-name">{{ match.homeTeam?.name }}</span>
+              </div>
+
+              <div class="score-inputs">
+                <input
+                  type="number"
+                  min="0"
+                  max="20"
+                  formControlName="home"
+                  class="score-input"
+                  [disabled]="isLocked(match)"
+                  [attr.aria-label]="t('predictions.home') + ' goals'"
+                />
+                <span class="score-sep">:</span>
+                <input
+                  type="number"
+                  min="0"
+                  max="20"
+                  formControlName="away"
+                  class="score-input"
+                  [disabled]="isLocked(match)"
+                  [attr.aria-label]="t('predictions.away') + ' goals'"
+                />
+              </div>
+
+              <div class="team away-team">
+                <span class="team-short">{{ match.awayTeam?.shortName }}</span>
+                <span class="team-name">{{ match.awayTeam?.name }}</span>
+              </div>
+            </div>
+          </div>
+        }
+
+        <button
+          mat-flat-button
+          type="submit"
+          class="submit-btn"
+          [disabled]="saving()"
+        >
+          @if (saving()) {
+            <mat-spinner diameter="20" />
+          } @else {
+            {{ t('predictions.submitBtn') }}
+          }
+        </button>
+      </form>
+    }
+  </div>
+</ng-container>

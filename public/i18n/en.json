@@ -1,0 +1,139 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "predictions": "Predictions",
+    "rankings": "Rankings",
+    "profile": "Profile",
+    "admin": "Admin"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "username": "Username",
+    "password": "Password",
+    "email": "Email address (optional)",
+    "loginBtn": "Sign in",
+    "registerBtn": "Create account",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "pendingApproval": "Registration submitted! Your account is pending approval.",
+    "invalidCredentials": "Invalid username or password.",
+    "usernameTaken": "Username is already taken."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "myGroups": "My Groups",
+    "activeCompetition": "Active Competition",
+    "upcomingMatchday": "Upcoming Matchday",
+    "missingPredictions": "Missing Predictions",
+    "missingPredictionsHint": "You still have {{ count }} predictions to submit.",
+    "submitNow": "Submit now",
+    "noGroups": "You are not a member of any group yet.",
+    "notifications": "Notifications",
+    "noNotifications": "No notifications.",
+    "deadline": "Deadline",
+    "matchday": "Matchday {{ number }}"
+  },
+  "predictions": {
+    "title": "Matchday {{ number }}",
+    "submitBtn": "Save Predictions",
+    "submitted": "Predictions saved!",
+    "lockedHint": "This match has already started.",
+    "home": "Home",
+    "away": "Away",
+    "kickoff": "Kickoff"
+  },
+  "rankings": {
+    "title": "Rankings",
+    "rank": "Rank",
+    "player": "Player",
+    "points": "Points",
+    "exact": "Exact",
+    "tendency": "Tendency",
+    "noData": "No ranking data available yet."
+  },
+  "preferences": {
+    "title": "Preferences",
+    "language": "Language",
+    "timezone": "Timezone",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
+    "emailAddress": "Email address",
+    "emailNotifications": "Email notifications",
+    "matchdayReminders": "Matchday reminders",
+    "twoFactor": "Two-factor authentication",
+    "saveBtn": "Save changes",
+    "saved": "Preferences saved."
+  },
+  "admin": {
+    "title": "Administration",
+    "competitions": "Competitions",
+    "groups": "Groups",
+    "matches": "Matches",
+    "createCompetition": "New Competition",
+    "createGroup": "New Group",
+    "createTeam": "New Team",
+    "createMatchday": "New Matchday",
+    "createMatch": "New Match",
+    "name": "Name",
+    "season": "Season",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "status": "Status",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "invite": "Invite",
+    "inviteEmail": "Email address to invite",
+    "sendInvitation": "Send invitation",
+    "invitationSent": "Invitation sent!",
+    "pendingMembers": "Pending approvals",
+    "approve": "Approve",
+    "approved": "Approved",
+    "teams": "Teams",
+    "matchdays": "Matchdays",
+    "shortName": "Short name",
+    "number": "Matchday number",
+    "deadline": "Prediction deadline",
+    "homeTeam": "Home team",
+    "awayTeam": "Away team",
+    "kickoff": "Kickoff time",
+    "homeGoals": "Home goals",
+    "awayGoals": "Away goals",
+    "result": "Result",
+    "enterResult": "Enter result",
+    "scoringRules": "Scoring Rules",
+    "exactResultPoints": "Exact result (points)",
+    "goalDifferencePoints": "Correct goal difference (points)",
+    "tendencyPoints": "Correct tendency (points)"
+  },
+  "competition": {
+    "status": {
+      "DRAFT": "Draft",
+      "ACTIVE": "Active",
+      "CLOSED": "Closed",
+      "ARCHIVED": "Archived"
+    }
+  },
+  "match": {
+    "status": {
+      "SCHEDULED": "Scheduled",
+      "LIVE": "Live",
+      "FINISHED": "Finished",
+      "CANCELLED": "Cancelled"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred. Please try again.",
+    "noData": "No data available.",
+    "back": "Back",
+    "close": "Close",
+    "confirm": "Confirm",
+    "vs": "vs"
+  }
+}
