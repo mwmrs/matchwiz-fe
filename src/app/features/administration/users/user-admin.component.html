@@ -1,0 +1,52 @@
+<ng-container *transloco="let t">
+  <div class="admin-section">
+    <div class="section-header">
+      <h2>{{ t('admin.users') }}</h2>
+    </div>
+
+    @if (pendingUsers().length > 0) {
+      <div class="admin-form" style="margin-bottom: 16px">
+        <h3 class="subsection-title">
+          {{ t('admin.pendingUsers') }}
+          <span class="pending-badge">{{ pendingUsers().length }}</span>
+        </h3>
+        <div class="list">
+          @for (user of pendingUsers(); track user.id) {
+            <div class="list-item">
+              <div class="list-item-info">
+                <span class="list-item-name">{{ user.username }}</span>
+                @if (user.email) {
+                  <span class="list-item-sub">{{ user.email }}</span>
+                }
+              </div>
+              <button mat-stroked-button (click)="approve(user.id)" [attr.aria-label]="t('admin.approve') + ' ' + user.username">
+                {{ t('admin.approve') }}
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="admin-form" style="margin-bottom: 16px">
+        <p class="empty-state">{{ t('admin.noPendingUsers') }}</p>
+      </div>
+    }
+
+    <div class="admin-form">
+      <h3 class="subsection-title">{{ t('admin.activeUsers') }} ({{ activeUsers().length }})</h3>
+      <div class="list">
+        @for (user of activeUsers(); track user.id) {
+          <div class="list-item">
+            <div class="list-item-info">
+              <span class="list-item-name">{{ user.username }}</span>
+              @if (user.email) {
+                <span class="list-item-sub">{{ user.email }}</span>
+              }
+            </div>
+            <span class="list-item-sub">{{ user.globalRole }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</ng-container>

@@ -43,8 +43,9 @@ export const AuthStore = signalStore(
                 patchState(store, { user: res.user, token: res.token, loading: false });
                 router.navigate(['/dashboard']);
               },
-              error: () => {
-                patchState(store, { loading: false, error: 'auth.invalidCredentials' });
+              error: (err: { status?: number }) => {
+                const error = err.status === 403 ? 'auth.accountNotApproved' : 'auth.invalidCredentials';
+                patchState(store, { loading: false, error });
               },
             }),
           ),

@@ -8,6 +8,9 @@ export const authHandlers = [
     if (!user || body.password !== 'password') {
       return HttpResponse.json({ message: 'Invalid credentials' }, { status: 401 });
     }
+    if (!user.active) {
+      return HttpResponse.json({ message: 'Account pending approval' }, { status: 403 });
+    }
     return HttpResponse.json({
       token: `mock-jwt-token-${user.id}`,
       user,

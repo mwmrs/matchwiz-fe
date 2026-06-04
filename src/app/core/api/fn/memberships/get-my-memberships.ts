@@ -9,14 +9,12 @@ import { RequestBuilder } from '../../request-builder';
 
 import { GroupMembership } from '../../models/group-membership';
 
-export interface AcceptInvitation$Params {
-  token: string;
+export interface GetMyMemberships$Params {
 }
 
-export function acceptInvitation(http: HttpClient, rootUrl: string, params: AcceptInvitation$Params, context?: HttpContext): Observable<StrictHttpResponse<GroupMembership>> {
-  const rb = new RequestBuilder(rootUrl, acceptInvitation.PATH, 'put');
+export function getMyMemberships(http: HttpClient, rootUrl: string, params?: GetMyMemberships$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<GroupMembership>>> {
+  const rb = new RequestBuilder(rootUrl, getMyMemberships.PATH, 'get');
   if (params) {
-    rb.path('token', params.token, {});
   }
 
   return http.request(
@@ -24,9 +22,9 @@ export function acceptInvitation(http: HttpClient, rootUrl: string, params: Acce
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<GroupMembership>;
+      return r as StrictHttpResponse<Array<GroupMembership>>;
     })
   );
 }
 
-acceptInvitation.PATH = '/invitations/{token}/accept';
+getMyMemberships.PATH = '/users/me/memberships';

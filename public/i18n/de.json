@@ -19,7 +19,8 @@
     "hasAccount": "Bereits registriert?",
     "pendingApproval": "Registrierung eingereicht! Dein Konto wartet auf Freischaltung.",
     "invalidCredentials": "Ungültiger Benutzername oder Passwort.",
-    "usernameTaken": "Dieser Benutzername ist bereits vergeben."
+    "usernameTaken": "Dieser Benutzername ist bereits vergeben.",
+    "accountNotApproved": "Dein Konto wartet auf Freischaltung. Bitte warte, bis ein Admin dein Konto aktiviert."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -30,6 +31,10 @@
     "missingPredictionsHint": "Du hast noch {{ count }} Tipps offen.",
     "submitNow": "Jetzt tippen",
     "noGroups": "Du bist noch in keiner Gruppe.",
+    "pendingApproval": "Freischaltung ausstehend",
+    "joinGroups": "Gruppe beitreten",
+    "joinGroup": "Anfrage stellen",
+    "joinRequestSent": "Beitrittsanfrage gesendet. Warte auf Genehmigung.",
     "notifications": "Benachrichtigungen",
     "noNotifications": "Keine Benachrichtigungen.",
     "deadline": "Abgabeschluss",
@@ -94,6 +99,11 @@
     "pendingMembers": "Ausstehende Genehmigungen",
     "approve": "Genehmigen",
     "approved": "Genehmigt",
+    "users": "Benutzer",
+    "pendingUsers": "Ausstehende Registrierungen",
+    "activeUsers": "Aktive Benutzer",
+    "noPendingUsers": "Keine ausstehenden Registrierungen.",
+    "userApproved": "Benutzer freigegeben!",
     "teams": "Teams",
     "matchdays": "Spieltage",
     "shortName": "Kürzel",

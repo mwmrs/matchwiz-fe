@@ -26,6 +26,10 @@ import { TranslocoModule } from '@jsverse/transloco';
             <mat-icon>sports_soccer</mat-icon>
             {{ t('admin.matches') }}
           </a>
+          <a routerLink="/admin/users" routerLinkActive="active" class="admin-tab">
+            <mat-icon>manage_accounts</mat-icon>
+            {{ t('admin.users') }}
+          </a>
         </nav>
         <div class="admin-content">
           <router-outlet />

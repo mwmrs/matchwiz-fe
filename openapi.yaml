@@ -14,7 +14,6 @@ tags:
   - name: competitions
   - name: groups
   - name: memberships
-  - name: invitations
   - name: teams
   - name: matchdays
   - name: matches
@@ -42,6 +41,8 @@ paths:
                 $ref: '#/components/schemas/LoginResponse'
         '401':
           description: Invalid credentials
+        '403':
+          description: Account pending approval
 
   /auth/register:
     post:
@@ -62,6 +63,43 @@ paths:
                 $ref: '#/components/schemas/User'
         '409':
           description: Username already taken
+
+  /users:
+    get:
+      tags: [users]
+      operationId: listUsers
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /users/{id}/approve:
+    post:
+      tags: [users]
+      operationId: approveUser
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: User approved and activated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
 
   /users/me:
     get:
@@ -94,6 +132,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+
+  /users/me/memberships:
+    get:
+      tags: [memberships]
+      operationId: getMyMemberships
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Current user's group memberships
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GroupMembership'
 
   /competitions:
     get:
@@ -395,10 +449,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/GroupMembership'
 
-  /groups/{id}/invitations:
+  /groups/{id}/join:
     post:
-      tags: [invitations]
-      operationId: createInvitation
+      tags: [memberships]
+      operationId: joinGroup
       security:
         - bearerAuth: []
       parameters:
@@ -408,39 +462,15 @@ paths:
           schema:
             type: integer
             format: int64
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateInvitationRequest'
       responses:
         '201':
-          description: Invitation sent
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Invitation'
-
-  /invitations/{token}/accept:
-    put:
-      tags: [invitations]
-      operationId: acceptInvitation
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: token
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Invitation accepted
+          description: Join request submitted, pending approval
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GroupMembership'
+        '409':
+          description: Already a member or join request pending
 
   /teams:
     get:
@@ -1021,36 +1051,6 @@ components:
         joinedAt:
           type: string
           format: date-time
-
-    Invitation:
-      type: object
-      required: [id, groupId, email, token, expiresAt]
-      properties:
-        id:
-          type: integer
-          format: int64
-        groupId:
-          type: integer
-          format: int64
-        email:
-          type: string
-          format: email
-        token:
-          type: string
-        expiresAt:
-          type: string
-          format: date-time
-        acceptedAt:
-          type: string
-          format: date-time
-
-    CreateInvitationRequest:
-      type: object
-      required: [email]
-      properties:
-        email:
-          type: string
-          format: email
 
     Team:
       type: object

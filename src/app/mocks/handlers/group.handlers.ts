@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { mockGroups, mockMemberships } from '../seed-data';
+import { getUserFromToken } from './user.handlers';
 import type { Group } from '../../core/api/models';
 
 export const groupHandlers = [
@@ -44,6 +45,25 @@ export const groupHandlers = [
     return new HttpResponse(null, { status: 204 });
   }),
 
+  http.post('/api/groups/:id/join', ({ params, request }) => {
+    const user = getUserFromToken(request);
+    if (!user) return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    const groupId = Number(params['id']);
+    const existing = mockMemberships.find((m) => m.groupId === groupId && m.userId === user.id);
+    if (existing) return HttpResponse.json({ message: 'Already a member or request pending' }, { status: 409 });
+    const membership = {
+      id: mockMemberships.length + 1,
+      groupId,
+      userId: user.id,
+      username: user.username,
+      role: 'MEMBER' as const,
+      approved: false,
+      joinedAt: new Date().toISOString(),
+    };
+    mockMemberships.push(membership);
+    return HttpResponse.json(membership, { status: 201 });
+  }),
+
   http.get('/api/groups/:id/members', ({ params }) => {
     const members = mockMemberships.filter((m) => m.groupId === Number(params['id']));
     return HttpResponse.json(members);
@@ -64,19 +84,5 @@ export const groupHandlers = [
     if (!member) return HttpResponse.json({ message: 'Not found' }, { status: 404 });
     member.approved = true;
     return HttpResponse.json(member);
-  }),
-
-  http.post('/api/groups/:id/invitations', async ({ params, request }) => {
-    const body = await request.json() as { email: string };
-    return HttpResponse.json(
-      {
-        id: 1,
-        groupId: Number(params['id']),
-        email: body.email,
-        token: 'mock-token-' + Date.now(),
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-      },
-      { status: 201 },
-    );
   }),
 ];

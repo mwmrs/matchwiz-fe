@@ -19,7 +19,8 @@
     "hasAccount": "Already have an account?",
     "pendingApproval": "Registration submitted! Your account is pending approval.",
     "invalidCredentials": "Invalid username or password.",
-    "usernameTaken": "Username is already taken."
+    "usernameTaken": "Username is already taken.",
+    "accountNotApproved": "Your account is pending approval. Please wait for an admin to activate it."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -30,6 +31,10 @@
     "missingPredictionsHint": "You still have {{ count }} predictions to submit.",
     "submitNow": "Submit now",
     "noGroups": "You are not a member of any group yet.",
+    "pendingApproval": "Pending approval",
+    "joinGroups": "Join a Group",
+    "joinGroup": "Request to join",
+    "joinRequestSent": "Join request submitted. Waiting for approval.",
     "notifications": "Notifications",
     "noNotifications": "No notifications.",
     "deadline": "Deadline",
@@ -94,6 +99,11 @@
     "pendingMembers": "Pending approvals",
     "approve": "Approve",
     "approved": "Approved",
+    "users": "Users",
+    "pendingUsers": "Pending registrations",
+    "activeUsers": "Active users",
+    "noPendingUsers": "No pending registrations.",
+    "userApproved": "User approved!",
     "teams": "Teams",
     "matchdays": "Matchdays",
     "shortName": "Short name",

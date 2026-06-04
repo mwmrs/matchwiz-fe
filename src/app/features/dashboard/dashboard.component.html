@@ -67,11 +67,11 @@
     <!-- My groups -->
     <section class="section">
       <h2 class="section-title">{{ t('dashboard.myGroups') }}</h2>
-      @if (groups().length === 0) {
+      @if (myGroups().length === 0 && pendingGroups().length === 0) {
         <p class="empty-msg">{{ t('dashboard.noGroups') }}</p>
       } @else {
         <div class="groups-grid">
-          @for (group of groups(); track group.id) {
+          @for (group of myGroups(); track group.id) {
             <a class="group-card" [routerLink]="['/rankings', group.id]">
               <mat-icon>group</mat-icon>
               <div class="group-info">
@@ -83,9 +83,46 @@
               <mat-icon class="chevron">chevron_right</mat-icon>
             </a>
           }
+          @for (group of pendingGroups(); track group.id) {
+            <div class="group-card group-card--pending">
+              <mat-icon>hourglass_empty</mat-icon>
+              <div class="group-info">
+                <span class="group-name">{{ group.name }}</span>
+                <span class="group-desc">{{ t('dashboard.pendingApproval') }}</span>
+              </div>
+            </div>
+          }
         </div>
       }
     </section>
+
+    <!-- Join a group -->
+    @if (availableGroups().length > 0) {
+      <section class="section">
+        <h2 class="section-title">{{ t('dashboard.joinGroups') }}</h2>
+        <div class="groups-grid">
+          @for (group of availableGroups(); track group.id) {
+            <div class="group-card group-card--available">
+              <mat-icon>group_add</mat-icon>
+              <div class="group-info">
+                <span class="group-name">{{ group.name }}</span>
+                @if (group.description) {
+                  <span class="group-desc">{{ group.description }}</span>
+                }
+              </div>
+              <button
+                mat-stroked-button
+                class="join-btn"
+                (click)="joinGroup(group.id)"
+                [attr.aria-label]="t('dashboard.joinGroup') + ' ' + group.name"
+              >
+                {{ t('dashboard.joinGroup') }}
+              </button>
+            </div>
+          }
+        </div>
+      </section>
+    }
 
     <!-- Notifications -->
     <section class="section">

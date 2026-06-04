@@ -58,20 +58,6 @@
       </form>
 
       @if (editMode()) {
-        <!-- Invite -->
-        <div class="admin-form" style="margin-bottom: 16px">
-          <h3 class="subsection-title">{{ t('admin.invite') }}</h3>
-          <form [formGroup]="inviteForm" (ngSubmit)="sendInvitation()" class="invite-form">
-            <mat-form-field appearance="outline">
-              <mat-label>{{ t('admin.inviteEmail') }}</mat-label>
-              <input matInput type="email" formControlName="email" />
-            </mat-form-field>
-            <button mat-flat-button type="submit" class="create-btn" [disabled]="inviteForm.invalid">
-              {{ t('admin.sendInvitation') }}
-            </button>
-          </form>
-        </div>
-
         <!-- Pending approvals -->
         @if (pendingMembers.length > 0) {
           <div class="admin-form" style="margin-bottom: 16px">

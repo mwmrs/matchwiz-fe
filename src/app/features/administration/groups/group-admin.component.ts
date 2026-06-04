@@ -47,10 +47,6 @@ export class GroupAdminComponent implements OnInit {
     description: [''],
   });
 
-  protected inviteForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-  });
-
   ngOnInit() {
     this.http.get<Group[]>('/api/groups').subscribe((g) => this.groups.set(g));
     this.http.get<Competition[]>('/api/competitions').subscribe((c) => this.competitions.set(c));
@@ -92,19 +88,6 @@ export class GroupAdminComponent implements OnInit {
         }
         const msg = this.transloco.translate('admin.save');
         this.snackBar.open(msg + ' ✓', '', { duration: 2000 });
-      },
-    });
-  }
-
-  sendInvitation() {
-    if (this.inviteForm.invalid || !this.selectedGroup()) return;
-    const group = this.selectedGroup()!;
-    const { email } = this.inviteForm.getRawValue();
-    this.http.post(`/api/groups/${group.id}/invitations`, { email }).subscribe({
-      next: () => {
-        this.inviteForm.reset();
-        const msg = this.transloco.translate('admin.invitationSent');
-        this.snackBar.open(msg, '', { duration: 3000 });
       },
     });
   }

@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
-import { mockUsers } from '../seed-data';
+import { mockUsers, mockMemberships } from '../seed-data';
 
-function getUserFromToken(request: Request): typeof mockUsers[0] | null {
+export function getUserFromToken(request: Request): typeof mockUsers[0] | null {
   const auth = request.headers.get('Authorization');
   if (!auth) return null;
   const token = auth.replace('Bearer ', '');
@@ -11,10 +11,28 @@ function getUserFromToken(request: Request): typeof mockUsers[0] | null {
 }
 
 export const userHandlers = [
+  http.get('/api/users', () => {
+    return HttpResponse.json(mockUsers);
+  }),
+
+  http.post('/api/users/:id/approve', ({ params }) => {
+    const user = mockUsers.find((u) => u.id === Number(params['id']));
+    if (!user) return HttpResponse.json({ message: 'Not found' }, { status: 404 });
+    user.active = true;
+    return HttpResponse.json(user);
+  }),
+
   http.get('/api/users/me', ({ request }) => {
     const user = getUserFromToken(request);
     if (!user) return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 });
     return HttpResponse.json(user);
+  }),
+
+  http.get('/api/users/me/memberships', ({ request }) => {
+    const user = getUserFromToken(request);
+    if (!user) return HttpResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    const memberships = mockMemberships.filter((m) => m.userId === user.id);
+    return HttpResponse.json(memberships);
   }),
 
   http.patch('/api/users/me', async ({ request }) => {

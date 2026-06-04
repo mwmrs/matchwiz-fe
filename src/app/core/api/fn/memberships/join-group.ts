@@ -7,19 +7,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { CreateInvitationRequest } from '../../models/create-invitation-request';
-import { Invitation } from '../../models/invitation';
+import { GroupMembership } from '../../models/group-membership';
 
-export interface CreateInvitation$Params {
+export interface JoinGroup$Params {
   id: number;
-      body: CreateInvitationRequest
 }
 
-export function createInvitation(http: HttpClient, rootUrl: string, params: CreateInvitation$Params, context?: HttpContext): Observable<StrictHttpResponse<Invitation>> {
-  const rb = new RequestBuilder(rootUrl, createInvitation.PATH, 'post');
+export function joinGroup(http: HttpClient, rootUrl: string, params: JoinGroup$Params, context?: HttpContext): Observable<StrictHttpResponse<GroupMembership>> {
+  const rb = new RequestBuilder(rootUrl, joinGroup.PATH, 'post');
   if (params) {
     rb.path('id', params.id, {});
-    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -27,9 +24,9 @@ export function createInvitation(http: HttpClient, rootUrl: string, params: Crea
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Invitation>;
+      return r as StrictHttpResponse<GroupMembership>;
     })
   );
 }
 
-createInvitation.PATH = '/groups/{id}/invitations';
+joinGroup.PATH = '/groups/{id}/join';

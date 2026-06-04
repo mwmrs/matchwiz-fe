@@ -95,6 +95,13 @@ export const routes: Routes = [
                 (m) => m.MatchAdminComponent,
               ),
           },
+          {
+            path: 'users',
+            loadComponent: () =>
+              import('./features/administration/users/user-admin.component').then(
+                (m) => m.UserAdminComponent,
+              ),
+          },
         ],
       },
     ],
