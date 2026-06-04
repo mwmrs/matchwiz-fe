@@ -1,6 +1,9 @@
 <ng-container *transloco="let t">
   <div class="rankings-page">
     <header class="page-header">
+      <a mat-icon-button routerLink="/rankings" [attr.aria-label]="t('common.back')">
+        <mat-icon>arrow_back</mat-icon>
+      </a>
       <h1>{{ t('rankings.title') }}</h1>
     </header>
 

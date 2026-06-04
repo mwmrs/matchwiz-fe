@@ -1,6 +1,9 @@
 <ng-container *transloco="let t">
   <div class="predictions-page">
     <header class="page-header">
+      <a mat-icon-button routerLink="/predictions" [attr.aria-label]="t('common.back')">
+        <mat-icon>arrow_back</mat-icon>
+      </a>
       @if (matchday()) {
         <h1>{{ t('predictions.title', { number: matchday()!.number }) }}</h1>
       }

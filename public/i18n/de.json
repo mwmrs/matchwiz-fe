@@ -40,6 +40,16 @@
     "deadline": "Abgabeschluss",
     "matchday": "Spieltag {{ number }}"
   },
+  "groupPicker": {
+    "predictionsTitle": "Gruppe wählen — Tipps",
+    "rankingsTitle": "Gruppe wählen — Rangliste",
+    "noGroups": "Du bist noch kein Mitglied einer Gruppe.",
+    "goToDashboard": "Zum Dashboard"
+  },
+  "matchdayList": {
+    "title": "Spieltag wählen",
+    "upcoming": "Bevorstehend"
+  },
   "predictions": {
     "title": "Spieltag {{ number }}",
     "submitBtn": "Tipps speichern",

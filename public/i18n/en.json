@@ -40,6 +40,16 @@
     "deadline": "Deadline",
     "matchday": "Matchday {{ number }}"
   },
+  "groupPicker": {
+    "predictionsTitle": "Select Group — Predictions",
+    "rankingsTitle": "Select Group — Rankings",
+    "noGroups": "You are not a member of any group yet.",
+    "goToDashboard": "Go to Dashboard"
+  },
+  "matchdayList": {
+    "title": "Select Matchday",
+    "upcoming": "Upcoming"
+  },
   "predictions": {
     "title": "Matchday {{ number }}",
     "submitBtn": "Save Predictions",

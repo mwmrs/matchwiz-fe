@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, input, OnInit, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,7 +11,7 @@ import type { RankingEntry } from '../../core/api/models';
 
 @Component({
   selector: 'app-ranking',
-  imports: [MatTableModule, MatProgressSpinnerModule, MatIconModule, TranslocoModule],
+  imports: [RouterLink, MatButtonModule, MatTableModule, MatProgressSpinnerModule, MatIconModule, TranslocoModule],
   templateUrl: './ranking.component.html',
   styleUrl: './ranking.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

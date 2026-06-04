@@ -5,6 +5,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { adminGuard } from './core/guards/admin.guard';
 import { publicGuard } from './core/guards/public.guard';
 import { AdminShellComponent } from './features/administration/admin-shell.component';
+import { GroupPickerComponent } from './features/group-picker/group-picker.component';
 
 export const routes: Routes = [
   {
@@ -37,23 +38,34 @@ export const routes: Routes = [
       },
       {
         path: 'predictions',
-        redirectTo: 'dashboard',
-      },
-      {
-        path: 'predictions/:matchdayId',
-        loadComponent: () =>
-          import('./features/predictions/matchday-prediction.component').then(
-            (m) => m.MatchdayPredictionComponent,
-          ),
+        children: [
+          { path: '', component: GroupPickerComponent, data: { target: 'predictions' } },
+          {
+            path: 'group/:groupId',
+            loadComponent: () =>
+              import('./features/predictions/matchday-list.component').then(
+                (m) => m.MatchdayListComponent,
+              ),
+          },
+          {
+            path: ':matchdayId',
+            loadComponent: () =>
+              import('./features/predictions/matchday-prediction.component').then(
+                (m) => m.MatchdayPredictionComponent,
+              ),
+          },
+        ],
       },
       {
         path: 'rankings',
-        redirectTo: 'dashboard',
-      },
-      {
-        path: 'rankings/:groupId',
-        loadComponent: () =>
-          import('./features/rankings/ranking.component').then((m) => m.RankingComponent),
+        children: [
+          { path: '', component: GroupPickerComponent, data: { target: 'rankings' } },
+          {
+            path: ':groupId',
+            loadComponent: () =>
+              import('./features/rankings/ranking.component').then((m) => m.RankingComponent),
+          },
+        ],
       },
       {
         path: 'preferences',

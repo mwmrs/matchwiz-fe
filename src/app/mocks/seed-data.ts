@@ -78,6 +78,7 @@ export const mockMemberships: GroupMembership[] = [
   { id: 2, groupId: 1, userId: 2, username: 'alice', role: 'MEMBER', approved: true, joinedAt: '2026-01-10T00:00:00Z' },
   { id: 3, groupId: 1, userId: 3, username: 'bob', role: 'MEMBER', approved: false, joinedAt: '2026-01-15T00:00:00Z' },
   { id: 4, groupId: 2, userId: 1, username: 'admin', role: 'GROUP_ADMIN', approved: true, joinedAt: '2026-01-01T00:00:00Z' },
+  { id: 5, groupId: 3, userId: 1, username: 'admin', role: 'MEMBER', approved: true, joinedAt: '2026-01-20T00:00:00Z' },
 ];
 
 export const mockTeams: Team[] = [
@@ -92,6 +93,8 @@ export const mockTeams: Team[] = [
 export const mockMatchdays: Matchday[] = [
   { id: 1, competitionId: 1, number: 33, deadline: '2026-05-15T13:30:00Z' },
   { id: 2, competitionId: 1, number: 34, deadline: '2026-05-23T13:30:00Z' },
+  { id: 3, competitionId: 2, number: 1, deadline: '2026-06-12T11:00:00Z' },
+  { id: 4, competitionId: 2, number: 2, deadline: '2026-06-16T11:00:00Z' },
 ];
 
 export const mockMatches: Match[] = [

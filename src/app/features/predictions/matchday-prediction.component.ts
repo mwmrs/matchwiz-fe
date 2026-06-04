@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input, OnInit, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,6 +13,7 @@ import type { Match, Matchday, Prediction } from '../../core/api/models';
 @Component({
   selector: 'app-matchday-prediction',
   imports: [
+    RouterLink,
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
