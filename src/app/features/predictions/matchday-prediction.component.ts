@@ -27,6 +27,7 @@ import type { Match, Matchday, Prediction } from '../../core/api/models';
 })
 export class MatchdayPredictionComponent implements OnInit {
   readonly matchdayId = input.required<string>();
+  readonly groupId = input.required<string>();
 
   private readonly http = inject(HttpClient);
   private readonly fb = inject(FormBuilder);
@@ -52,7 +53,7 @@ export class MatchdayPredictionComponent implements OnInit {
     forkJoin({
       matchday: this.http.get<Matchday>(`/api/matchdays/${id}`),
       matches: this.http.get<Match[]>(`/api/matchdays/${id}/matches`),
-      predictions: this.http.get<Prediction[]>(`/api/matchdays/${id}/predictions`),
+      predictions: this.http.get<Prediction[]>(`/api/matchdays/${id}/predictions?groupId=${this.groupId()}`),
     }).subscribe({
       next: ({ matchday, matches, predictions }) => {
         this.matchday.set(matchday);
@@ -104,7 +105,7 @@ export class MatchdayPredictionComponent implements OnInit {
       })
       .filter((p) => p.predictedHomeGoals !== null && p.predictedAwayGoals !== null);
 
-    this.http.post<Prediction[]>(`/api/matchdays/${id}/predictions`, payload).subscribe({
+    this.http.post<Prediction[]>(`/api/matchdays/${id}/predictions?groupId=${this.groupId()}`, payload).subscribe({
       next: () => {
         this.saving.set(false);
         const msg = this.transloco.translate('predictions.submitted');

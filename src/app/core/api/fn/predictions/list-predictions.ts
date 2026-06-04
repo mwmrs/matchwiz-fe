@@ -11,12 +11,14 @@ import { Prediction } from '../../models/prediction';
 
 export interface ListPredictions$Params {
   id: number;
+  groupId: number;
 }
 
 export function listPredictions(http: HttpClient, rootUrl: string, params: ListPredictions$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Prediction>>> {
   const rb = new RequestBuilder(rootUrl, listPredictions.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
+    rb.query('groupId', params.groupId, {});
   }
 
   return http.request(

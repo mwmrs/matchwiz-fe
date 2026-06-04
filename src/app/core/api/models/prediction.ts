@@ -3,6 +3,7 @@
 
 export interface Prediction {
   awardedPoints?: number;
+  groupId: number;
   id: number;
   matchId: number;
   predictedAwayGoals: number;

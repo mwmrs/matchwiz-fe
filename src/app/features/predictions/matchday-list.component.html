@@ -24,7 +24,7 @@
       <ul class="matchday-items" role="list">
         @for (md of matchdays(); track md.id) {
           <li>
-            <a class="matchday-card" [routerLink]="['/predictions', md.id]">
+            <a class="matchday-card" [routerLink]="['/predictions', 'group', groupId(), 'matchday', md.id]">
               <mat-icon aria-hidden="true">sports_soccer</mat-icon>
               <div class="md-info">
                 <span class="md-name">{{ t('dashboard.matchday', { number: md.number }) }}</span>

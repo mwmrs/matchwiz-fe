@@ -35,8 +35,6 @@ export class DashboardComponent implements OnInit {
   protected readonly memberships = signal<GroupMembership[]>([]);
   protected readonly competition = signal<Competition | null>(null);
   protected readonly upcomingMatchday = signal<Matchday | null>(null);
-  protected readonly missingPredictionsCount = signal(0);
-
   protected readonly myGroups = computed(() => {
     const approved = new Set(
       this.memberships().filter((m) => m.approved).map((m) => m.groupId),
@@ -69,11 +67,6 @@ export class DashboardComponent implements OnInit {
           const upcoming = sorted.find((md) => new Date(md.deadline) > new Date()) ?? sorted[sorted.length - 1];
           if (upcoming) {
             this.upcomingMatchday.set(upcoming);
-            this.http.get<unknown[]>(`/api/matchdays/${upcoming.id}/matches`).subscribe((matches) => {
-              this.http.get<unknown[]>(`/api/matchdays/${upcoming.id}/predictions`).subscribe((preds) => {
-                this.missingPredictionsCount.set(matches.length - preds.length);
-              });
-            });
           }
         });
       }

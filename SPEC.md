@@ -402,6 +402,7 @@ User settings.
 
 * id
 * user_id
+* group_id
 * match_id
 * predicted_home_goals
 * predicted_away_goals

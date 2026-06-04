@@ -141,8 +141,8 @@ export const mockMatches: Match[] = [
 ];
 
 export const mockPredictions: Prediction[] = [
-  { id: 1, userId: 1, matchId: 1, predictedHomeGoals: 2, predictedAwayGoals: 1, submittedAt: '2026-05-14T10:00:00Z' },
-  { id: 2, userId: 1, matchId: 2, predictedHomeGoals: 1, predictedAwayGoals: 1, submittedAt: '2026-05-14T10:00:00Z' },
+  { id: 1, userId: 1, groupId: 1, matchId: 1, predictedHomeGoals: 2, predictedAwayGoals: 1, submittedAt: '2026-05-14T10:00:00Z' },
+  { id: 2, userId: 1, groupId: 1, matchId: 2, predictedHomeGoals: 1, predictedAwayGoals: 1, submittedAt: '2026-05-14T10:00:00Z' },
 ];
 
 export const mockRankings: RankingEntry[] = [

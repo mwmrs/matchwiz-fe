@@ -5,24 +5,6 @@
       <p class="greeting">{{ t('dashboard.welcome') }}, <strong>{{ authStore.user()?.username }}</strong></p>
     </header>
 
-    <!-- Missing predictions warning -->
-    @if (missingPredictionsCount() > 0 && upcomingMatchday()) {
-      <div class="alert-card warn-card" role="alert">
-        <mat-icon>warning</mat-icon>
-        <div class="alert-content">
-          <strong>{{ t('dashboard.missingPredictions') }}</strong>
-          <p>{{ t('dashboard.missingPredictionsHint', { count: missingPredictionsCount() }) }}</p>
-        </div>
-        <a
-          mat-flat-button
-          class="accent-btn"
-          [routerLink]="['/predictions', upcomingMatchday()!.id]"
-        >
-          {{ t('dashboard.submitNow') }}
-        </a>
-      </div>
-    }
-
     <!-- Upcoming matchday -->
     @if (upcomingMatchday()) {
       <section class="section">
@@ -40,7 +22,7 @@
           <a
             mat-stroked-button
             class="view-btn"
-            [routerLink]="['/predictions', upcomingMatchday()!.id]"
+            routerLink="/predictions"
           >
             {{ t('nav.predictions') }}
           </a>

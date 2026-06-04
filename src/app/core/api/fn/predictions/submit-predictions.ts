@@ -12,6 +12,7 @@ import { SubmitPredictionRequest } from '../../models/submit-prediction-request'
 
 export interface SubmitPredictions$Params {
   id: number;
+  groupId: number;
       body: Array<SubmitPredictionRequest>
 }
 
@@ -19,6 +20,7 @@ export function submitPredictions(http: HttpClient, rootUrl: string, params: Sub
   const rb = new RequestBuilder(rootUrl, submitPredictions.PATH, 'post');
   if (params) {
     rb.path('id', params.id, {});
+    rb.query('groupId', params.groupId, {});
     rb.body(params.body, 'application/json');
   }
 

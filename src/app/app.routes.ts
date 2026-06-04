@@ -48,7 +48,7 @@ export const routes: Routes = [
               ),
           },
           {
-            path: ':matchdayId',
+            path: 'group/:groupId/matchday/:matchdayId',
             loadComponent: () =>
               import('./features/predictions/matchday-prediction.component').then(
                 (m) => m.MatchdayPredictionComponent,

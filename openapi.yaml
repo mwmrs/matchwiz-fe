@@ -696,9 +696,15 @@ paths:
           schema:
             type: integer
             format: int64
+        - name: groupId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
         '200':
-          description: User predictions for a matchday
+          description: User predictions for a matchday within a group
           content:
             application/json:
               schema:
@@ -713,6 +719,12 @@ paths:
       parameters:
         - name: id
           in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: groupId
+          in: query
           required: true
           schema:
             type: integer
@@ -1171,12 +1183,15 @@ components:
 
     Prediction:
       type: object
-      required: [id, userId, matchId, predictedHomeGoals, predictedAwayGoals, submittedAt]
+      required: [id, userId, groupId, matchId, predictedHomeGoals, predictedAwayGoals, submittedAt]
       properties:
         id:
           type: integer
           format: int64
         userId:
+          type: integer
+          format: int64
+        groupId:
           type: integer
           format: int64
         matchId:
