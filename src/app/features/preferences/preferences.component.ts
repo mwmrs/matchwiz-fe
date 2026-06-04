@@ -9,7 +9,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { AuthStore } from '../../core/auth/auth.store';
-import type { UpdateUserRequest } from '../../core/api/models';
+import type { UpdateUserRequest, User } from '../../core/api/models';
 
 @Component({
   selector: 'app-preferences',
@@ -93,6 +93,19 @@ export class PreferencesComponent implements OnInit {
     this.http.patch('/api/users/me', payload).subscribe({
       next: () => {
         this.saving.set(false);
+        const currentUser = this.authStore.user();
+        if (currentUser) {
+          this.authStore.setUser({
+            ...currentUser,
+            email: value.email ?? currentUser.email,
+            preferredLanguage: value.preferredLanguage ?? currentUser.preferredLanguage,
+            timezone: value.timezone ?? currentUser.timezone,
+            theme: (value.theme as User['theme']) ?? currentUser.theme,
+            emailNotifications: value.emailNotifications ?? currentUser.emailNotifications,
+            matchdayReminders: value.matchdayReminders ?? currentUser.matchdayReminders,
+            twoFactorEnabled: value.twoFactorEnabled ?? currentUser.twoFactorEnabled,
+          });
+        }
         if (value.preferredLanguage) {
           this.transloco.setActiveLang(value.preferredLanguage);
         }

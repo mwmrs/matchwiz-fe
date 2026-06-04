@@ -1,7 +1,7 @@
 import { ApplicationConfig, provideAppInitializer, inject, isDevMode, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { provideTransloco } from '@jsverse/transloco';
+import { provideTransloco, TranslocoService } from '@jsverse/transloco';
 
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
@@ -22,9 +22,12 @@ provideRouter(routes, withComponentInputBinding()),
       },
       loader: TranslocoHttpLoader,
     }),
-    provideAppInitializer(() => {
+    provideAppInitializer(async () => {
       const authStore = inject(AuthStore);
-      return authStore.initializeSession();
+      const transloco = inject(TranslocoService);
+      await authStore.initializeSession();
+      const lang = authStore.user()?.preferredLanguage;
+      if (lang) transloco.setActiveLang(lang);
     }),
   ],
 };

@@ -91,6 +91,10 @@ export const AuthStore = signalStore(
       }
     },
 
+    setUser(user: User) {
+      patchState(store, { user });
+    },
+
     clearError() {
       patchState(store, { error: null });
     },
