@@ -1,7 +1,6 @@
-import { ApplicationConfig, APP_INITIALIZER, inject, isDevMode, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, provideAppInitializer, inject, isDevMode, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideTransloco } from '@jsverse/transloco';
 
 import { routes } from './app.routes';
@@ -12,8 +11,7 @@ import { AuthStore } from './core/auth/auth.store';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideAnimationsAsync(),
-    provideRouter(routes, withComponentInputBinding()),
+provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideTransloco({
       config: {
@@ -24,13 +22,9 @@ export const appConfig: ApplicationConfig = {
       },
       loader: TranslocoHttpLoader,
     }),
-    {
-      provide: APP_INITIALIZER,
-      useFactory: () => {
-        const authStore = inject(AuthStore);
-        return () => authStore.initializeSession();
-      },
-      multi: true,
-    },
+    provideAppInitializer(() => {
+      const authStore = inject(AuthStore);
+      return authStore.initializeSession();
+    }),
   ],
 };
