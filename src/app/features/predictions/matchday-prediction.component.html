@@ -31,8 +31,15 @@
 
             <div class="match-row" [formGroupName]="'match_' + match.id">
               <div class="team home-team">
-                <span class="team-short">{{ match.homeTeam?.shortName }}</span>
-                <span class="team-name">{{ match.homeTeam?.name }}</span>
+                <div class="team-text">
+                  <div class="team-main">
+                    @if (match.homeTeam?.logoUrl) {
+                      <img [src]="match.homeTeam!.logoUrl" [alt]="match.homeTeam!.name" class="team-logo" />
+                    }
+                    <span class="team-short">{{ match.homeTeam?.shortName }}</span>
+                  </div>
+                  <span class="team-name">{{ match.homeTeam?.name }}</span>
+                </div>
               </div>
 
               <div class="score-inputs">
@@ -58,8 +65,15 @@
               </div>
 
               <div class="team away-team">
-                <span class="team-short">{{ match.awayTeam?.shortName }}</span>
-                <span class="team-name">{{ match.awayTeam?.name }}</span>
+                <div class="team-text">
+                  <div class="team-main">
+                    <span class="team-short">{{ match.awayTeam?.shortName }}</span>
+                    @if (match.awayTeam?.logoUrl) {
+                      <img [src]="match.awayTeam!.logoUrl" [alt]="match.awayTeam!.name" class="team-logo" />
+                    }
+                  </div>
+                  <span class="team-name">{{ match.awayTeam?.name }}</span>
+                </div>
               </div>
             </div>
           </div>

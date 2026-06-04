@@ -24,6 +24,7 @@
   },
   "dashboard": {
     "title": "Dashboard",
+    "welcome": "Willkommen zurück",
     "myGroups": "Meine Gruppen",
     "activeCompetition": "Aktiver Wettbewerb",
     "upcomingMatchday": "Nächster Spieltag",

@@ -2,7 +2,7 @@
   <div class="dashboard">
     <header class="page-header">
       <h1>{{ t('dashboard.title') }}</h1>
-      <p class="greeting">Welcome back, <strong>{{ authStore.user()?.username }}</strong></p>
+      <p class="greeting">{{ t('dashboard.welcome') }}, <strong>{{ authStore.user()?.username }}</strong></p>
     </header>
 
     <!-- Missing predictions warning -->

@@ -73,18 +73,44 @@
 
 .team {
   display: flex;
+
+  &.home-team {
+    justify-content: flex-end;
+  }
+
+  &.away-team {
+    justify-content: flex-start;
+  }
+}
+
+.team-text {
+  display: flex;
   flex-direction: column;
   gap: 2px;
 
-  &.home-team {
+  .home-team & {
     text-align: right;
     align-items: flex-end;
   }
 
-  &.away-team {
+  .away-team & {
     text-align: left;
     align-items: flex-start;
   }
+}
+
+.team-main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+.team-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .team-short {
