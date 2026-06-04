@@ -6,10 +6,12 @@
       }
     </header>
 
-    @if (!form) {
+    @if (loading()) {
       <div class="loading">
         <mat-spinner diameter="40" />
       </div>
+    } @else if (error()) {
+      <p class="empty-msg">{{ t('common.error') }}</p>
     } @else if (matches().length === 0) {
       <p class="empty-msg">{{ t('common.noData') }}</p>
     } @else {

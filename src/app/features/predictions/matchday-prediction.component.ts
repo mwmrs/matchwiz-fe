@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, OnInit, signal, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, OnInit, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
+import { forkJoin } from 'rxjs';
 import type { Match, Matchday, Prediction } from '../../core/api/models';
 
 @Component({
@@ -34,6 +35,8 @@ export class MatchdayPredictionComponent implements OnInit {
   protected readonly matches = signal<Match[]>([]);
   protected readonly predictions = signal<Prediction[]>([]);
   protected readonly saving = signal(false);
+  protected readonly loading = signal(true);
+  protected readonly error = signal(false);
 
   protected form!: FormGroup;
 
@@ -41,13 +44,25 @@ export class MatchdayPredictionComponent implements OnInit {
 
   ngOnInit() {
     const id = Number(this.matchdayId());
-    this.http.get<Matchday>(`/api/matchdays/${id}`).subscribe((md) => this.matchday.set(md));
-    this.http.get<Match[]>(`/api/matchdays/${id}/matches`).subscribe((matches) => {
-      this.matches.set(matches);
-      this.http.get<Prediction[]>(`/api/matchdays/${id}/predictions`).subscribe((preds) => {
-        this.predictions.set(preds);
-        this.buildForm(matches, preds);
-      });
+    this.loading.set(true);
+    this.error.set(false);
+
+    forkJoin({
+      matchday: this.http.get<Matchday>(`/api/matchdays/${id}`),
+      matches: this.http.get<Match[]>(`/api/matchdays/${id}/matches`),
+      predictions: this.http.get<Prediction[]>(`/api/matchdays/${id}/predictions`),
+    }).subscribe({
+      next: ({ matchday, matches, predictions }) => {
+        this.matchday.set(matchday);
+        this.matches.set(matches);
+        this.predictions.set(predictions);
+        this.buildForm(matches, predictions);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+        this.error.set(true);
+      },
     });
   }
 
