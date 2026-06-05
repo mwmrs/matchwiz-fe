@@ -63,8 +63,8 @@ export class DashboardComponent implements OnInit {
       if (active) {
         this.competition.set(active);
         this.http.get<Matchday[]>(`/api/matchdays?competitionId=${active.id}`).subscribe((mds) => {
-          const sorted = mds.sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
-          const upcoming = sorted.find((md) => new Date(md.deadline) > new Date()) ?? sorted[sorted.length - 1];
+          const sorted = mds.sort((a, b) => a.number - b.number);
+          const upcoming = sorted[sorted.length - 1];
           if (upcoming) {
             this.upcomingMatchday.set(upcoming);
           }
@@ -91,12 +91,4 @@ export class DashboardComponent implements OnInit {
     this.notificationStore.markRead(id);
   }
 
-  protected formatDeadline(deadline: string): string {
-    return new Intl.DateTimeFormat('default', {
-      day: '2-digit',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(new Date(deadline));
-  }
 }

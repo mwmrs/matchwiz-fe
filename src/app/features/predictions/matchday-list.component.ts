@@ -33,9 +33,7 @@ export class MatchdayListComponent implements OnInit {
       }),
     ).subscribe({
       next: (matchdays) => {
-        const sorted = [...matchdays].sort(
-          (a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime(),
-        );
+        const sorted = [...matchdays].sort((a, b) => a.number - b.number);
         this.matchdays.set(sorted);
         this.loading.set(false);
       },
@@ -44,18 +42,5 @@ export class MatchdayListComponent implements OnInit {
         this.loading.set(false);
       },
     });
-  }
-
-  protected isUpcoming(deadline: string): boolean {
-    return new Date(deadline) > new Date();
-  }
-
-  protected formatDeadline(deadline: string): string {
-    return new Intl.DateTimeFormat('default', {
-      day: '2-digit',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(new Date(deadline));
   }
 }

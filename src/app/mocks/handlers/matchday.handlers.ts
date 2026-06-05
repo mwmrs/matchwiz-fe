@@ -18,7 +18,6 @@ export const matchdayHandlers = [
       id: mockMatchdays.length + 1,
       competitionId: body.competitionId ?? 1,
       number: body.number ?? 1,
-      deadline: body.deadline ?? new Date().toISOString(),
     };
     mockMatchdays.push(newMatchday);
     return HttpResponse.json(newMatchday, { status: 201 });

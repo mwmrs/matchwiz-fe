@@ -3,6 +3,5 @@
 
 export interface CreateMatchdayRequest {
   competitionId: number;
-  deadline: string;
   number: number;
 }

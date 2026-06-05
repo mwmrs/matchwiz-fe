@@ -38,7 +38,6 @@
     "joinRequestSent": "Join request submitted. Waiting for approval.",
     "notifications": "Notifications",
     "noNotifications": "No notifications.",
-    "deadline": "Deadline",
     "matchday": "Matchday {{ number }}"
   },
   "groupPicker": {
@@ -119,7 +118,6 @@
     "matchdays": "Matchdays",
     "shortName": "Short name",
     "number": "Matchday number",
-    "deadline": "Prediction deadline",
     "homeTeam": "Home team",
     "awayTeam": "Away team",
     "kickoff": "Kickoff time",

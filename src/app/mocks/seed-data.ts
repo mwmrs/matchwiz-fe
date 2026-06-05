@@ -91,10 +91,10 @@ export const mockTeams: Team[] = [
 ];
 
 export const mockMatchdays: Matchday[] = [
-  { id: 1, competitionId: 1, number: 33, deadline: '2026-05-15T13:30:00Z' },
-  { id: 2, competitionId: 1, number: 34, deadline: '2026-05-23T13:30:00Z' },
-  { id: 3, competitionId: 2, number: 1, deadline: '2026-06-12T11:00:00Z' },
-  { id: 4, competitionId: 2, number: 2, deadline: '2026-06-16T11:00:00Z' },
+  { id: 1, competitionId: 1, number: 33 },
+  { id: 2, competitionId: 1, number: 34 },
+  { id: 3, competitionId: 2, number: 1 },
+  { id: 4, competitionId: 2, number: 2 },
 ];
 
 export const mockMatches: Match[] = [

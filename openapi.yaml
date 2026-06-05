@@ -1091,7 +1091,7 @@ components:
 
     Matchday:
       type: object
-      required: [id, competitionId, number, deadline]
+      required: [id, competitionId, number]
       properties:
         id:
           type: integer
@@ -1101,22 +1101,16 @@ components:
           format: int64
         number:
           type: integer
-        deadline:
-          type: string
-          format: date-time
 
     CreateMatchdayRequest:
       type: object
-      required: [competitionId, number, deadline]
+      required: [competitionId, number]
       properties:
         competitionId:
           type: integer
           format: int64
         number:
           type: integer
-        deadline:
-          type: string
-          format: date-time
 
     Match:
       type: object

@@ -3,7 +3,6 @@
 
 export interface Matchday {
   competitionId: number;
-  deadline: string;
   id: number;
   number: number;
 }

@@ -14,11 +14,6 @@
             <mat-icon>sports_soccer</mat-icon>
             <span>{{ t('dashboard.matchday', { number: upcomingMatchday()!.number }) }}</span>
           </div>
-          <div class="info-row deadline-row">
-            <mat-icon>schedule</mat-icon>
-            <span class="deadline-label">{{ t('dashboard.deadline') }}:</span>
-            <span class="deadline-value">{{ formatDeadline(upcomingMatchday()!.deadline) }}</span>
-          </div>
           <a
             mat-stroked-button
             class="view-btn"

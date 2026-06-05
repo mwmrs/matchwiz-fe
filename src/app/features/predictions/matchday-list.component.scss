@@ -77,29 +77,6 @@
     font-weight: 500;
   }
 
-  .md-deadline {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.875rem;
-    color: var(--mat-sys-on-surface-variant);
-
-    .deadline-icon {
-      font-size: 14px;
-      width: 14px;
-      height: 14px;
-    }
-  }
-
-  .badge-upcoming {
-    font-size: 0.75rem;
-    padding: 2px 8px;
-    border-radius: 12px;
-    background: var(--mat-sys-primary-container);
-    color: var(--mat-sys-on-primary-container);
-    white-space: nowrap;
-  }
-
   .chevron {
     color: var(--mat-sys-on-surface-variant);
   }

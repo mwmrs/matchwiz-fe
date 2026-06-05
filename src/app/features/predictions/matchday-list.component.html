@@ -28,14 +28,7 @@
               <mat-icon aria-hidden="true">sports_soccer</mat-icon>
               <div class="md-info">
                 <span class="md-name">{{ t('dashboard.matchday', { number: md.number }) }}</span>
-                <span class="md-deadline">
-                  <mat-icon class="deadline-icon" aria-hidden="true">schedule</mat-icon>
-                  {{ t('dashboard.deadline') }}: {{ formatDeadline(md.deadline) }}
-                </span>
               </div>
-              @if (isUpcoming(md.deadline)) {
-                <span class="badge-upcoming">{{ t('matchdayList.upcoming') }}</span>
-              }
               <mat-icon class="chevron" aria-hidden="true">chevron_right</mat-icon>
             </a>
           </li>

@@ -87,10 +87,6 @@
             <mat-label>{{ t('admin.number') }}</mat-label>
             <input matInput type="number" formControlName="number" />
           </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>{{ t('admin.deadline') }}</mat-label>
-            <input matInput type="datetime-local" formControlName="deadline" />
-          </mat-form-field>
           <div class="form-actions">
             <button mat-stroked-button type="button" (click)="cancelMatchday()">{{ t('admin.cancel') }}</button>
             <button mat-flat-button type="submit" class="create-btn" [disabled]="matchdayForm.invalid">{{ t('admin.save') }}</button>
@@ -103,7 +99,6 @@
           <div class="list-item" (click)="selectMatchday(md)" style="cursor: pointer" [class.selected]="selectedMatchday()?.id === md.id">
             <div class="list-item-info">
               <span class="list-item-name">{{ t('dashboard.matchday', { number: md.number }) }}</span>
-              <span class="list-item-sub">{{ t('admin.deadline') }}: {{ formatKickoff(md.deadline) }}</span>
             </div>
             <mat-icon>chevron_right</mat-icon>
           </div>

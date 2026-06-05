@@ -38,7 +38,6 @@
     "joinRequestSent": "Beitrittsanfrage gesendet. Warte auf Genehmigung.",
     "notifications": "Benachrichtigungen",
     "noNotifications": "Keine Benachrichtigungen.",
-    "deadline": "Abgabeschluss",
     "matchday": "Spieltag {{ number }}"
   },
   "groupPicker": {
@@ -119,7 +118,6 @@
     "matchdays": "Spieltage",
     "shortName": "Kürzel",
     "number": "Spieltagnummer",
-    "deadline": "Tippschluss",
     "homeTeam": "Heimteam",
     "awayTeam": "Auswärtsteam",
     "kickoff": "Anstoßzeit",

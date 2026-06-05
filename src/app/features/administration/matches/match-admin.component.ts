@@ -59,7 +59,6 @@ export class MatchAdminComponent implements OnInit {
   protected matchdayForm = this.fb.group({
     competitionId: [null as number | null, Validators.required],
     number: [1, [Validators.required, Validators.min(1)]],
-    deadline: ['', Validators.required],
   });
 
   protected matchForm = this.fb.group({
