@@ -84,14 +84,6 @@
       @if (showMatchdayForm()) {
         <form [formGroup]="matchdayForm" (ngSubmit)="saveMatchday()" class="admin-form" style="margin-bottom: 16px">
           <mat-form-field appearance="outline">
-            <mat-label>Competition</mat-label>
-            <mat-select formControlName="competitionId">
-              @for (comp of competitions(); track comp.id) {
-                <mat-option [value]="comp.id">{{ comp.name }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
             <mat-label>{{ t('admin.number') }}</mat-label>
             <input matInput type="number" formControlName="number" />
           </mat-form-field>

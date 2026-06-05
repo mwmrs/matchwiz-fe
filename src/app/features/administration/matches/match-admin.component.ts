@@ -40,6 +40,7 @@ export class MatchAdminComponent implements OnInit {
   protected readonly matchdays = signal<Matchday[]>([]);
   protected readonly matches = signal<Match[]>([]);
   protected readonly selectedMatchday = signal<Matchday | null>(null);
+  protected readonly selectedCompetitionId = signal<number | null>(null);
 
   protected readonly showTeamForm = signal(false);
   protected readonly showMatchdayForm = signal(false);
@@ -114,13 +115,14 @@ export class MatchAdminComponent implements OnInit {
 
   // Matchdays
   loadMatchdays(competitionId: number) {
+    this.selectedCompetitionId.set(competitionId);
     this.selectedMatchday.set(null);
     this.matches.set([]);
     this.matchResultForms.clear();
     this.http.get<Matchday[]>(`/api/matchdays?competitionId=${competitionId}`).subscribe((m) => this.matchdays.set(m));
   }
 
-  openCreateMatchday() { this.showMatchdayForm.set(true); this.matchdayForm.reset({ number: 1 }); }
+  openCreateMatchday() { this.showMatchdayForm.set(true); this.matchdayForm.reset({ number: 1, competitionId: this.selectedCompetitionId() }); }
   cancelMatchday() { this.showMatchdayForm.set(false); }
 
   saveMatchday() {
