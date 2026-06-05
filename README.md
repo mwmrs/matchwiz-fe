@@ -12,6 +12,23 @@ ng serve
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
+---
+  What was implemented:
+  
+  - Foundation — Angular Material 3 (Stadium Pulse dark theme), @ngrx/signals, @jsverse/transloco (EN/DE), MSW, ng-openapi-gen
+  - OpenAPI spec (openapi.yaml) + generated typed API client in src/app/core/api/ (31 models, 12 service tags)
+  - MSW mocks — all 12 API tags mocked with seed data (3 users, 2 competitions, Bundesliga matchdays, 6 teams)
+  - AuthStore (NgRx signals) — JWT persisted to localStorage, APP_INITIALIZER awaits session restore before routing
+  - NotificationStore — unread badge in the top bar
+  - Guards — authGuard, adminGuard, publicGuard with lazy-loaded routes
+  - Layouts — desktop sidenav + mobile bottom navigation
+  - All 6 features — Login/Register, Dashboard (groups, matchday, missing predictions alert), Matchday Predictions (score inputs, locked after
+  kickoff), Rankings (medal icons, "You" highlight), Preferences (language/timezone/theme/toggles), Admin (Competition CRUD + scoring rules,
+  Group management + invite + approvals, Team/Matchday/Match CRUD + result entry)
+  - i18n — full EN and DE translation keys wired throughout
+
+  **To log in: username admin, password password (admin role) or alice/bob with password (user role).**
+
 ## Code scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:

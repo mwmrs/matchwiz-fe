@@ -1,0 +1,158 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "predictions": "Tipps",
+    "rankings": "Rangliste",
+    "profile": "Profil",
+    "admin": "Verwaltung"
+  },
+  "auth": {
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "logout": "Abmelden",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "email": "E-Mail-Adresse (optional)",
+    "loginBtn": "Anmelden",
+    "registerBtn": "Konto erstellen",
+    "noAccount": "Noch kein Konto?",
+    "hasAccount": "Bereits registriert?",
+    "pendingApproval": "Registrierung eingereicht! Dein Konto wartet auf Freischaltung.",
+    "invalidCredentials": "Ungültiger Benutzername oder Passwort.",
+    "usernameTaken": "Dieser Benutzername ist bereits vergeben.",
+    "accountNotApproved": "Dein Konto wartet auf Freischaltung. Bitte warte, bis ein Admin dein Konto aktiviert."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Willkommen zurück",
+    "myGroups": "Meine Gruppen",
+    "activeCompetition": "Aktiver Wettbewerb",
+    "upcomingMatchday": "Nächster Spieltag",
+    "missingPredictions": "Fehlende Tipps",
+    "missingPredictionsHint": "Du hast noch {{ count }} Tipps offen.",
+    "submitNow": "Jetzt tippen",
+    "noGroups": "Du bist noch in keiner Gruppe.",
+    "pendingApproval": "Freischaltung ausstehend",
+    "joinGroups": "Gruppe beitreten",
+    "joinGroup": "Anfrage stellen",
+    "joinRequestSent": "Beitrittsanfrage gesendet. Warte auf Genehmigung.",
+    "notifications": "Benachrichtigungen",
+    "noNotifications": "Keine Benachrichtigungen.",
+    "matchday": "Spieltag {{ number }}"
+  },
+  "groupPicker": {
+    "predictionsTitle": "Gruppe wählen — Tipps",
+    "rankingsTitle": "Gruppe wählen — Rangliste",
+    "noGroups": "Du bist noch kein Mitglied einer Gruppe.",
+    "goToDashboard": "Zum Dashboard"
+  },
+  "matchdayList": {
+    "title": "Spieltag wählen",
+    "upcoming": "Bevorstehend"
+  },
+  "predictions": {
+    "title": "Spieltag {{ number }}",
+    "submitBtn": "Tipps speichern",
+    "submitted": "Tipps gespeichert!",
+    "lockedHint": "Dieses Spiel hat bereits begonnen.",
+    "home": "Heim",
+    "away": "Auswärts",
+    "kickoff": "Anstoß"
+  },
+  "rankings": {
+    "title": "Rangliste",
+    "rank": "Rang",
+    "player": "Spieler",
+    "points": "Punkte",
+    "exact": "Exakt",
+    "tendency": "Tendenz",
+    "noData": "Noch keine Rangliste verfügbar."
+  },
+  "preferences": {
+    "title": "Einstellungen",
+    "language": "Sprache",
+    "timezone": "Zeitzone",
+    "theme": "Design",
+    "themeLight": "Hell",
+    "themeDark": "Dunkel",
+    "themeSystem": "System",
+    "emailAddress": "E-Mail-Adresse",
+    "emailNotifications": "E-Mail-Benachrichtigungen",
+    "matchdayReminders": "Spieltag-Erinnerungen",
+    "twoFactor": "Zwei-Faktor-Authentifizierung",
+    "saveBtn": "Änderungen speichern",
+    "saved": "Einstellungen gespeichert."
+  },
+  "admin": {
+    "title": "Verwaltung",
+    "competitions": "Wettbewerbe",
+    "groups": "Gruppen",
+    "matches": "Spiele",
+    "createCompetition": "Neuer Wettbewerb",
+    "createGroup": "Neue Gruppe",
+    "createTeam": "Neues Team",
+    "createMatchday": "Neuer Spieltag",
+    "createMatch": "Neues Spiel",
+    "name": "Name",
+    "season": "Saison",
+    "startDate": "Startdatum",
+    "endDate": "Enddatum",
+    "status": "Status",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "invite": "Einladen",
+    "inviteEmail": "E-Mail-Adresse zum Einladen",
+    "sendInvitation": "Einladung senden",
+    "invitationSent": "Einladung gesendet!",
+    "pendingMembers": "Ausstehende Genehmigungen",
+    "approve": "Genehmigen",
+    "approved": "Genehmigt",
+    "users": "Benutzer",
+    "pendingUsers": "Ausstehende Registrierungen",
+    "activeUsers": "Aktive Benutzer",
+    "noPendingUsers": "Keine ausstehenden Registrierungen.",
+    "userApproved": "Benutzer freigegeben!",
+    "teams": "Teams",
+    "matchdays": "Spieltage",
+    "shortName": "Kürzel",
+    "number": "Spieltagnummer",
+    "homeTeam": "Heimteam",
+    "awayTeam": "Auswärtsteam",
+    "kickoff": "Anstoßzeit",
+    "homeGoals": "Tore Heim",
+    "awayGoals": "Tore Auswärts",
+    "result": "Ergebnis",
+    "enterResult": "Ergebnis eintragen",
+    "scoringRules": "Punkteregeln",
+    "exactResultPoints": "Exaktes Ergebnis (Punkte)",
+    "goalDifferencePoints": "Richtiges Torverhältnis (Punkte)",
+    "tendencyPoints": "Richtige Tendenz (Punkte)"
+  },
+  "competition": {
+    "status": {
+      "DRAFT": "Entwurf",
+      "ACTIVE": "Aktiv",
+      "CLOSED": "Beendet",
+      "ARCHIVED": "Archiviert"
+    }
+  },
+  "match": {
+    "status": {
+      "SCHEDULED": "Geplant",
+      "LIVE": "Live",
+      "FINISHED": "Beendet",
+      "CANCELLED": "Abgesagt"
+    }
+  },
+  "common": {
+    "loading": "Laden...",
+    "error": "Ein Fehler ist aufgetreten. Bitte versuche es erneut.",
+    "noData": "Keine Daten verfügbar.",
+    "back": "Zurück",
+    "close": "Schließen",
+    "confirm": "Bestätigen",
+    "vs": "vs"
+  }
+}

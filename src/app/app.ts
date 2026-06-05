@@ -1,12 +1,22 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { TranslocoService } from '@jsverse/transloco';
+import { AuthStore } from './core/auth/auth.store';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  template: '<router-outlet />',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
-  protected readonly title = signal('matchwiz-fe');
+  private readonly authStore = inject(AuthStore);
+  private readonly transloco = inject(TranslocoService);
+
+  constructor() {
+    effect(() => {
+      const lang = this.authStore.user()?.preferredLanguage;
+      if (lang) this.transloco.setActiveLang(lang);
+    });
+  }
 }

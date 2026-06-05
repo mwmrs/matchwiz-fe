@@ -135,7 +135,7 @@ Optional:
 
 * Email address
 
-New registrations require approval.
+New registrations require approval. Until successful approval the user is not able to login!
 
 Approval can be performed by:
 
@@ -164,14 +164,8 @@ Disabled by default.
 
 Users may belong to multiple groups.
 
-Groups are joined through invitation.
-
-Invitation flow:
-
-1. Group admin sends invitation.
-2. Email contains invitation token.
-3. User registers or logs in.
-4. Membership is created after approval.
+After a user is approved he can login and choose from a list of all available groups.
+Every selection must be approved by admin or a group admin (if already present).
 
 ---
 
@@ -408,6 +402,7 @@ User settings.
 
 * id
 * user_id
+* group_id
 * match_id
 * predicted_home_goals
 * predicted_away_goals

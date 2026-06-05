@@ -1,0 +1,1256 @@
+openapi: 3.0.3
+info:
+  title: MatchWiz API
+  version: 1.0.0
+  description: Soccer match prediction app API
+
+servers:
+  - url: /api
+    description: Local server
+
+tags:
+  - name: auth
+  - name: users
+  - name: competitions
+  - name: groups
+  - name: memberships
+  - name: teams
+  - name: matchdays
+  - name: matches
+  - name: predictions
+  - name: rankings
+  - name: notifications
+
+paths:
+  /auth/login:
+    post:
+      tags: [auth]
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Invalid credentials
+        '403':
+          description: Account pending approval
+
+  /auth/register:
+    post:
+      tags: [auth]
+      operationId: register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Registration submitted, pending approval
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '409':
+          description: Username already taken
+
+  /users:
+    get:
+      tags: [users]
+      operationId: listUsers
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /users/{id}/approve:
+    post:
+      tags: [users]
+      operationId: approveUser
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: User approved and activated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users/me:
+    get:
+      tags: [users]
+      operationId: getMe
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Current user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    patch:
+      tags: [users]
+      operationId: updateMe
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        '200':
+          description: Updated user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users/me/memberships:
+    get:
+      tags: [memberships]
+      operationId: getMyMemberships
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Current user's group memberships
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GroupMembership'
+
+  /competitions:
+    get:
+      tags: [competitions]
+      operationId: listCompetitions
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of competitions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Competition'
+    post:
+      tags: [competitions]
+      operationId: createCompetition
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCompetitionRequest'
+      responses:
+        '201':
+          description: Competition created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Competition'
+
+  /competitions/{id}:
+    get:
+      tags: [competitions]
+      operationId: getCompetition
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Competition detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Competition'
+    patch:
+      tags: [competitions]
+      operationId: updateCompetition
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCompetitionRequest'
+      responses:
+        '200':
+          description: Updated competition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Competition'
+
+  /competitions/{id}/scoring-rules:
+    get:
+      tags: [competitions]
+      operationId: getScoringRules
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Scoring rules for competition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoringRule'
+    put:
+      tags: [competitions]
+      operationId: updateScoringRules
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoringRule'
+      responses:
+        '200':
+          description: Updated scoring rules
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoringRule'
+
+  /groups:
+    get:
+      tags: [groups]
+      operationId: listGroups
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: competitionId
+          in: query
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: List of groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+    post:
+      tags: [groups]
+      operationId: createGroup
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGroupRequest'
+      responses:
+        '201':
+          description: Group created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+
+  /groups/{id}:
+    get:
+      tags: [groups]
+      operationId: getGroup
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Group detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+    patch:
+      tags: [groups]
+      operationId: updateGroup
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGroupRequest'
+      responses:
+        '200':
+          description: Updated group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+    delete:
+      tags: [groups]
+      operationId: deleteGroup
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Group deleted
+
+  /groups/{id}/members:
+    get:
+      tags: [memberships]
+      operationId: listMembers
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Group members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GroupMembership'
+
+  /groups/{id}/members/{userId}:
+    delete:
+      tags: [memberships]
+      operationId: removeMember
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Member removed
+
+  /groups/{id}/members/{userId}/approve:
+    post:
+      tags: [memberships]
+      operationId: approveMember
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Member approved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupMembership'
+
+  /groups/{id}/join:
+    post:
+      tags: [memberships]
+      operationId: joinGroup
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '201':
+          description: Join request submitted, pending approval
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupMembership'
+        '409':
+          description: Already a member or join request pending
+
+  /teams:
+    get:
+      tags: [teams]
+      operationId: listTeams
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of teams
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+    post:
+      tags: [teams]
+      operationId: createTeam
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTeamRequest'
+      responses:
+        '201':
+          description: Team created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+
+  /teams/{id}:
+    patch:
+      tags: [teams]
+      operationId: updateTeam
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTeamRequest'
+      responses:
+        '200':
+          description: Updated team
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+    delete:
+      tags: [teams]
+      operationId: deleteTeam
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Team deleted
+
+  /matchdays:
+    get:
+      tags: [matchdays]
+      operationId: listMatchdays
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: competitionId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: List of matchdays
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Matchday'
+    post:
+      tags: [matchdays]
+      operationId: createMatchday
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMatchdayRequest'
+      responses:
+        '201':
+          description: Matchday created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Matchday'
+
+  /matchdays/{id}:
+    get:
+      tags: [matchdays]
+      operationId: getMatchday
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Matchday detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Matchday'
+    patch:
+      tags: [matchdays]
+      operationId: updateMatchday
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMatchdayRequest'
+      responses:
+        '200':
+          description: Updated matchday
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Matchday'
+
+  /matchdays/{id}/matches:
+    get:
+      tags: [matches]
+      operationId: listMatchesByMatchday
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Matches for a matchday
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Match'
+    post:
+      tags: [matches]
+      operationId: createMatch
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMatchRequest'
+      responses:
+        '201':
+          description: Match created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Match'
+
+  /matchdays/{id}/predictions:
+    get:
+      tags: [predictions]
+      operationId: listPredictions
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: groupId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: User predictions for a matchday within a group
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Prediction'
+    post:
+      tags: [predictions]
+      operationId: submitPredictions
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: groupId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/SubmitPredictionRequest'
+      responses:
+        '200':
+          description: Predictions saved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Prediction'
+
+  /matches/{id}:
+    patch:
+      tags: [matches]
+      operationId: updateMatch
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMatchRequest'
+      responses:
+        '200':
+          description: Updated match
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Match'
+
+  /groups/{id}/rankings:
+    get:
+      tags: [rankings]
+      operationId: getGroupRankings
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Group rankings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RankingEntry'
+
+  /notifications:
+    get:
+      tags: [notifications]
+      operationId: listNotifications
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+
+  /notifications/{id}/read:
+    patch:
+      tags: [notifications]
+      operationId: markNotificationRead
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Notification marked as read
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LoginRequest:
+      type: object
+      required: [username, password]
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    LoginResponse:
+      type: object
+      required: [token, user]
+      properties:
+        token:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+
+    RegisterRequest:
+      type: object
+      required: [username, password]
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+          format: email
+
+    UpdateUserRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        preferredLanguage:
+          type: string
+        timezone:
+          type: string
+        theme:
+          $ref: '#/components/schemas/Theme'
+        twoFactorEnabled:
+          type: boolean
+        emailNotifications:
+          type: boolean
+        matchdayReminders:
+          type: boolean
+
+    User:
+      type: object
+      required: [id, username, active, createdAt]
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        emailVerified:
+          type: boolean
+        preferredLanguage:
+          type: string
+        timezone:
+          type: string
+        theme:
+          $ref: '#/components/schemas/Theme'
+        twoFactorEnabled:
+          type: boolean
+        emailNotifications:
+          type: boolean
+        matchdayReminders:
+          type: boolean
+        globalRole:
+          $ref: '#/components/schemas/GlobalRole'
+        active:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    Theme:
+      type: string
+      enum: [LIGHT, DARK, SYSTEM]
+
+    GlobalRole:
+      type: string
+      enum: [USER, ADMIN]
+
+    GroupRole:
+      type: string
+      enum: [MEMBER, GROUP_ADMIN]
+
+    CompetitionStatus:
+      type: string
+      enum: [DRAFT, ACTIVE, CLOSED, ARCHIVED]
+
+    MatchStatus:
+      type: string
+      enum: [SCHEDULED, LIVE, FINISHED, CANCELLED]
+
+    NotificationType:
+      type: string
+      enum: [MATCHDAY_STARTS, MISSING_PREDICTIONS, REGISTRATION_APPROVED, INVITATION_ACCEPTED]
+
+    Competition:
+      type: object
+      required: [id, name, season, status]
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        season:
+          type: string
+        status:
+          $ref: '#/components/schemas/CompetitionStatus'
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+
+    CreateCompetitionRequest:
+      type: object
+      required: [name, season]
+      properties:
+        name:
+          type: string
+        season:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+
+    UpdateCompetitionRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        season:
+          type: string
+        status:
+          $ref: '#/components/schemas/CompetitionStatus'
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+
+    ScoringRule:
+      type: object
+      required: [competitionId, exactResultPoints, goalDifferencePoints, tendencyPoints]
+      properties:
+        competitionId:
+          type: integer
+          format: int64
+        exactResultPoints:
+          type: integer
+        goalDifferencePoints:
+          type: integer
+        tendencyPoints:
+          type: integer
+
+    Group:
+      type: object
+      required: [id, competitionId, name]
+      properties:
+        id:
+          type: integer
+          format: int64
+        competitionId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+
+    CreateGroupRequest:
+      type: object
+      required: [competitionId, name]
+      properties:
+        competitionId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+
+    GroupMembership:
+      type: object
+      required: [id, groupId, userId, role, approved]
+      properties:
+        id:
+          type: integer
+          format: int64
+        groupId:
+          type: integer
+          format: int64
+        userId:
+          type: integer
+          format: int64
+        username:
+          type: string
+        role:
+          $ref: '#/components/schemas/GroupRole'
+        approved:
+          type: boolean
+        joinedAt:
+          type: string
+          format: date-time
+
+    Team:
+      type: object
+      required: [id, name, shortName]
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        shortName:
+          type: string
+        logoUrl:
+          type: string
+
+    CreateTeamRequest:
+      type: object
+      required: [name, shortName]
+      properties:
+        name:
+          type: string
+        shortName:
+          type: string
+        logoUrl:
+          type: string
+
+    Matchday:
+      type: object
+      required: [id, competitionId, number]
+      properties:
+        id:
+          type: integer
+          format: int64
+        competitionId:
+          type: integer
+          format: int64
+        number:
+          type: integer
+
+    CreateMatchdayRequest:
+      type: object
+      required: [competitionId, number]
+      properties:
+        competitionId:
+          type: integer
+          format: int64
+        number:
+          type: integer
+
+    Match:
+      type: object
+      required: [id, matchdayId, homeTeamId, awayTeamId, kickoffTime, status]
+      properties:
+        id:
+          type: integer
+          format: int64
+        matchdayId:
+          type: integer
+          format: int64
+        homeTeamId:
+          type: integer
+          format: int64
+        awayTeamId:
+          type: integer
+          format: int64
+        homeTeam:
+          $ref: '#/components/schemas/Team'
+        awayTeam:
+          $ref: '#/components/schemas/Team'
+        kickoffTime:
+          type: string
+          format: date-time
+        homeGoals:
+          type: integer
+        awayGoals:
+          type: integer
+        status:
+          $ref: '#/components/schemas/MatchStatus'
+
+    CreateMatchRequest:
+      type: object
+      required: [homeTeamId, awayTeamId, kickoffTime]
+      properties:
+        homeTeamId:
+          type: integer
+          format: int64
+        awayTeamId:
+          type: integer
+          format: int64
+        kickoffTime:
+          type: string
+          format: date-time
+
+    UpdateMatchRequest:
+      type: object
+      properties:
+        homeTeamId:
+          type: integer
+          format: int64
+        awayTeamId:
+          type: integer
+          format: int64
+        kickoffTime:
+          type: string
+          format: date-time
+        homeGoals:
+          type: integer
+        awayGoals:
+          type: integer
+        status:
+          $ref: '#/components/schemas/MatchStatus'
+
+    Prediction:
+      type: object
+      required: [id, userId, groupId, matchId, predictedHomeGoals, predictedAwayGoals, submittedAt]
+      properties:
+        id:
+          type: integer
+          format: int64
+        userId:
+          type: integer
+          format: int64
+        groupId:
+          type: integer
+          format: int64
+        matchId:
+          type: integer
+          format: int64
+        predictedHomeGoals:
+          type: integer
+        predictedAwayGoals:
+          type: integer
+        awardedPoints:
+          type: integer
+        submittedAt:
+          type: string
+          format: date-time
+
+    SubmitPredictionRequest:
+      type: object
+      required: [matchId, predictedHomeGoals, predictedAwayGoals]
+      properties:
+        matchId:
+          type: integer
+          format: int64
+        predictedHomeGoals:
+          type: integer
+        predictedAwayGoals:
+          type: integer
+
+    RankingEntry:
+      type: object
+      required: [rank, userId, username, totalPoints, exactPredictions, tendencyPredictions]
+      properties:
+        rank:
+          type: integer
+        userId:
+          type: integer
+          format: int64
+        username:
+          type: string
+        totalPoints:
+          type: integer
+        exactPredictions:
+          type: integer
+        goalDifferencePredictions:
+          type: integer
+        tendencyPredictions:
+          type: integer
+
+    Notification:
+      type: object
+      required: [id, userId, type, title, message, read, createdAt]
+      properties:
+        id:
+          type: integer
+          format: int64
+        userId:
+          type: integer
+          format: int64
+        type:
+          $ref: '#/components/schemas/NotificationType'
+        title:
+          type: string
+        message:
+          type: string
+        read:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time

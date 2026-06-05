@@ -1,0 +1,130 @@
+<ng-container *transloco="let t">
+  <div class="dashboard">
+    <header class="page-header">
+      <h1>{{ t('dashboard.title') }}</h1>
+      <p class="greeting">{{ t('dashboard.welcome') }}, <strong>{{ authStore.user()?.username }}</strong></p>
+    </header>
+
+    <!-- Upcoming matchday -->
+    @if (upcomingMatchday()) {
+      <section class="section">
+        <h2 class="section-title">{{ t('dashboard.upcomingMatchday') }}</h2>
+        <div class="info-card">
+          <div class="info-row">
+            <mat-icon>sports_soccer</mat-icon>
+            <span>{{ t('dashboard.matchday', { number: upcomingMatchday()!.number }) }}</span>
+          </div>
+          <a
+            mat-stroked-button
+            class="view-btn"
+            routerLink="/predictions"
+          >
+            {{ t('nav.predictions') }}
+          </a>
+        </div>
+      </section>
+    }
+
+    <!-- Active competition -->
+    @if (competition()) {
+      <section class="section">
+        <h2 class="section-title">{{ t('dashboard.activeCompetition') }}</h2>
+        <div class="info-card">
+          <div class="comp-info">
+            <span class="comp-name">{{ competition()!.name }}</span>
+            <span class="comp-season">{{ competition()!.season }}</span>
+          </div>
+          <span class="status-badge" [class]="'status-' + competition()!.status.toLowerCase()">
+            {{ t('competition.status.' + competition()!.status) }}
+          </span>
+        </div>
+      </section>
+    }
+
+    <!-- My groups -->
+    <section class="section">
+      <h2 class="section-title">{{ t('dashboard.myGroups') }}</h2>
+      @if (myGroups().length === 0 && pendingGroups().length === 0) {
+        <p class="empty-msg">{{ t('dashboard.noGroups') }}</p>
+      } @else {
+        <div class="groups-grid">
+          @for (group of myGroups(); track group.id) {
+            <a class="group-card" [routerLink]="['/rankings', group.id]">
+              <mat-icon>group</mat-icon>
+              <div class="group-info">
+                <span class="group-name">{{ group.name }}</span>
+                @if (group.description) {
+                  <span class="group-desc">{{ group.description }}</span>
+                }
+              </div>
+              <mat-icon class="chevron">chevron_right</mat-icon>
+            </a>
+          }
+          @for (group of pendingGroups(); track group.id) {
+            <div class="group-card group-card--pending">
+              <mat-icon>hourglass_empty</mat-icon>
+              <div class="group-info">
+                <span class="group-name">{{ group.name }}</span>
+                <span class="group-desc">{{ t('dashboard.pendingApproval') }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+    <!-- Join a group -->
+    @if (availableGroups().length > 0) {
+      <section class="section">
+        <h2 class="section-title">{{ t('dashboard.joinGroups') }}</h2>
+        <div class="groups-grid">
+          @for (group of availableGroups(); track group.id) {
+            <div class="group-card group-card--available">
+              <mat-icon>group_add</mat-icon>
+              <div class="group-info">
+                <span class="group-name">{{ group.name }}</span>
+                @if (group.description) {
+                  <span class="group-desc">{{ group.description }}</span>
+                }
+              </div>
+              <button
+                mat-stroked-button
+                class="join-btn"
+                (click)="joinGroup(group.id)"
+                [attr.aria-label]="t('dashboard.joinGroup') + ' ' + group.name"
+              >
+                {{ t('dashboard.joinGroup') }}
+              </button>
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    <!-- Notifications -->
+    <section class="section">
+      <h2 class="section-title">{{ t('dashboard.notifications') }}</h2>
+      @if (getUnreadNotifications().length === 0) {
+        <p class="empty-msg">{{ t('dashboard.noNotifications') }}</p>
+      } @else {
+        <div class="notifications-list">
+          @for (notification of getUnreadNotifications(); track notification.id) {
+            <div class="notification-item" [class.unread]="!notification.read">
+              <div class="notification-content">
+                <strong class="notification-title">{{ notification.title }}</strong>
+                <p class="notification-msg">{{ notification.message }}</p>
+              </div>
+              <button
+                mat-icon-button
+                [attr.aria-label]="'Mark as read'"
+                (click)="markRead(notification.id)"
+              >
+                <mat-icon>check</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </section>
+  </div>
+</ng-container>

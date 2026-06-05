@@ -1,0 +1,103 @@
+<ng-container *transloco="let t">
+  <div class="admin-section">
+    @if (!showForm()) {
+      <div class="section-header">
+        <h2>{{ t('admin.groups') }}</h2>
+        <button mat-flat-button class="create-btn" (click)="openCreate()">
+          <mat-icon>add</mat-icon>
+          {{ t('admin.createGroup') }}
+        </button>
+      </div>
+
+      <div class="list">
+        @for (group of groups(); track group.id) {
+          <div class="list-item">
+            <div class="list-item-info">
+              <span class="list-item-name">{{ group.name }}</span>
+              @if (group.description) {
+                <span class="list-item-sub">{{ group.description }}</span>
+              }
+            </div>
+            <button mat-icon-button (click)="openEdit(group)" [attr.aria-label]="t('admin.edit')">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="section-header">
+        <h2>{{ editMode() ? selectedGroup()?.name : t('admin.createGroup') }}</h2>
+        <button mat-stroked-button (click)="cancel()">{{ t('admin.cancel') }}</button>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="save()" class="admin-form" style="margin-bottom: 16px">
+        <mat-form-field appearance="outline">
+          <mat-label>Competition</mat-label>
+          <mat-select formControlName="competitionId">
+            @for (comp of competitions(); track comp.id) {
+              <mat-option [value]="comp.id">{{ comp.name }} ({{ comp.season }})</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ t('admin.name') }}</mat-label>
+          <input matInput formControlName="name" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description" />
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-flat-button type="submit" class="create-btn" [disabled]="form.invalid">
+            {{ t('admin.save') }}
+          </button>
+        </div>
+      </form>
+
+      @if (editMode()) {
+        <!-- Pending approvals -->
+        @if (pendingMembers.length > 0) {
+          <div class="admin-form" style="margin-bottom: 16px">
+            <h3 class="subsection-title">
+              {{ t('admin.pendingMembers') }}
+              <span class="pending-badge">{{ pendingMembers.length }}</span>
+            </h3>
+            <div class="list">
+              @for (member of pendingMembers; track member.userId) {
+                <div class="list-item">
+                  <div class="list-item-info">
+                    <span class="list-item-name">{{ member.username }}</span>
+                  </div>
+                  <button mat-stroked-button (click)="approveMember(member.userId)">
+                    {{ t('admin.approve') }}
+                  </button>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Members -->
+        <div class="admin-form">
+          <h3 class="subsection-title">Members ({{ approvedMembers.length }})</h3>
+          <div class="list">
+            @for (member of approvedMembers; track member.userId) {
+              <div class="list-item">
+                <div class="list-item-info">
+                  <span class="list-item-name">{{ member.username }}</span>
+                  <span class="list-item-sub">{{ member.role }}</span>
+                </div>
+                <button mat-icon-button (click)="removeMember(member.userId)" [attr.aria-label]="t('admin.delete')">
+                  <mat-icon>person_remove</mat-icon>
+                </button>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    }
+  </div>
+</ng-container>

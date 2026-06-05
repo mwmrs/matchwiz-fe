@@ -1,0 +1,19 @@
+@use '../shared-admin';
+
+.subsection-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--mw-text-muted);
+  margin-bottom: var(--mw-spacing-md);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.empty-state {
+  font-size: 14px;
+  color: var(--mw-text-muted);
+  margin: 0;
+}

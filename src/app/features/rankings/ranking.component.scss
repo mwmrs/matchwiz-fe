@@ -1,0 +1,103 @@
+.rankings-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--mw-spacing-md);
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: var(--mw-spacing-lg);
+
+  h1 {
+    font-size: 26px;
+    font-weight: 800;
+  }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: var(--mw-spacing-xl);
+}
+
+.empty-msg {
+  color: var(--mw-text-muted);
+  font-size: 14px;
+}
+
+.table-wrapper {
+  background: var(--mw-surface);
+  border-radius: var(--mw-radius-lg);
+  overflow: hidden;
+}
+
+.rankings-table {
+  width: 100%;
+  background: transparent;
+
+  th.mat-mdc-header-cell {
+    color: var(--mw-text-muted);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: transparent;
+  }
+
+  td.mat-mdc-cell {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    color: var(--mw-text);
+    font-size: 14px;
+  }
+}
+
+.highlight-row {
+  background: rgba(198, 255, 0, 0.06) !important;
+}
+
+.rank-cell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+}
+
+.medal {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+
+  &.medal-1 { color: #ffd700; }
+  &.medal-2 { color: #c0c0c0; }
+  &.medal-3 { color: #cd7f32; }
+}
+
+.player-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+
+  &.current-user {
+    color: var(--mw-accent);
+  }
+}
+
+.you-badge {
+  background: var(--mw-accent);
+  color: #000;
+  border-radius: 8px;
+  padding: 1px 6px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.points-value {
+  font-size: 18px;
+  font-weight: 800;
+  font-family: 'Inter', sans-serif;
+  color: var(--mw-accent);
+}

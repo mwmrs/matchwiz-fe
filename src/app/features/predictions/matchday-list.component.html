@@ -1,0 +1,39 @@
+<ng-container *transloco="let t">
+  <div class="matchday-list">
+    <header class="page-header">
+      <a mat-icon-button routerLink="/predictions" [attr.aria-label]="t('common.back')">
+        <mat-icon>arrow_back</mat-icon>
+      </a>
+      <div class="header-text">
+        <h1>{{ t('matchdayList.title') }}</h1>
+        @if (group()) {
+          <span class="group-label">{{ group()!.name }}</span>
+        }
+      </div>
+    </header>
+
+    @if (loading()) {
+      <div class="loading" role="status" [attr.aria-label]="t('common.loading')">
+        <mat-spinner diameter="40" />
+      </div>
+    } @else if (error()) {
+      <p class="status-msg">{{ t('common.error') }}</p>
+    } @else if (matchdays().length === 0) {
+      <p class="status-msg">{{ t('common.noData') }}</p>
+    } @else {
+      <ul class="matchday-items" role="list">
+        @for (md of matchdays(); track md.id) {
+          <li>
+            <a class="matchday-card" [routerLink]="['/predictions', 'group', groupId(), 'matchday', md.id]">
+              <mat-icon aria-hidden="true">sports_soccer</mat-icon>
+              <div class="md-info">
+                <span class="md-name">{{ t('dashboard.matchday', { number: md.number }) }}</span>
+              </div>
+              <mat-icon class="chevron" aria-hidden="true">chevron_right</mat-icon>
+            </a>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</ng-container>

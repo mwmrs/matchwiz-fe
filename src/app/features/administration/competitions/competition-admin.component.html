@@ -1,0 +1,95 @@
+<ng-container *transloco="let t">
+  <div class="admin-section">
+    @if (!showForm()) {
+      <div class="section-header">
+        <h2>{{ t('admin.competitions') }}</h2>
+        <button mat-flat-button class="create-btn" (click)="openCreate()">
+          <mat-icon>add</mat-icon>
+          {{ t('admin.createCompetition') }}
+        </button>
+      </div>
+
+      <div class="list">
+        @for (comp of competitions(); track comp.id) {
+          <div class="list-item">
+            <div class="list-item-info">
+              <span class="list-item-name">{{ comp.name }}</span>
+              <span class="list-item-sub">{{ comp.season }}</span>
+            </div>
+            <span class="status-badge status-{{ comp.status.toLowerCase() }}">
+              {{ t('competition.status.' + comp.status) }}
+            </span>
+            <button mat-icon-button (click)="openEdit(comp)" [attr.aria-label]="t('admin.edit')">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="section-header">
+        <h2>{{ editMode() ? t('admin.edit') : t('admin.createCompetition') }}</h2>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="save()" class="admin-form">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ t('admin.name') }}</mat-label>
+          <input matInput formControlName="name" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ t('admin.season') }}</mat-label>
+          <input matInput formControlName="season" placeholder="2025/26" />
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ t('admin.startDate') }}</mat-label>
+            <input matInput type="date" formControlName="startDate" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ t('admin.endDate') }}</mat-label>
+            <input matInput type="date" formControlName="endDate" />
+          </mat-form-field>
+        </div>
+
+        @if (editMode()) {
+          <mat-form-field appearance="outline">
+            <mat-label>{{ t('admin.status') }}</mat-label>
+            <mat-select formControlName="status">
+              @for (s of statuses; track s) {
+                <mat-option [value]="s">{{ t('competition.status.' + s) }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+
+        @if (editMode()) {
+          <div class="scoring-section">
+            <h3>{{ t('admin.scoringRules') }}</h3>
+            <form [formGroup]="scoringForm" class="scoring-form">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ t('admin.exactResultPoints') }}</mat-label>
+                <input matInput type="number" formControlName="exactResultPoints" />
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>{{ t('admin.goalDifferencePoints') }}</mat-label>
+                <input matInput type="number" formControlName="goalDifferencePoints" />
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>{{ t('admin.tendencyPoints') }}</mat-label>
+                <input matInput type="number" formControlName="tendencyPoints" />
+              </mat-form-field>
+            </form>
+          </div>
+        }
+
+        <div class="form-actions">
+          <button mat-stroked-button type="button" (click)="cancel()">{{ t('admin.cancel') }}</button>
+          <button mat-flat-button type="submit" class="create-btn" [disabled]="form.invalid">
+            {{ t('admin.save') }}
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</ng-container>

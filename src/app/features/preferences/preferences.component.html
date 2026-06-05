@@ -1,0 +1,79 @@
+<ng-container *transloco="let t">
+  <div class="preferences-page">
+    <header class="page-header">
+      <h1>{{ t('preferences.title') }}</h1>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="prefs-form">
+      <section class="prefs-section">
+        <h2 class="section-title">Account</h2>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ t('preferences.emailAddress') }}</mat-label>
+          <input matInput type="email" formControlName="email" autocomplete="email" />
+        </mat-form-field>
+      </section>
+
+      <section class="prefs-section">
+        <h2 class="section-title">{{ t('preferences.language') }} & Region</h2>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ t('preferences.language') }}</mat-label>
+          <mat-select formControlName="preferredLanguage">
+            @for (lang of languages; track lang.value) {
+              <mat-option [value]="lang.value">{{ lang.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ t('preferences.timezone') }}</mat-label>
+          <mat-select formControlName="timezone">
+            @for (tz of timezones; track tz) {
+              <mat-option [value]="tz">{{ tz }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </section>
+
+      <section class="prefs-section">
+        <h2 class="section-title">{{ t('preferences.theme') }}</h2>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ t('preferences.theme') }}</mat-label>
+          <mat-select formControlName="theme">
+            @for (theme of themes; track theme.value) {
+              <mat-option [value]="theme.value">{{ t(theme.labelKey) }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </section>
+
+      <section class="prefs-section">
+        <h2 class="section-title">Notifications</h2>
+        <div class="toggle-row">
+          <label class="toggle-label">{{ t('preferences.emailNotifications') }}</label>
+          <mat-slide-toggle formControlName="emailNotifications" />
+        </div>
+        <div class="toggle-row">
+          <label class="toggle-label">{{ t('preferences.matchdayReminders') }}</label>
+          <mat-slide-toggle formControlName="matchdayReminders" />
+        </div>
+      </section>
+
+      <section class="prefs-section">
+        <h2 class="section-title">Security</h2>
+        <div class="toggle-row">
+          <label class="toggle-label">{{ t('preferences.twoFactor') }}</label>
+          <mat-slide-toggle formControlName="twoFactorEnabled" />
+        </div>
+      </section>
+
+      <button
+        mat-flat-button
+        type="submit"
+        class="save-btn"
+        [disabled]="saving()"
+      >
+        {{ t('preferences.saveBtn') }}
+      </button>
+    </form>
+  </div>
+</ng-container>
