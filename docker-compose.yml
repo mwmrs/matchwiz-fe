@@ -1,16 +1,20 @@
 # Docker Compose for Matchwiz on Raspberry Pi (arm64).
 #
+# Images are built by GitHub Actions and published to ghcr.io.
+#
 # Prerequisites on the Pi:
-#   1. Copy this repo next to matchwiz-be:
-#        ~/matchwiz-fe/   (this repo)
-#        ~/matchwiz-be/
-#   2. Create secrets/privateKey.pem and secrets/publicKey.pem in THIS directory.
-#      For a first start you can copy the dev keys:
+#   1. Authenticate with ghcr.io (once per machine):
+#        echo <your-github-pat> | docker login ghcr.io -u <your-github-user> --password-stdin
+#      PAT needs: read:packages scope.
+#      Create one at: https://github.com/settings/tokens
+#   2. Create secrets/privateKey.pem and secrets/publicKey.pem in THIS directory:
 #        mkdir -p secrets
-#        cp ../matchwiz-be/src/main/resources/privateKey.pem secrets/
-#        cp ../matchwiz-be/src/main/resources/publicKey.pem  secrets/
+#        # copy the keys you generated on your dev machine
 #   3. Copy .env.example → .env and fill in the values.
-#   4. docker compose up -d --build
+#   4. docker compose pull && docker compose up -d
+#
+# To update to the latest images after a new release:
+#   docker compose pull && docker compose up -d
 #
 # The frontend is reachable on http://<pi-ip>:80.
 
@@ -34,9 +38,7 @@ services:
 
   # ------------------------------------------------------------------ backend
   backend:
-    build:
-      context: ../matchwiz-be
-      dockerfile: Dockerfile
+    image: ghcr.io/mwmrs/matchwiz-be:latest
     restart: unless-stopped
     environment:
       QUARKUS_PROFILE: prod
@@ -47,7 +49,6 @@ services:
       MATCHWIZ_DB_PASSWORD: ${MATCHWIZ_DB_PASSWORD}
 
       # CORS — only needed for direct backend access; nginx proxy removes the need.
-      # Set to your Pi's IP/hostname if you ever expose the backend port directly.
       MATCHWIZ_CORS_ORIGINS: ${MATCHWIZ_CORS_ORIGINS:-http://localhost}
 
       # JWT keys — mounted from the secrets/ directory (see prerequisites above).
@@ -77,9 +78,7 @@ services:
 
   # ------------------------------------------------------------------ frontend
   frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/mwmrs/matchwiz-fe:latest
     restart: unless-stopped
     ports:
       - "${MATCHWIZ_FRONTEND_PORT:-80}:80"
