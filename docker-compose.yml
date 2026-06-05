@@ -11,18 +11,25 @@
 #        mkdir -p secrets
 #        # copy the keys you generated on your dev machine
 #   3. Copy .env.example → .env and fill in the values.
-#   4. docker compose pull && docker compose up -d
+#      - External database: set MATCHWIZ_DB_URL (e.g. jdbc:postgresql://myserver:5432/matchwiz)
+#      - Local database:    leave MATCHWIZ_DB_URL unset; use --profile localdb (see step 4b)
+#   4a. External database:  docker compose pull && docker compose up -d
+#   4b. Local database:     docker compose pull && docker compose --profile localdb up -d
 #
 # To update to the latest images after a new release:
 #   docker compose pull && docker compose up -d
+#   (add --profile localdb if you are running a local database)
 #
 # The frontend is reachable on http://<pi-ip>:80.
 
 services:
 
   # ------------------------------------------------------------------ database
+  # Only started when you pass --profile localdb.
+  # For an external database, set MATCHWIZ_DB_URL in .env and omit this profile.
   db:
     image: postgres:17-alpine
+    profiles: [localdb]
     restart: unless-stopped
     environment:
       POSTGRES_DB:       ${MATCHWIZ_DB_NAME:-matchwiz}
@@ -43,8 +50,9 @@ services:
     environment:
       QUARKUS_PROFILE: prod
 
-      # Datasource — points to the db service above.
-      MATCHWIZ_DB_URL:      jdbc:postgresql://db:5432/${MATCHWIZ_DB_NAME:-matchwiz}
+      # Datasource — set MATCHWIZ_DB_URL to an external host, or leave unset
+      # to use the local db service started via --profile localdb.
+      MATCHWIZ_DB_URL:      ${MATCHWIZ_DB_URL:-jdbc:postgresql://db:5432/${MATCHWIZ_DB_NAME:-matchwiz}}
       MATCHWIZ_DB_USER:     ${MATCHWIZ_DB_USER:-matchwiz}
       MATCHWIZ_DB_PASSWORD: ${MATCHWIZ_DB_PASSWORD}
 
@@ -72,6 +80,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
+        required: false  # skipped when db is not started (no --profile localdb)
     # Backend is NOT exposed on the host — nginx proxies /api/ to it.
     # Uncomment the line below only for debugging:
     # ports: ["8080:8080"]
