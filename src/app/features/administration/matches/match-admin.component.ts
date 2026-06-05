@@ -114,6 +114,9 @@ export class MatchAdminComponent implements OnInit {
 
   // Matchdays
   loadMatchdays(competitionId: number) {
+    this.selectedMatchday.set(null);
+    this.matches.set([]);
+    this.matchResultForms.clear();
     this.http.get<Matchday[]>(`/api/matchdays?competitionId=${competitionId}`).subscribe((m) => this.matchdays.set(m));
   }
 
