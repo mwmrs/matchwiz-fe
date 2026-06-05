@@ -42,24 +42,31 @@
   font-family: 'Inter', sans-serif;
 }
 
-.result-modal {
-  background: var(--mw-surface);
-  border-radius: var(--mw-radius-lg);
-  padding: var(--mw-spacing-lg);
-  margin-top: var(--mw-spacing-md);
-  border: 1px solid var(--mw-accent);
-
-  h3 {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: var(--mw-spacing-md);
-  }
+.match-result-row {
+  flex-wrap: wrap;
+  align-items: center;
 }
 
-.result-form {
+.inline-result-form {
   display: flex;
-  flex-direction: column;
-  gap: var(--mw-spacing-sm);
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--mw-spacing-xs);
+  width: 100%;
+}
+
+.goals-field {
+  width: 72px;
+}
+
+.status-field {
+  width: 130px;
+}
+
+.goals-sep {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--mw-text-muted);
 }
 
 .empty-msg {

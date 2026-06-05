@@ -1,17 +1,16 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTabsModule } from '@angular/material/tabs';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import type { Team, Matchday, Match, Competition } from '../../../core/api/models';
 
-type AdminTab = 'teams' | 'matchdays' | 'matches';
+type AdminTab = 'teams' | 'matchdays';
 
 @Component({
   selector: 'app-match-admin',
@@ -22,7 +21,6 @@ type AdminTab = 'teams' | 'matchdays' | 'matches';
     MatInputModule,
     MatSelectModule,
     MatIconModule,
-    MatTabsModule,
     MatSnackBarModule,
     TranslocoModule,
   ],
@@ -47,9 +45,9 @@ export class MatchAdminComponent implements OnInit {
   protected readonly showMatchdayForm = signal(false);
   protected readonly showMatchForm = signal(false);
   protected readonly editingTeam = signal<Team | null>(null);
-  protected readonly editingMatch = signal<Match | null>(null);
 
   protected readonly matchStatuses = ['SCHEDULED', 'LIVE', 'FINISHED', 'CANCELLED'];
+  protected readonly matchResultForms = new Map<number, FormGroup>();
 
   protected teamForm = this.fb.group({
     name: ['', Validators.required],
@@ -69,11 +67,13 @@ export class MatchAdminComponent implements OnInit {
     kickoffTime: ['', Validators.required],
   });
 
-  protected resultForm = this.fb.group({
-    homeGoals: [null as number | null, Validators.min(0)],
-    awayGoals: [null as number | null, Validators.min(0)],
-    status: ['FINISHED'],
-  });
+  private createResultForm(match: Match) {
+    return this.fb.group({
+      homeGoals: [match.homeGoals ?? null as number | null, Validators.min(0)],
+      awayGoals: [match.awayGoals ?? null as number | null, Validators.min(0)],
+      status: [match.status ?? 'FINISHED'],
+    });
+  }
 
   ngOnInit() {
     this.http.get<Team[]>('/api/teams').subscribe((t) => this.teams.set(t));
@@ -134,11 +134,15 @@ export class MatchAdminComponent implements OnInit {
 
   selectMatchday(md: Matchday) {
     this.selectedMatchday.set(md);
-    this.http.get<Match[]>(`/api/matchdays/${md.id}/matches`).subscribe((m) => this.matches.set(m));
+    this.http.get<Match[]>(`/api/matchdays/${md.id}/matches`).subscribe((m) => {
+      this.matchResultForms.clear();
+      m.forEach((match) => this.matchResultForms.set(match.id, this.createResultForm(match)));
+      this.matches.set(m);
+    });
   }
 
   // Matches
-  openCreateMatch() { this.editingMatch.set(null); this.matchForm.reset(); this.showMatchForm.set(true); }
+  openCreateMatch() { this.matchForm.reset(); this.showMatchForm.set(true); }
   cancelMatch() { this.showMatchForm.set(false); }
 
   saveMatch() {
@@ -154,19 +158,11 @@ export class MatchAdminComponent implements OnInit {
     });
   }
 
-  enterResult(match: Match) {
-    this.editingMatch.set(match);
-    this.resultForm.patchValue({ homeGoals: match.homeGoals ?? null, awayGoals: match.awayGoals ?? null, status: match.status });
-  }
-
-  saveResult() {
-    const match = this.editingMatch();
-    if (!match) return;
-    const value = this.resultForm.getRawValue();
+  saveMatchResult(match: Match, form: FormGroup) {
+    const value = form.getRawValue();
     this.http.patch<Match>(`/api/matches/${match.id}`, value).subscribe({
       next: (saved) => {
         this.matches.update((list) => list.map((m) => (m.id === saved.id ? saved : m)));
-        this.editingMatch.set(null);
         this.snackBar.open(this.transloco.translate('admin.save') + ' ✓', '', { duration: 2000 });
       },
     });
