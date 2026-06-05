@@ -1,0 +1,89 @@
+# Docker Compose for Matchwiz on Raspberry Pi (arm64).
+#
+# Images are built by GitHub Actions and published to ghcr.io.
+#
+# Prerequisites on the Pi:
+#   1. Authenticate with ghcr.io (once per machine):
+#        echo <your-github-pat> | docker login ghcr.io -u <your-github-user> --password-stdin
+#      PAT needs: read:packages scope.
+#      Create one at: https://github.com/settings/tokens
+#   2. Create secrets/privateKey.pem and secrets/publicKey.pem in THIS directory:
+#        mkdir -p secrets
+#        # copy the keys you generated on your dev machine
+#   3. Copy .env.example → .env and fill in the values.
+#   4. docker compose pull && docker compose up -d
+#
+# To update to the latest images after a new release:
+#   docker compose pull && docker compose up -d
+#
+# The frontend is reachable on http://<pi-ip>:80.
+
+services:
+
+  # ------------------------------------------------------------------ database
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       ${MATCHWIZ_DB_NAME:-matchwiz}
+      POSTGRES_USER:     ${MATCHWIZ_DB_USER:-matchwiz}
+      POSTGRES_PASSWORD: ${MATCHWIZ_DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${MATCHWIZ_DB_USER:-matchwiz} -d ${MATCHWIZ_DB_NAME:-matchwiz}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ------------------------------------------------------------------ backend
+  backend:
+    image: ghcr.io/mwmrs/matchwiz-be:latest
+    restart: unless-stopped
+    environment:
+      QUARKUS_PROFILE: prod
+
+      # Datasource — points to the db service above.
+      MATCHWIZ_DB_URL:      jdbc:postgresql://db:5432/${MATCHWIZ_DB_NAME:-matchwiz}
+      MATCHWIZ_DB_USER:     ${MATCHWIZ_DB_USER:-matchwiz}
+      MATCHWIZ_DB_PASSWORD: ${MATCHWIZ_DB_PASSWORD}
+
+      # CORS — only needed for direct backend access; nginx proxy removes the need.
+      MATCHWIZ_CORS_ORIGINS: ${MATCHWIZ_CORS_ORIGINS:-http://localhost}
+
+      # JWT keys — mounted from the secrets/ directory (see prerequisites above).
+      MATCHWIZ_JWT_PRIVATE_KEY_LOCATION: /run/secrets/jwt-private.pem
+      MATCHWIZ_JWT_PUBLIC_KEY_LOCATION:  /run/secrets/jwt-public.pem
+
+      # Bootstrap admin account (change these!).
+      MATCHWIZ_ADMIN_USERNAME: ${MATCHWIZ_ADMIN_USERNAME:-admin}
+      MATCHWIZ_ADMIN_PASSWORD: ${MATCHWIZ_ADMIN_PASSWORD}
+
+      # JVM memory tuning — conservative defaults for a Raspberry Pi.
+      JAVA_TOOL_OPTIONS: >-
+        -Dquarkus.http.host=0.0.0.0
+        -Djava.util.logging.manager=org.jboss.logmanager.LogManager
+        -Xms128m
+        -Xmx384m
+        -XX:+UseG1GC
+    volumes:
+      - ./secrets/privateKey.pem:/run/secrets/jwt-private.pem:ro
+      - ./secrets/publicKey.pem:/run/secrets/jwt-public.pem:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    # Backend is NOT exposed on the host — nginx proxies /api/ to it.
+    # Uncomment the line below only for debugging:
+    # ports: ["8080:8080"]
+
+  # ------------------------------------------------------------------ frontend
+  frontend:
+    image: ghcr.io/mwmrs/matchwiz-fe:latest
+    restart: unless-stopped
+    ports:
+      - "${MATCHWIZ_FRONTEND_PORT:-80}:80"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:
