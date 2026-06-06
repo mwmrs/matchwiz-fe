@@ -20,7 +20,8 @@
 #   docker compose pull && docker compose up -d
 #   (add --profile localdb if you are running a local database)
 #
-# The frontend is reachable on http://<pi-ip>:80.
+# With Lighttpd reverse proxy: the frontend is reachable on http://<pi-ip>/matchwiz/
+# Without reverse proxy: directly on http://<pi-ip>:<MATCHWIZ_FRONTEND_PORT>
 
 services:
 
@@ -90,7 +91,7 @@ services:
     image: ghcr.io/mwmrs/matchwiz-fe:latest
     restart: unless-stopped
     ports:
-      - "${MATCHWIZ_FRONTEND_PORT:-80}:80"
+      - "127.0.0.1:${MATCHWIZ_FRONTEND_PORT:-8080}:80"
     depends_on:
       - backend
 

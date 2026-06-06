@@ -35,6 +35,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/matchwiz/",
               "budgets": [
                 {
                   "type": "initial",
