@@ -24,6 +24,9 @@
             <div class="match-kickoff">
               <mat-icon>schedule</mat-icon>
               {{ formatKickoff(match.kickoffTime) }}
+              @if (match.stage) {
+                <span class="stage-badge">{{ t('match.stage.' + match.stage) }}</span>
+              }
               @if (isLocked(match)) {
                 <span class="locked-badge">{{ t('predictions.lockedHint') }}</span>
               }

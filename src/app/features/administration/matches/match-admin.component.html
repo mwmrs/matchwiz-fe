@@ -136,6 +136,15 @@
               <mat-label>{{ t('admin.kickoff') }}</mat-label>
               <input matInput type="datetime-local" formControlName="kickoffTime" />
             </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ t('admin.stage') }}</mat-label>
+              <mat-select formControlName="stage">
+                <mat-option [value]="null">—</mat-option>
+                @for (s of matchStages; track s) {
+                  <mat-option [value]="s">{{ t('match.stage.' + s) }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
             <div class="form-actions">
               <button mat-stroked-button type="button" (click)="cancelMatch()">{{ t('admin.cancel') }}</button>
               <button mat-flat-button type="submit" class="create-btn" [disabled]="matchForm.invalid">{{ t('admin.save') }}</button>
@@ -166,6 +175,15 @@
                     <mat-select formControlName="status">
                       @for (s of matchStatuses; track s) {
                         <mat-option [value]="s">{{ t('match.status.' + s) }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic" class="stage-field">
+                    <mat-label>{{ t('admin.stage') }}</mat-label>
+                    <mat-select formControlName="stage">
+                      <mat-option [value]="null">—</mat-option>
+                      @for (s of matchStages; track s) {
+                        <mat-option [value]="s">{{ t('match.stage.' + s) }}</mat-option>
                       }
                     </mat-select>
                   </mat-form-field>

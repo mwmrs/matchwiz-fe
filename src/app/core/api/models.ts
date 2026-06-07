@@ -16,6 +16,7 @@ export type { LoginRequest } from './models/login-request';
 export type { LoginResponse } from './models/login-response';
 export type { Match } from './models/match';
 export type { Matchday } from './models/matchday';
+export type { MatchStage } from './models/match-stage';
 export type { MatchStatus } from './models/match-status';
 export type { Notification } from './models/notification';
 export type { NotificationType } from './models/notification-type';
