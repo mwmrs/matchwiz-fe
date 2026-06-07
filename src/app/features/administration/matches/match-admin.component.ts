@@ -8,6 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
+import { MATCH_STAGE } from '../../../core/api/models/match-stage-array';
 import type { Team, Matchday, Match, Competition } from '../../../core/api/models';
 
 type AdminTab = 'teams' | 'matchdays';
@@ -48,6 +49,7 @@ export class MatchAdminComponent implements OnInit {
   protected readonly editingTeam = signal<Team | null>(null);
 
   protected readonly matchStatuses = ['SCHEDULED', 'LIVE', 'FINISHED', 'CANCELLED'];
+  protected readonly matchStages = MATCH_STAGE;
   protected readonly matchResultForms = new Map<number, FormGroup>();
 
   protected teamForm = this.fb.group({
@@ -65,6 +67,7 @@ export class MatchAdminComponent implements OnInit {
     homeTeamId: [null as number | null, Validators.required],
     awayTeamId: [null as number | null, Validators.required],
     kickoffTime: ['', Validators.required],
+    stage: [null as string | null],
   });
 
   private createResultForm(match: Match) {
@@ -72,6 +75,7 @@ export class MatchAdminComponent implements OnInit {
       homeGoals: [match.homeGoals ?? null as number | null, Validators.min(0)],
       awayGoals: [match.awayGoals ?? null as number | null, Validators.min(0)],
       status: [match.status ?? 'FINISHED'],
+      stage: [match.stage ?? null as string | null],
     });
   }
 

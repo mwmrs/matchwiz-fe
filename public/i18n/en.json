@@ -128,7 +128,8 @@
     "scoringRules": "Scoring Rules",
     "exactResultPoints": "Exact result (points)",
     "goalDifferencePoints": "Correct goal difference (points)",
-    "tendencyPoints": "Correct tendency (points)"
+    "tendencyPoints": "Correct tendency (points)",
+    "stage": "Stage"
   },
   "competition": {
     "status": {
@@ -144,6 +145,26 @@
       "LIVE": "Live",
       "FINISHED": "Finished",
       "CANCELLED": "Cancelled"
+    },
+    "stage": {
+      "A": "Group A",
+      "B": "Group B",
+      "C": "Group C",
+      "D": "Group D",
+      "E": "Group E",
+      "F": "Group F",
+      "G": "Group G",
+      "H": "Group H",
+      "I": "Group I",
+      "J": "Group J",
+      "K": "Group K",
+      "L": "Group L",
+      "ROUND_32": "Round of 32",
+      "ROUND_16": "Round of 16",
+      "ROUND_8": "Quarter-final",
+      "SEMI_FINAL": "Semi-final",
+      "FINAL": "Final",
+      "THIRD_PLACE": "Third place"
     }
   },
   "common": {

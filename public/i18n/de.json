@@ -128,7 +128,8 @@
     "scoringRules": "Punkteregeln",
     "exactResultPoints": "Exaktes Ergebnis (Punkte)",
     "goalDifferencePoints": "Richtiges Torverhältnis (Punkte)",
-    "tendencyPoints": "Richtige Tendenz (Punkte)"
+    "tendencyPoints": "Richtige Tendenz (Punkte)",
+    "stage": "Phase"
   },
   "competition": {
     "status": {
@@ -144,6 +145,26 @@
       "LIVE": "Live",
       "FINISHED": "Beendet",
       "CANCELLED": "Abgesagt"
+    },
+    "stage": {
+      "A": "Gruppe A",
+      "B": "Gruppe B",
+      "C": "Gruppe C",
+      "D": "Gruppe D",
+      "E": "Gruppe E",
+      "F": "Gruppe F",
+      "G": "Gruppe G",
+      "H": "Gruppe H",
+      "I": "Gruppe I",
+      "J": "Gruppe J",
+      "K": "Gruppe K",
+      "L": "Gruppe L",
+      "ROUND_32": "Runde der 32",
+      "ROUND_16": "Achtelfinale",
+      "ROUND_8": "Viertelfinale",
+      "SEMI_FINAL": "Halbfinale",
+      "FINAL": "Finale",
+      "THIRD_PLACE": "Spiel um Platz 3"
     }
   },
   "common": {

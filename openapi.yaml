@@ -945,6 +945,10 @@ components:
       type: string
       enum: [SCHEDULED, LIVE, FINISHED, CANCELLED]
 
+    MatchStage:
+      type: string
+      enum: [A, B, C, D, E, F, G, H, I, J, K, L, ROUND_32, ROUND_16, ROUND_8, SEMI_FINAL, FINAL, THIRD_PLACE]
+
     NotificationType:
       type: string
       enum: [MATCHDAY_STARTS, MISSING_PREDICTIONS, REGISTRATION_APPROVED, INVITATION_ACCEPTED]
@@ -1141,6 +1145,8 @@ components:
           type: integer
         status:
           $ref: '#/components/schemas/MatchStatus'
+        stage:
+          $ref: '#/components/schemas/MatchStage'
 
     CreateMatchRequest:
       type: object
@@ -1155,6 +1161,8 @@ components:
         kickoffTime:
           type: string
           format: date-time
+        stage:
+          $ref: '#/components/schemas/MatchStage'
 
     UpdateMatchRequest:
       type: object
@@ -1174,6 +1182,8 @@ components:
           type: integer
         status:
           $ref: '#/components/schemas/MatchStatus'
+        stage:
+          $ref: '#/components/schemas/MatchStage'
 
     Prediction:
       type: object
