@@ -32,7 +32,7 @@
 
       <form [formGroup]="form" (ngSubmit)="save()" class="admin-form" style="margin-bottom: 16px">
         <mat-form-field appearance="outline">
-          <mat-label>Competition</mat-label>
+          <mat-label>{{ t('admin.competition') }}</mat-label>
           <mat-select formControlName="competitionId">
             @for (comp of competitions(); track comp.id) {
               <mat-option [value]="comp.id">{{ comp.name }} ({{ comp.season }})</mat-option>
@@ -46,7 +46,7 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Description</mat-label>
+          <mat-label>{{ t('admin.description') }}</mat-label>
           <input matInput formControlName="description" />
         </mat-form-field>
 

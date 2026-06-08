@@ -76,7 +76,13 @@ export class MatchAdminComponent implements OnInit {
       awayGoals: [match.awayGoals ?? null as number | null, Validators.min(0)],
       status: [match.status ?? 'FINISHED'],
       stage: [match.stage ?? null as string | null],
+      kickoffTime: [match.kickoffTime ? this.toDatetimeLocalValue(match.kickoffTime) : null],
     });
+  }
+
+  private toDatetimeLocalValue(isoString: string): string {
+    const d = new Date(isoString);
+    return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
   }
 
   ngOnInit() {
@@ -156,6 +162,7 @@ export class MatchAdminComponent implements OnInit {
   saveMatch() {
     if (this.matchForm.invalid || !this.selectedMatchday()) return;
     const value = this.matchForm.getRawValue();
+    if (value.kickoffTime) value.kickoffTime = new Date(value.kickoffTime).toISOString();
     const md = this.selectedMatchday()!;
     this.http.post<Match>(`/api/matchdays/${md.id}/matches`, value).subscribe({
       next: (saved) => {
@@ -168,6 +175,7 @@ export class MatchAdminComponent implements OnInit {
 
   saveMatchResult(match: Match, form: FormGroup) {
     const value = form.getRawValue();
+    if (value.kickoffTime) value.kickoffTime = new Date(value.kickoffTime).toISOString();
     this.http.patch<Match>(`/api/matches/${match.id}`, value).subscribe({
       next: (saved) => {
         this.matches.update((list) => list.map((m) => (m.id === saved.id ? saved : m)));

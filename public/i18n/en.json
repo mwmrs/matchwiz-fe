@@ -85,7 +85,9 @@
   },
   "admin": {
     "title": "Administration",
+    "competition": "Competition",
     "competitions": "Competitions",
+    "description": "Description",
     "groups": "Groups",
     "matches": "Matches",
     "createCompetition": "New Competition",

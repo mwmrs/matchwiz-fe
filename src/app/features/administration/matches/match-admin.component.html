@@ -73,7 +73,7 @@
       </div>
 
       <mat-form-field appearance="outline" style="max-width: 300px; margin-bottom: 16px">
-        <mat-label>Competition</mat-label>
+        <mat-label>{{ t('admin.competition') }}</mat-label>
         <mat-select (valueChange)="loadMatchdays($event)">
           @for (comp of competitions(); track comp.id) {
             <mat-option [value]="comp.id">{{ comp.name }} ({{ comp.season }})</mat-option>
@@ -160,7 +160,6 @@
                   <span class="list-item-name">
                     {{ match.homeTeam?.shortName }} {{ t('common.vs') }} {{ match.awayTeam?.shortName }}
                   </span>
-                  <span class="list-item-sub">{{ formatKickoff(match.kickoffTime) }}</span>
                 </div>
                 <form [formGroup]="form" (ngSubmit)="saveMatchResult(match, form)" class="inline-result-form">
                   <mat-form-field appearance="outline" subscriptSizing="dynamic" class="goals-field">                    
@@ -186,6 +185,10 @@
                         <mat-option [value]="s">{{ t('match.stage.' + s) }}</mat-option>
                       }
                     </mat-select>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic" class="kickoff-field">
+                    <mat-label>{{ t('admin.kickoff') }}</mat-label>
+                    <input matInput type="datetime-local" formControlName="kickoffTime" />
                   </mat-form-field>
                   <button mat-icon-button type="submit" color="primary" [attr.aria-label]="t('admin.save')">
                     <mat-icon>check</mat-icon>

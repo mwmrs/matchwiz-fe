@@ -85,7 +85,9 @@
   },
   "admin": {
     "title": "Verwaltung",
+    "competition": "Wettbewerb",
     "competitions": "Wettbewerbe",
+    "description": "Beschreibung",
     "groups": "Gruppen",
     "matches": "Spiele",
     "createCompetition": "Neuer Wettbewerb",
