@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -44,6 +44,7 @@ export class MatchdayPredictionComponent implements OnInit {
   protected form!: FormGroup;
 
   protected readonly now = signal(new Date());
+  protected readonly hasUnlockedMatches = computed(() => this.matches().some((m) => !this.isLocked(m)));
 
   ngOnInit() {
     const id = Number(this.matchdayId());
@@ -73,16 +74,24 @@ export class MatchdayPredictionComponent implements OnInit {
     const controls: Record<string, FormGroup> = {};
     for (const match of matches) {
       const pred = predictions.find((p) => p.matchId === match.id);
-      controls[`match_${match.id}`] = this.fb.group({
+      const group = this.fb.group({
         home: [pred?.predictedHomeGoals ?? ''],
         away: [pred?.predictedAwayGoals ?? ''],
       });
+      if (this.isLocked(match)) {
+        group.disable();
+      }
+      controls[`match_${match.id}`] = group;
     }
     this.form = this.fb.group(controls);
   }
 
   protected isLocked(match: Match): boolean {
     return new Date(match.kickoffTime) <= this.now();
+  }
+
+  protected getPrediction(matchId: number): Prediction | undefined {
+    return this.predictions().find((p) => p.matchId === matchId);
   }
 
   protected getMatchGroup(matchId: number): FormGroup {
