@@ -52,7 +52,6 @@
                   max="20"
                   formControlName="home"
                   class="score-input"
-                  [disabled]="isLocked(match)"
                   [attr.aria-label]="t('predictions.home') + ' goals'"
                 />
                 <span class="score-sep">:</span>
@@ -62,7 +61,6 @@
                   max="20"
                   formControlName="away"
                   class="score-input"
-                  [disabled]="isLocked(match)"
                   [attr.aria-label]="t('predictions.away') + ' goals'"
                 />
               </div>
@@ -79,6 +77,22 @@
                 </div>
               </div>
             </div>
+
+            @if (match.status === 'LIVE' || match.status === 'FINISHED') {
+              <div class="match-result-row">
+                @if (match.status === 'LIVE') {
+                  <span class="live-badge">● {{ t('match.status.LIVE') }}</span>
+                }
+                <div class="result-scores">
+                  <span class="result-score-value">{{ match.homeGoals ?? '–' }}</span>
+                  <span class="score-sep">:</span>
+                  <span class="result-score-value">{{ match.awayGoals ?? '–' }}</span>
+                </div>
+                @if (getPrediction(match.id)?.awardedPoints != null) {
+                  <span class="points-badge">+{{ getPrediction(match.id)!.awardedPoints }} {{ t('rankings.points') }}</span>
+                }
+              </div>
+            }
           </div>
         }
 
@@ -86,7 +100,7 @@
           mat-flat-button
           type="submit"
           class="submit-btn"
-          [disabled]="saving()"
+          [disabled]="saving() || !hasUnlockedMatches()"
         >
           @if (saving()) {
             <mat-spinner diameter="20" />
