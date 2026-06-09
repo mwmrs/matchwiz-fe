@@ -75,8 +75,8 @@ export class MatchdayPredictionComponent implements OnInit {
     for (const match of matches) {
       const pred = predictions.find((p) => p.matchId === match.id);
       const group = this.fb.group({
-        home: [pred?.predictedHomeGoals ?? ''],
-        away: [pred?.predictedAwayGoals ?? ''],
+        home: [pred?.predictedHomeGoals ?? null],
+        away: [pred?.predictedAwayGoals ?? null],
       });
       if (this.isLocked(match)) {
         group.disable();
@@ -104,15 +104,13 @@ export class MatchdayPredictionComponent implements OnInit {
     const id = Number(this.matchdayId());
     const payload = this.matches()
       .filter((m) => !this.isLocked(m))
-      .map((m) => {
+      .flatMap((m) => {
         const group = this.getMatchGroup(m.id);
-        return {
-          matchId: m.id,
-          predictedHomeGoals: Number(group.get('home')?.value ?? 0),
-          predictedAwayGoals: Number(group.get('away')?.value ?? 0),
-        };
-      })
-      .filter((p) => p.predictedHomeGoals !== null && p.predictedAwayGoals !== null);
+        const home = group.get('home')?.value;
+        const away = group.get('away')?.value;
+        if (home == null || away == null) return [];
+        return [{ matchId: m.id, predictedHomeGoals: Number(home), predictedAwayGoals: Number(away) }];
+      });
 
     this.http.post<Prediction[]>(`/api/matchdays/${id}/predictions?groupId=${this.groupId()}`, payload).subscribe({
       next: () => {
