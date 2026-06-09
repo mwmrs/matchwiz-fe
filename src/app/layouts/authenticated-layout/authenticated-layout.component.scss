@@ -95,7 +95,7 @@
 .content-area {
   flex: 1;
   overflow-y: auto;
-  padding-bottom: 80px; /* space for bottom nav on mobile */
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
 
   @media (min-width: 768px) {
     padding-bottom: 0;
@@ -109,7 +109,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 64px;
+  height: calc(64px + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
   background: var(--mw-surface);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
