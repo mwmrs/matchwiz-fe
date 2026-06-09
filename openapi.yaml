@@ -1067,6 +1067,8 @@ components:
         joinedAt:
           type: string
           format: date-time
+        predictionsCount:
+          type: integer
 
     Team:
       type: object

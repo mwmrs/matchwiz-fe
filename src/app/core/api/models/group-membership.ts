@@ -7,6 +7,7 @@ export interface GroupMembership {
   groupId: number;
   id: number;
   joinedAt?: string;
+  predictionsCount?: number;
   role: GroupRole;
   userId: number;
   username?: string;

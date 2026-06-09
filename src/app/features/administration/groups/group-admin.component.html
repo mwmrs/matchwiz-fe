@@ -88,7 +88,12 @@
               <div class="list-item">
                 <div class="list-item-info">
                   <span class="list-item-name">{{ member.username }}</span>
-                  <span class="list-item-sub">{{ member.role }}</span>
+                  <span class="list-item-sub">
+                    {{ member.role }}
+                    @if (member.predictionsCount != null) {
+                      · {{ member.predictionsCount }} {{ t('admin.predictions') }}
+                    }
+                  </span>
                 </div>
                 <button mat-icon-button (click)="removeMember(member.userId)" [attr.aria-label]="t('admin.delete')">
                   <mat-icon>person_remove</mat-icon>
