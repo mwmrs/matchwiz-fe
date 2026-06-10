@@ -170,6 +170,19 @@
       "THIRD_PLACE": "Spiel um Platz 3"
     }
   },
+  "home": {
+    "tagline": "Tippen. Mitfiebern. Gewinnen.",
+    "step1Title": "Konto erstellen und Gruppe beitreten",
+    "step1Text": "Registriere dich, der Admin schaltet dich frei. Frage dann eine Gruppe an.",
+    "step2Title": "Tipps abgeben",
+    "step2Text": "Tippe die Spielergebnisse bis zur Minute vor dem Anstoß jedes Spiels.",
+    "step3Title": "Punkte sammeln",
+    "step3Text": "Es gibt Punkte für das exakte Ergebnis, dann Torverhältnis und Tendenz.",
+    "step4Title": "Rangliste verfolgen",
+    "step4Text": "Sieh nach jedem Spieltag in der Gruppenrangliste, wer die Tabelle anführt.",
+    "loginCta": "Anmelden",
+    "registerCta": "Konto erstellen"
+  },
   "common": {
     "loading": "Laden...",
     "error": "Ein Fehler ist aufgetreten. Bitte versuche es erneut.",

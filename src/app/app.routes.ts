@@ -10,10 +10,16 @@ import { GroupPickerComponent } from './features/group-picker/group-picker.compo
 export const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
+    canActivate: [publicGuard],
+    loadComponent: () =>
+      import('./features/home/home.component').then((m) => m.HomeComponent),
+  },
+  {
+    path: '',
     component: PublicLayoutComponent,
     canActivate: [publicGuard],
     children: [
-      { path: '', redirectTo: 'login', pathMatch: 'full' },
       {
         path: 'login',
         loadComponent: () =>

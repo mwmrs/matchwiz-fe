@@ -25,6 +25,23 @@
       </section>
     }
 
+    <!-- Missing predictions -->
+    @if (missingPredictionsCount() > 0 && targetGroup()) {
+      <section class="section">
+        <h2 class="section-title">{{ t('dashboard.missingPredictions') }}</h2>
+        <div class="info-card info-card--warning">
+          <p class="warning-hint">{{ t('dashboard.missingPredictionsHint', { count: missingPredictionsCount() }) }}</p>
+          <a
+            mat-flat-button
+            class="submit-btn"
+            [routerLink]="['/predictions/group', targetGroup()!.id, 'matchday', upcomingMatchday()!.id]"
+          >
+            {{ t('dashboard.submitNow') }}
+          </a>
+        </div>
+      </section>
+    }
+
     <!-- Active competition -->
     @if (competition()) {
       <section class="section">

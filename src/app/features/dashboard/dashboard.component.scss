@@ -85,6 +85,24 @@
   gap: var(--mw-spacing-sm);
 }
 
+.info-card--warning {
+  background: rgba(255, 109, 0, 0.1);
+  border: 1px solid rgba(255, 109, 0, 0.3);
+
+  .warning-hint {
+    font-size: 14px;
+    color: var(--mw-warn);
+    margin: 0;
+  }
+
+  .submit-btn {
+    align-self: flex-start;
+    background: var(--mw-accent) !important;
+    color: #000 !important;
+    font-weight: 700;
+  }
+}
+
 .info-row {
   display: flex;
   align-items: center;

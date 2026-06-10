@@ -170,6 +170,19 @@
       "THIRD_PLACE": "Third place"
     }
   },
+  "home": {
+    "tagline": "Predict. Compete. Win.",
+    "step1Title": "Create an account and join a group",
+    "step1Text": "Register and wait for admin approval. Then request to join a group.",
+    "step2Title": "Make predictions",
+    "step2Text": "Predict match scores up until a minute before each match kicks off.",
+    "step3Title": "Earn points",
+    "step3Text": "Points are awarded for the exact result, then goal difference and correct tendency.",
+    "step4Title": "Follow the rankings",
+    "step4Text": "Check the group leaderboard after every matchday to see who leads the table.",
+    "loginCta": "Sign in",
+    "registerCta": "Create account"
+  },
   "common": {
     "loading": "Loading...",
     "error": "An error occurred. Please try again.",

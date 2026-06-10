@@ -1,0 +1,49 @@
+<ng-container *transloco="let t">
+  <div class="home-shell">
+    <div class="home-content">
+      <header class="home-header">
+        <div class="header-spacer" aria-hidden="true"></div>
+        <div class="logo">
+          <span class="logo-icon">⚽</span>
+          <span class="logo-text">MatchWiz</span>
+        </div>
+        <div class="header-actions">
+          <button
+            mat-button
+            class="lang-toggle"
+            (click)="toggleLang()"
+            [attr.aria-label]="activeLang() === 'de' ? 'Switch language to English' : 'Sprache zu Deutsch wechseln'"
+          >
+            {{ activeLang() === 'de' ? 'EN' : 'DE' }}
+          </button>
+        </div>
+      </header>
+
+      <section class="hero" aria-labelledby="hero-heading">
+        <h1 id="hero-heading" class="hero-tagline">{{ t('home.tagline') }}</h1>
+      </section>
+
+      <section class="guide" aria-label="How it works">
+        <ol class="steps-grid" role="list">
+          @for (step of steps; track step.icon; let i = $index) {
+            <li class="step-card">
+              <span class="step-number" aria-hidden="true">{{ i + 1 }}</span>
+              <mat-icon class="step-icon" aria-hidden="true">{{ step.icon }}</mat-icon>
+              <h2 class="step-title">{{ t(step.titleKey) }}</h2>
+              <p class="step-text">{{ t(step.textKey) }}</p>
+            </li>
+          }
+        </ol>
+      </section>
+
+      <div class="cta-row">
+        <a mat-flat-button routerLink="/login" class="cta-primary">
+          {{ t('home.loginCta') }}
+        </a>
+        <a mat-stroked-button routerLink="/register" class="cta-secondary">
+          {{ t('home.registerCta') }}
+        </a>
+      </div>
+    </div>
+  </div>
+</ng-container>
