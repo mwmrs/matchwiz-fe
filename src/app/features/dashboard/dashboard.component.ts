@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,7 +8,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { AuthStore } from '../../core/auth/auth.store';
 import { NotificationStore } from '../../core/services/notification.store';
-import type { Group, Competition, Matchday, Notification, GroupMembership } from '../../core/api/models';
+import type { Group, Competition, Match, Matchday, Notification, GroupMembership, Prediction } from '../../core/api/models';
 
 @Component({
   selector: 'app-dashboard',
@@ -35,6 +35,9 @@ export class DashboardComponent implements OnInit {
   protected readonly memberships = signal<GroupMembership[]>([]);
   protected readonly competition = signal<Competition | null>(null);
   protected readonly upcomingMatchday = signal<Matchday | null>(null);
+  protected readonly matches = signal<Match[]>([]);
+  protected readonly existingPredictions = signal<Prediction[]>([]);
+
   protected readonly myGroups = computed(() => {
     const approved = new Set(
       this.memberships().filter((m) => m.approved).map((m) => m.groupId),
@@ -54,6 +57,32 @@ export class DashboardComponent implements OnInit {
     return this.allGroups().filter((g) => !joined.has(g.id));
   });
 
+  protected readonly targetGroup = computed(() => {
+    const comp = this.competition();
+    if (!comp) return null;
+    return this.myGroups().find((g) => g.competitionId === comp.id) ?? null;
+  });
+
+  protected readonly missingPredictionsCount = computed(() => {
+    const now = new Date();
+    const openMatches = this.matches().filter(
+      (m) => m.status === 'SCHEDULED' && new Date(m.kickoffTime) > now,
+    );
+    return Math.max(0, openMatches.length - this.existingPredictions().length);
+  });
+
+  constructor() {
+    effect(() => {
+      const group = this.targetGroup();
+      const matchday = this.upcomingMatchday();
+      if (group && matchday) {
+        this.http
+          .get<Prediction[]>(`/api/matchdays/${matchday.id}/predictions?groupId=${group.id}`)
+          .subscribe((p) => this.existingPredictions.set(p));
+      }
+    });
+  }
+
   ngOnInit() {
     this.notificationStore.load(undefined);
     this.http.get<GroupMembership[]>('/api/users/me/memberships').subscribe((m) => this.memberships.set(m));
@@ -67,6 +96,9 @@ export class DashboardComponent implements OnInit {
           const upcoming = sorted[sorted.length - 1];
           if (upcoming) {
             this.upcomingMatchday.set(upcoming);
+            this.http
+              .get<Match[]>(`/api/matchdays/${upcoming.id}/matches`)
+              .subscribe((ms) => this.matches.set(ms));
           }
         });
       }
