@@ -75,7 +75,7 @@ export const AuthStore = signalStore(
     logout() {
       localStorage.removeItem(TOKEN_KEY);
       patchState(store, { user: null, token: null, error: null, registrationPending: false });
-      router.navigate(['/login']);
+      router.navigate(['/']);
     },
 
     async initializeSession(): Promise<void> {
