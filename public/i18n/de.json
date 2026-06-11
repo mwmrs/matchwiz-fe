@@ -11,6 +11,7 @@
     "register": "Registrieren",
     "logout": "Abmelden",
     "username": "Benutzername",
+    "usernameMinLength": "Der Benutzername muss mindestens {{ usrMinLength }} Zeichen haben.",
     "password": "Passwort",
     "email": "E-Mail-Adresse (optional)",
     "loginBtn": "Anmelden",
@@ -20,7 +21,10 @@
     "pendingApproval": "Registrierung eingereicht! Dein Konto wartet auf Freischaltung.",
     "invalidCredentials": "Ungültiger Benutzername oder Passwort.",
     "usernameTaken": "Dieser Benutzername ist bereits vergeben.",
-    "accountNotApproved": "Dein Konto wartet auf Freischaltung. Bitte warte, bis ein Admin dein Konto aktiviert."
+    "accountNotApproved": "Dein Konto wartet auf Freischaltung. Bitte warte, bis ein Admin dein Konto aktiviert.",
+    "confirmPassword": "Passwort bestätigen",
+    "passwordMismatch": "Passwörter stimmen nicht überein",
+    "passwordMinLength": "Das Passwort muss mindestens {{ pwdMinLength }} Zeichen haben."
   },
   "dashboard": {
     "title": "Dashboard",

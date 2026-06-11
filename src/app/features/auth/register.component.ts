@@ -1,12 +1,25 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoModule } from '@jsverse/transloco';
 import { AuthStore } from '../../core/auth/auth.store';
+
+const passwordMatchValidator: ValidatorFn = (group: AbstractControl) => {
+  const pw = group.get('password')?.value;
+  const confirm = group.get('confirmPassword')?.value;
+  return pw === confirm ? null : { passwordMismatch: true };
+};
+
+class ConfirmPasswordErrorMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null): boolean {
+    return !!(control?.touched && control.parent?.hasError('passwordMismatch'));
+  }
+}
 
 @Component({
   selector: 'app-register',
@@ -37,19 +50,33 @@ import { AuthStore } from '../../core/auth/auth.store';
           }
 
           <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <mat-label>{{ t('auth.username') }}</mat-label>
-              <input matInput formControlName="username" autocomplete="username" />
+              <input matInput formControlName="username" autocomplete="username" maxlength="16" />              
             </mat-form-field>
+            @if (form.get('username')?.hasError('minlength') && form.get('username')?.touched) {
+              <p class="field-error" role="alert">{{ t('auth.usernameMinLength', { usrMinLength: 3 }) }}</p>
+            }
 
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <mat-label>{{ t('auth.password') }}</mat-label>
-              <input matInput type="password" formControlName="password" autocomplete="new-password" />
+              <input matInput type="password" formControlName="password" autocomplete="new-password" maxlength="100" />
             </mat-form-field>
+            @if (form.get('password')?.hasError('minlength') && form.get('password')?.touched) {
+              <p class="field-error" role="alert">{{ t('auth.passwordMinLength', { pwdMinLength: 8 }) }}</p>
+            }
 
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>{{ t('auth.confirmPassword') }}</mat-label>
+              <input matInput type="password" formControlName="confirmPassword" autocomplete="new-password" [errorStateMatcher]="passwordMismatchMatcher" maxlength="100" />
+            </mat-form-field>
+            @if (form.hasError('passwordMismatch') && form.get('confirmPassword')?.touched) {
+              <p class="field-error" role="alert">{{ t('auth.passwordMismatch') }}</p>
+            }
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <mat-label>{{ t('auth.email') }}</mat-label>
-              <input matInput type="email" formControlName="email" autocomplete="email" />
+              <input matInput type="email" formControlName="email" autocomplete="email" maxlength="100" />
             </mat-form-field>
 
             <button
@@ -75,12 +102,17 @@ import { AuthStore } from '../../core/auth/auth.store';
     </ng-container>
   `,
   styles: [`
+    :host {
+      display: block;
+      width: 100%;
+      max-width: 440px;
+    }
+
     .auth-card {
       background: var(--mw-surface);
       border-radius: var(--mw-radius-lg);
       padding: var(--mw-spacing-xl);
       width: 100%;
-      max-width: 400px;
     }
 
     .auth-title {
@@ -118,6 +150,12 @@ import { AuthStore } from '../../core/auth/auth.store';
       gap: var(--mw-spacing-sm);
     }
 
+    .field-error {
+      color: var(--mw-warn);
+      font-size: 12px;
+      margin-top: calc(-1 * var(--mw-spacing-sm) + 2px);
+    }
+
     .submit-btn {
       background: var(--mw-accent) !important;
       color: #000 !important;
@@ -129,6 +167,10 @@ import { AuthStore } from '../../core/auth/auth.store';
       display: flex;
       align-items: center;
       justify-content: center;
+
+      &:disabled {
+        opacity: 0.45;
+      }
     }
 
     .auth-link {
@@ -148,12 +190,17 @@ import { AuthStore } from '../../core/auth/auth.store';
 export class RegisterComponent {
   protected readonly authStore = inject(AuthStore);
   private readonly fb = inject(FormBuilder);
+  protected readonly passwordMismatchMatcher = new ConfirmPasswordErrorMatcher();
 
-  protected readonly form = this.fb.group({
-    username: ['', Validators.required],
-    password: ['', Validators.required],
-    email: ['', Validators.email],
-  });
+  protected readonly form = this.fb.group(
+    {
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', Validators.required],
+      email: ['', Validators.email],
+    },
+    { validators: passwordMatchValidator }
+  );
 
   submit() {
     if (this.form.invalid) return;
