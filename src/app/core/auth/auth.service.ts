@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import type { LoginRequest, LoginResponse, RegisterRequest, User } from '../api/models';
+import type { LoginRequest, LoginResponse, PasswordResetConfirmRequest, PasswordResetRequest, RegisterRequest, User } from '../api/models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -16,5 +16,13 @@ export class AuthService {
 
   getMe() {
     return this.http.get<User>('/api/users/me');
+  }
+
+  requestPasswordReset(req: PasswordResetRequest) {
+    return this.http.post<void>('/api/auth/password-reset/request', req);
+  }
+
+  confirmPasswordReset(req: PasswordResetConfirmRequest) {
+    return this.http.post<void>('/api/auth/password-reset/confirm', req);
   }
 }

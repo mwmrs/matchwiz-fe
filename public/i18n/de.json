@@ -24,7 +24,19 @@
     "accountNotApproved": "Dein Konto wartet auf Freischaltung. Bitte warte, bis ein Admin dein Konto aktiviert.",
     "confirmPassword": "Passwort bestätigen",
     "passwordMismatch": "Passwörter stimmen nicht überein",
-    "passwordMinLength": "Das Passwort muss mindestens {{ pwdMinLength }} Zeichen haben."
+    "passwordMinLength": "Das Passwort muss mindestens {{ pwdMinLength }} Zeichen haben.",
+    "forgotPassword": "Passwort vergessen?",
+    "forgotPasswordTitle": "Passwort zurücksetzen",
+    "resetCodeTitle": "Code eingeben",
+    "emailForReset": "E-Mail-Adresse",
+    "resetCode": "Reset-Code",
+    "newPassword": "Neues Passwort",
+    "requestResetBtn": "Code anfordern",
+    "confirmResetBtn": "Passwort zurücksetzen",
+    "resetRequested": "Falls ein Konto mit dieser E-Mail existiert, wurde ein Reset-Code gesendet.",
+    "resetComplete": "Dein Passwort wurde aktualisiert. Du kannst dich jetzt anmelden.",
+    "resetInvalidCode": "Dieser Code ist ungültig oder abgelaufen.",
+    "backToLogin": "Zurück zur Anmeldung"
   },
   "dashboard": {
     "title": "Dashboard",

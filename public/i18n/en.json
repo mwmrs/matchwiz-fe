@@ -24,7 +24,19 @@
     "accountNotApproved": "Your account is pending approval. Please wait for an admin to activate it.",
     "confirmPassword": "Confirm password",
     "passwordMismatch": "Passwords do not match",
-    "passwordMinLength": "The password must be at least {{ pwdMinLength }} characters long."
+    "passwordMinLength": "The password must be at least {{ pwdMinLength }} characters long.",
+    "forgotPassword": "Forgot password?",
+    "forgotPasswordTitle": "Reset password",
+    "resetCodeTitle": "Enter reset code",
+    "emailForReset": "Email address",
+    "resetCode": "Reset code",
+    "newPassword": "New password",
+    "requestResetBtn": "Send reset code",
+    "confirmResetBtn": "Reset password",
+    "resetRequested": "If an account with this email exists, a reset code has been sent.",
+    "resetComplete": "Your password has been updated. You can now sign in.",
+    "resetInvalidCode": "This reset code is invalid or has expired.",
+    "backToLogin": "Back to login"
   },
   "dashboard": {
     "title": "Dashboard",

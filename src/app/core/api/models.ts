@@ -20,6 +20,8 @@ export type { MatchStage } from './models/match-stage';
 export type { MatchStatus } from './models/match-status';
 export type { Notification } from './models/notification';
 export type { NotificationType } from './models/notification-type';
+export type { PasswordResetConfirmRequest } from './models/password-reset-confirm-request';
+export type { PasswordResetRequest } from './models/password-reset-request';
 export type { Prediction } from './models/prediction';
 export type { RankingEntry } from './models/ranking-entry';
 export type { RegisterRequest } from './models/register-request';
