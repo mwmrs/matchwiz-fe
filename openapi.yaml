@@ -64,6 +64,36 @@ paths:
         '409':
           description: Username already taken
 
+  /auth/password-reset/request:
+    post:
+      tags: [auth]
+      operationId: requestPasswordReset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+      responses:
+        '204':
+          description: Accepted; if the email matches an account, a reset code was sent
+
+  /auth/password-reset/confirm:
+    post:
+      tags: [auth]
+      operationId: confirmPasswordReset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
+      responses:
+        '204':
+          description: Password updated
+        '400':
+          description: Invalid or expired code
+
   /users:
     get:
       tags: [users]
@@ -871,6 +901,23 @@ components:
         email:
           type: string
           format: email
+
+    PasswordResetRequest:
+      type: object
+      required: [email]
+      properties:
+        email:
+          type: string
+          format: email
+
+    PasswordResetConfirmRequest:
+      type: object
+      required: [code, newPassword]
+      properties:
+        code:
+          type: string
+        newPassword:
+          type: string
 
     UpdateUserRequest:
       type: object

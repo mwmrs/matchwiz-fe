@@ -3,7 +3,7 @@ import { signalStore, withState, withComputed, withMethods, patchState } from '@
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { firstValueFrom, pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
-import type { User, LoginRequest, RegisterRequest } from '../api/models';
+import type { User, LoginRequest, PasswordResetConfirmRequest, PasswordResetRequest, RegisterRequest } from '../api/models';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 
@@ -13,6 +13,8 @@ interface AuthState {
   loading: boolean;
   error: string | null;
   registrationPending: boolean;
+  resetRequested: boolean;
+  resetComplete: boolean;
 }
 
 const TOKEN_KEY = 'mw_token';
@@ -25,6 +27,8 @@ export const AuthStore = signalStore(
     loading: false,
     error: null,
     registrationPending: false,
+    resetRequested: false,
+    resetComplete: false,
   }),
   withComputed((store) => ({
     isAuthenticated: computed(() => store.token() !== null && store.user() !== null),
@@ -72,9 +76,40 @@ export const AuthStore = signalStore(
       ),
     ),
 
+    requestPasswordReset: rxMethod<PasswordResetRequest>(
+      pipe(
+        tap(() => patchState(store, { loading: true, error: null })),
+        switchMap((req) =>
+          authService.requestPasswordReset(req).pipe(
+            tapResponse({
+              next: () => patchState(store, { loading: false, resetRequested: true }),
+              error: () => patchState(store, { loading: false, error: 'common.error' }),
+            }),
+          ),
+        ),
+      ),
+    ),
+
+    confirmPasswordReset: rxMethod<PasswordResetConfirmRequest>(
+      pipe(
+        tap(() => patchState(store, { loading: true, error: null })),
+        switchMap((req) =>
+          authService.confirmPasswordReset(req).pipe(
+            tapResponse({
+              next: () => patchState(store, { loading: false, resetComplete: true }),
+              error: (err: { status?: number }) => {
+                const error = err.status === 400 ? 'auth.resetInvalidCode' : 'common.error';
+                patchState(store, { loading: false, error });
+              },
+            }),
+          ),
+        ),
+      ),
+    ),
+
     logout() {
       localStorage.removeItem(TOKEN_KEY);
-      patchState(store, { user: null, token: null, error: null, registrationPending: false });
+      patchState(store, { user: null, token: null, error: null, registrationPending: false, resetRequested: false, resetComplete: false });
       router.navigate(['/']);
     },
 
@@ -96,7 +131,7 @@ export const AuthStore = signalStore(
     },
 
     clearError() {
-      patchState(store, { error: null });
+      patchState(store, { error: null, resetRequested: false, resetComplete: false });
     },
   })),
 );

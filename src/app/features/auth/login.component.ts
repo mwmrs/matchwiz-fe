@@ -54,6 +54,10 @@ import { AuthStore } from '../../core/auth/auth.store';
         </form>
 
         <p class="auth-link">
+          <a routerLink="/forgot-password">{{ t('auth.forgotPassword') }}</a>
+        </p>
+
+        <p class="auth-link">
           {{ t('auth.noAccount') }}
           <a routerLink="/register">{{ t('auth.register') }}</a>
         </p>
