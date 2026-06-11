@@ -31,12 +31,12 @@ import { AuthStore } from '../../core/auth/auth.store';
         <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
           <mat-form-field appearance="outline">
             <mat-label>{{ t('auth.username') }}</mat-label>
-            <input matInput formControlName="username" autocomplete="username" />
+            <input matInput formControlName="username" autocomplete="username" maxlength="16" />
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>{{ t('auth.password') }}</mat-label>
-            <input matInput type="password" formControlName="password" autocomplete="current-password" />
+            <input matInput type="password" formControlName="password" autocomplete="current-password" maxlength="100" />
           </mat-form-field>
 
           <button
@@ -61,12 +61,17 @@ import { AuthStore } from '../../core/auth/auth.store';
     </ng-container>
   `,
   styles: [`
+    :host {
+      display: block;
+      width: 100%;
+      max-width: 440px;
+    }
+
     .auth-card {
       background: var(--mw-surface);
       border-radius: var(--mw-radius-lg);
       padding: var(--mw-spacing-xl);
       width: 100%;
-      max-width: 400px;
     }
 
     .auth-title {
@@ -104,6 +109,10 @@ import { AuthStore } from '../../core/auth/auth.store';
       display: flex;
       align-items: center;
       justify-content: center;
+
+      &:disabled {
+        opacity: 0.45;
+      }
     }
 
     .auth-link {
