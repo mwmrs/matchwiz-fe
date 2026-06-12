@@ -1,0 +1,13 @@
+mat-dialog-content {
+  font-size: 15px;
+  color: var(--mw-text);
+  padding: var(--mw-spacing-md) var(--mw-spacing-lg) var(--mw-spacing-sm);
+  margin: 0;
+  text-align: center;
+}
+
+mat-dialog-actions {
+  padding: var(--mw-spacing-sm) var(--mw-spacing-lg) var(--mw-spacing-md);
+  gap: var(--mw-spacing-sm);
+  margin: 0;
+}

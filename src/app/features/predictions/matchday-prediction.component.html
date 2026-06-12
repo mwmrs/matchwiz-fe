@@ -19,6 +19,19 @@
       <p class="empty-msg">{{ t('common.noData') }}</p>
     } @else {
       <form [formGroup]="form" (ngSubmit)="submit()" class="matches-list">
+        <button
+          mat-flat-button
+          type="submit"
+          class="submit-btn"
+          [disabled]="saving() || !hasUnlockedMatches()"
+        >
+          @if (saving()) {
+            <mat-spinner diameter="20" />
+          } @else {
+            {{ t('predictions.submitBtn') }}
+          }
+        </button>
+        
         @for (match of matches(); track match.id) {
           <div class="match-card" [class.locked]="isLocked(match)">
             <div class="match-kickoff">
@@ -52,6 +65,7 @@
                   max="20"
                   formControlName="home"
                   class="score-input"
+                  (input)="clampScore($event, 'match_' + match.id, 'home')"
                   [attr.aria-label]="t('predictions.home') + ' goals'"
                 />
                 <span class="score-sep">:</span>
@@ -61,6 +75,7 @@
                   max="20"
                   formControlName="away"
                   class="score-input"
+                  (input)="clampScore($event, 'match_' + match.id, 'away')"
                   [attr.aria-label]="t('predictions.away') + ' goals'"
                 />
               </div>
@@ -95,19 +110,6 @@
             }
           </div>
         }
-
-        <button
-          mat-flat-button
-          type="submit"
-          class="submit-btn"
-          [disabled]="saving() || !hasUnlockedMatches()"
-        >
-          @if (saving()) {
-            <mat-spinner diameter="20" />
-          } @else {
-            {{ t('predictions.submitBtn') }}
-          }
-        </button>
       </form>
     }
   </div>

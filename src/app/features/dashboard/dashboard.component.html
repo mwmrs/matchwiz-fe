@@ -5,26 +5,6 @@
       <p class="greeting">{{ t('dashboard.welcome') }}, <strong>{{ authStore.user()?.username }}</strong></p>
     </header>
 
-    <!-- Upcoming matchday -->
-    @if (upcomingMatchday()) {
-      <section class="section">
-        <h2 class="section-title">{{ t('dashboard.upcomingMatchday') }}</h2>
-        <div class="info-card">
-          <div class="info-row">
-            <mat-icon>sports_soccer</mat-icon>
-            <span>{{ t('dashboard.matchday', { number: upcomingMatchday()!.number }) }}</span>
-          </div>
-          <a
-            mat-stroked-button
-            class="view-btn"
-            routerLink="/predictions"
-          >
-            {{ t('nav.predictions') }}
-          </a>
-        </div>
-      </section>
-    }
-
     <!-- Missing predictions -->
     @if (missingPredictionsCount() > 0 && targetGroup()) {
       <section class="section">
@@ -34,7 +14,7 @@
           <a
             mat-flat-button
             class="submit-btn"
-            [routerLink]="['/predictions/group', targetGroup()!.id, 'matchday', upcomingMatchday()!.id]"
+            [routerLink]="['/predictions/group', targetGroup()!.id]"
           >
             {{ t('dashboard.submitNow') }}
           </a>
@@ -66,16 +46,23 @@
       } @else {
         <div class="groups-grid">
           @for (group of myGroups(); track group.id) {
-            <a class="group-card" [routerLink]="['/rankings', group.id]">
-              <mat-icon>group</mat-icon>
-              <div class="group-info">
-                <span class="group-name">{{ group.name }}</span>
-                @if (group.description) {
-                  <span class="group-desc">{{ group.description }}</span>
-                }
-              </div>
-              <mat-icon class="chevron">chevron_right</mat-icon>
-            </a>
+            <div class="group-card group-card--with-preview">
+              <a
+                class="group-card-header"
+                [routerLink]="['/rankings', group.id]"
+                [attr.aria-label]="t('rankings.title') + ': ' + group.name"
+              >
+                <mat-icon aria-hidden="true">group</mat-icon>
+                <div class="group-info">
+                  <span class="group-name">{{ group.name }}</span>
+                  @if (group.description) {
+                    <span class="group-desc">{{ group.description }}</span>
+                  }
+                </div>
+                <mat-icon class="chevron" aria-hidden="true">chevron_right</mat-icon>
+              </a>
+              <app-group-ranking-preview [groupId]="group.id" />
+            </div>
           }
           @for (group of pendingGroups(); track group.id) {
             <div class="group-card group-card--pending">

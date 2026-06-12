@@ -1,0 +1,29 @@
+<ng-container *transloco="let t">
+  @if (!loading() && topRankings().length === 0) {
+    <p class="preview-empty">{{ t('rankings.noData') }}</p>
+  }
+  @if (!loading() && topRankings().length > 0) {
+    <ol class="preview-list" [attr.aria-label]="t('rankings.title')">
+      @for (entry of topRankings(); track entry.userId) {
+        <li class="preview-row" [class.preview-row--me]="isCurrentUser(entry.userId)">
+          <span class="preview-rank">
+            @if (entry.rank <= 3) {
+              <mat-icon class="medal medal-{{ entry.rank }}" aria-hidden="true">
+                {{ entry.rank === 1 ? 'emoji_events' : 'workspace_premium' }}
+              </mat-icon>
+            } @else {
+              {{ entry.rank }}
+            }
+          </span>
+          <span class="preview-name">
+            {{ entry.username }}
+            @if (isCurrentUser(entry.userId)) {
+              <span class="you-badge" aria-label="(you)">You</span>
+            }
+          </span>
+          <span class="preview-pts">{{ entry.totalPoints }}</span>
+        </li>
+      }
+    </ol>
+  }
+</ng-container>

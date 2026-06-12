@@ -43,7 +43,6 @@
     "welcome": "Willkommen zurück",
     "myGroups": "Meine Gruppen",
     "activeCompetition": "Aktiver Wettbewerb",
-    "upcomingMatchday": "Nächster Spieltag",
     "missingPredictions": "Fehlende Tipps",
     "missingPredictionsHint": "Du hast noch {{ count }} Tipps offen.",
     "submitNow": "Jetzt tippen",
@@ -70,7 +69,7 @@
     "title": "Spieltag {{ number }}",
     "submitBtn": "Tipps speichern",
     "submitted": "Tipps gespeichert!",
-    "lockedHint": "Dieses Spiel hat bereits begonnen.",
+    "lockedHint": "Tippabgabe geschlossen",
     "home": "Heim",
     "away": "Auswärts",
     "kickoff": "Anstoß"
@@ -81,8 +80,14 @@
     "player": "Spieler",
     "points": "Punkte",
     "exact": "Exakt",
+    "goalDiff": "Torverhältnis",
     "tendency": "Tendenz",
-    "noData": "Noch keine Rangliste verfügbar."
+    "noData": "Noch keine Rangliste verfügbar.",
+    "rulesTitle": "Punkteregeln",
+    "rulesExact": "Exaktes Ergebnis",
+    "rulesGoalDiff": "Richtiges Torverhältnis",
+    "rulesTendency": "Richtige Tendenz",
+    "rulesPts": "Pkt."
   },
   "preferences": {
     "title": "Einstellungen",
@@ -148,7 +153,8 @@
     "exactResultPoints": "Exaktes Ergebnis (Punkte)",
     "goalDifferencePoints": "Richtiges Torverhältnis (Punkte)",
     "tendencyPoints": "Richtige Tendenz (Punkte)",
-    "stage": "Phase"
+    "stage": "Phase",
+    "removeMemberConfirm": "{{ username }} aus dieser Gruppe entfernen?"
   },
   "competition": {
     "status": {

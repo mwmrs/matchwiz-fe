@@ -120,3 +120,8 @@ a {
 mat-form-field {
   width: 100%;
 }
+
+.mw-dialog .mat-mdc-dialog-surface {
+  background: var(--mw-surface-2);
+  border-radius: var(--mw-radius-lg) !important;
+}

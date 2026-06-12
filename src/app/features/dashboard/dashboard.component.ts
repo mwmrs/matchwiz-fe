@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { forkJoin } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
@@ -9,6 +10,7 @@ import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { AuthStore } from '../../core/auth/auth.store';
 import { NotificationStore } from '../../core/services/notification.store';
 import type { Group, Competition, Match, Matchday, Notification, GroupMembership, Prediction } from '../../core/api/models';
+import { GroupRankingPreviewComponent } from './group-ranking-preview/group-ranking-preview.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,6 +21,7 @@ import type { Group, Competition, Match, Matchday, Notification, GroupMembership
     MatChipsModule,
     MatSnackBarModule,
     TranslocoModule,
+    GroupRankingPreviewComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -34,9 +37,9 @@ export class DashboardComponent implements OnInit {
   protected readonly allGroups = signal<Group[]>([]);
   protected readonly memberships = signal<GroupMembership[]>([]);
   protected readonly competition = signal<Competition | null>(null);
-  protected readonly upcomingMatchday = signal<Matchday | null>(null);
-  protected readonly matches = signal<Match[]>([]);
-  protected readonly existingPredictions = signal<Prediction[]>([]);
+  protected readonly allMatchdays = signal<Matchday[]>([]);
+  protected readonly allMatches = signal<Match[]>([]);
+  protected readonly allPredictions = signal<Prediction[]>([]);
 
   protected readonly myGroups = computed(() => {
     const approved = new Set(
@@ -65,41 +68,54 @@ export class DashboardComponent implements OnInit {
 
   protected readonly missingPredictionsCount = computed(() => {
     const now = new Date();
-    const openMatches = this.matches().filter(
-      (m) => m.status === 'SCHEDULED' && new Date(m.kickoffTime) > now,
-    );
-    return Math.max(0, openMatches.length - this.existingPredictions().length);
+    const predicted = new Set(this.allPredictions().map((p) => p.matchId));
+    return this.allMatches().filter(
+      (m) => m.status === 'SCHEDULED' && new Date(m.kickoffTime) > now && !predicted.has(m.id),
+    ).length;
   });
 
   constructor() {
     effect(() => {
       const group = this.targetGroup();
-      const matchday = this.upcomingMatchday();
-      if (group && matchday) {
-        this.http
-          .get<Prediction[]>(`/api/matchdays/${matchday.id}/predictions?groupId=${group.id}`)
-          .subscribe((p) => this.existingPredictions.set(p));
+      const matchdays = this.allMatchdays();
+      if (group && matchdays.length > 0) {
+        forkJoin(
+          matchdays.map((md) =>
+            this.http.get<Prediction[]>(`/api/matchdays/${md.id}/predictions?groupId=${group.id}`),
+          ),
+        ).subscribe((results) => this.allPredictions.set(results.flat()));
       }
     });
   }
 
   ngOnInit() {
     this.notificationStore.load(undefined);
-    this.http.get<GroupMembership[]>('/api/users/me/memberships').subscribe((m) => this.memberships.set(m));
-    this.http.get<Group[]>('/api/groups').subscribe((g) => this.allGroups.set(g));
-    this.http.get<Competition[]>('/api/competitions').subscribe((comps) => {
-      const active = comps.find((c) => c.status === 'ACTIVE') ?? comps[0];
-      if (active) {
-        this.competition.set(active);
-        this.http.get<Matchday[]>(`/api/matchdays?competitionId=${active.id}`).subscribe((mds) => {
+    forkJoin({
+      memberships: this.http.get<GroupMembership[]>('/api/users/me/memberships'),
+      groups: this.http.get<Group[]>('/api/groups'),
+      competitions: this.http.get<Competition[]>('/api/competitions'),
+    }).subscribe(({ memberships, groups, competitions }) => {
+      this.memberships.set(memberships);
+      this.allGroups.set(groups);
+
+      const approved = new Set(memberships.filter((m) => m.approved).map((m) => m.groupId));
+      const myCompIds = new Set(groups.filter((g) => approved.has(g.id)).map((g) => g.competitionId));
+
+      const best =
+        competitions.find((c) => c.status === 'ACTIVE' && myCompIds.has(c.id)) ??
+        competitions.find((c) => c.status === 'ACTIVE') ??
+        competitions[0] ??
+        null;
+
+      if (best) {
+        this.competition.set(best);
+        this.http.get<Matchday[]>(`/api/matchdays?competitionId=${best.id}`).subscribe((mds) => {
           const sorted = mds.sort((a, b) => a.number - b.number);
-          const upcoming = sorted[sorted.length - 1];
-          if (upcoming) {
-            this.upcomingMatchday.set(upcoming);
-            this.http
-              .get<Match[]>(`/api/matchdays/${upcoming.id}/matches`)
-              .subscribe((ms) => this.matches.set(ms));
-          }
+          this.allMatchdays.set(sorted);
+          if (sorted.length === 0) return;
+          forkJoin(
+            sorted.map((md) => this.http.get<Match[]>(`/api/matchdays/${md.id}/matches`)),
+          ).subscribe((results) => this.allMatches.set(results.flat()));
         });
       }
     });

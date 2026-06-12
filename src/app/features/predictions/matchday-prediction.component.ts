@@ -122,6 +122,17 @@ export class MatchdayPredictionComponent implements OnInit {
     });
   }
 
+  protected clampScore(event: Event, groupName: string, controlName: string): void {
+    const input = event.target as HTMLInputElement;
+    const raw = parseInt(input.value, 10);
+    if (isNaN(raw)) return;
+    const clamped = Math.max(0, Math.min(20, raw));
+    if (clamped !== raw) {
+      input.value = String(clamped);
+      this.form.get(groupName)?.get(controlName)?.setValue(clamped, { emitEvent: false });
+    }
+  }
+
   protected formatKickoff(time: string): string {
     return new Intl.DateTimeFormat('default', {
       weekday: 'short',

@@ -6,16 +6,19 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import type { Group, Competition, GroupMembership } from '../../../core/api/models';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-group-admin',
   imports: [
     ReactiveFormsModule,
     MatButtonModule,
+    MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -31,6 +34,7 @@ import type { Group, Competition, GroupMembership } from '../../../core/api/mode
 export class GroupAdminComponent implements OnInit {
   private readonly http = inject(HttpClient);
   private readonly fb = inject(FormBuilder);
+  private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   private readonly transloco = inject(TranslocoService);
 
@@ -104,11 +108,23 @@ export class GroupAdminComponent implements OnInit {
 
   removeMember(userId: number) {
     const group = this.selectedGroup();
-    if (!group) return;
-    this.http.delete(`/api/groups/${group.id}/members/${userId}`).subscribe({
-      next: () => {
-        this.members.update((list) => list.filter((m) => m.userId !== userId));
-      },
+    const member = this.members().find((m) => m.userId === userId);
+    if (!group || !member) return;
+
+    const message = this.transloco.translate('admin.removeMemberConfirm', { username: member.username });
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: { message },
+      width: '360px',
+      panelClass: 'mw-dialog',
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (!confirmed) return;
+      this.http.delete(`/api/groups/${group.id}/members/${userId}`).subscribe({
+        next: () => {
+          this.members.update((list) => list.filter((m) => m.userId !== userId));
+        },
+      });
     });
   }
 
