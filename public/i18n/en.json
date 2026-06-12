@@ -70,7 +70,7 @@
     "title": "Matchday {{ number }}",
     "submitBtn": "Save Predictions",
     "submitted": "Predictions saved!",
-    "lockedHint": "This match has already started.",
+    "lockedHint": "Predictions closed",
     "home": "Home",
     "away": "Away",
     "kickoff": "Kickoff"
@@ -148,7 +148,8 @@
     "exactResultPoints": "Exact result (points)",
     "goalDifferencePoints": "Correct goal difference (points)",
     "tendencyPoints": "Correct tendency (points)",
-    "stage": "Stage"
+    "stage": "Stage",
+    "removeMemberConfirm": "Remove {{ username }} from this group?"
   },
   "competition": {
     "status": {

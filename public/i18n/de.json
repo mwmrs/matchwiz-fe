@@ -70,7 +70,7 @@
     "title": "Spieltag {{ number }}",
     "submitBtn": "Tipps speichern",
     "submitted": "Tipps gespeichert!",
-    "lockedHint": "Dieses Spiel hat bereits begonnen.",
+    "lockedHint": "Tippabgabe geschlossen",
     "home": "Heim",
     "away": "Auswärts",
     "kickoff": "Anstoß"
@@ -148,7 +148,8 @@
     "exactResultPoints": "Exaktes Ergebnis (Punkte)",
     "goalDifferencePoints": "Richtiges Torverhältnis (Punkte)",
     "tendencyPoints": "Richtige Tendenz (Punkte)",
-    "stage": "Phase"
+    "stage": "Phase",
+    "removeMemberConfirm": "{{ username }} aus dieser Gruppe entfernen?"
   },
   "competition": {
     "status": {
