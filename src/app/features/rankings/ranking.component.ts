@@ -6,13 +6,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoModule } from '@jsverse/transloco';
 import { AuthStore } from '../../core/auth/auth.store';
 import type { Group, RankingEntry, ScoringRule } from '../../core/api/models';
 
 @Component({
   selector: 'app-ranking',
-  imports: [RouterLink, MatButtonModule, MatTableModule, MatProgressSpinnerModule, MatIconModule, TranslocoModule],
+  imports: [RouterLink, MatButtonModule, MatTableModule, MatProgressSpinnerModule, MatIconModule, MatTooltipModule, TranslocoModule],
   templateUrl: './ranking.component.html',
   styleUrl: './ranking.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
