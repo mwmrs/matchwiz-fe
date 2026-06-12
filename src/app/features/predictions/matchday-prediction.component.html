@@ -19,6 +19,19 @@
       <p class="empty-msg">{{ t('common.noData') }}</p>
     } @else {
       <form [formGroup]="form" (ngSubmit)="submit()" class="matches-list">
+        <button
+          mat-flat-button
+          type="submit"
+          class="submit-btn"
+          [disabled]="saving() || !hasUnlockedMatches()"
+        >
+          @if (saving()) {
+            <mat-spinner diameter="20" />
+          } @else {
+            {{ t('predictions.submitBtn') }}
+          }
+        </button>
+        
         @for (match of matches(); track match.id) {
           <div class="match-card" [class.locked]="isLocked(match)">
             <div class="match-kickoff">
@@ -97,19 +110,6 @@
             }
           </div>
         }
-
-        <button
-          mat-flat-button
-          type="submit"
-          class="submit-btn"
-          [disabled]="saving() || !hasUnlockedMatches()"
-        >
-          @if (saving()) {
-            <mat-spinner diameter="20" />
-          } @else {
-            {{ t('predictions.submitBtn') }}
-          }
-        </button>
       </form>
     }
   </div>
