@@ -53,12 +53,12 @@ export class PreferencesComponent implements OnInit {
 
   protected form = this.fb.group({
     email: ['', Validators.email],
-    preferredLanguage: ['en'],
+    preferredLanguage: ['de'],
     timezone: ['Europe/Berlin'],
     theme: ['DARK'],
-    emailNotifications: [false],
-    matchdayReminders: [true],
-    twoFactorEnabled: [false],
+    emailNotifications: [{ value: false, disabled: true }],
+    matchdayReminders: [{ value: false, disabled: true }],
+    twoFactorEnabled: [{ value: false, disabled: true }],
   });
 
   ngOnInit() {
