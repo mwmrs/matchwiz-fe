@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component, inject, input, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { forkJoin, map, switchMap } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
 import { AuthStore } from '../../core/auth/auth.store';
-import type { RankingEntry } from '../../core/api/models';
+import type { Group, RankingEntry, ScoringRule } from '../../core/api/models';
 
 @Component({
   selector: 'app-ranking',
@@ -23,14 +24,26 @@ export class RankingComponent implements OnInit {
   protected readonly authStore = inject(AuthStore);
 
   protected readonly rankings = signal<RankingEntry[]>([]);
+  protected readonly scoringRule = signal<ScoringRule | null>(null);
   protected readonly loading = signal(true);
 
-  protected readonly displayedColumns = ['rank', 'player', 'points', 'exact', 'tendency'];
+  protected readonly displayedColumns = ['rank', 'player', 'points', 'exact', 'goalDiff', 'tendency'];
 
   ngOnInit() {
-    this.http.get<RankingEntry[]>(`/api/groups/${this.groupId()}/rankings`).subscribe({
-      next: (data) => {
-        this.rankings.set(data);
+    const id = this.groupId();
+    forkJoin({
+      rankings: this.http.get<RankingEntry[]>(`/api/groups/${id}/rankings`),
+      group: this.http.get<Group>(`/api/groups/${id}`),
+    }).pipe(
+      switchMap(({ rankings, group }) =>
+        this.http.get<ScoringRule>(`/api/competitions/${group.competitionId}/scoring-rules`).pipe(
+          map(scoringRule => ({ rankings, scoringRule }))
+        )
+      )
+    ).subscribe({
+      next: ({ rankings, scoringRule }) => {
+        this.rankings.set(rankings);
+        this.scoringRule.set(scoringRule);
         this.loading.set(false);
       },
       error: () => this.loading.set(false),

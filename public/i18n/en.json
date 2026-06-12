@@ -81,8 +81,14 @@
     "player": "Player",
     "points": "Points",
     "exact": "Exact",
+    "goalDiff": "Goal Diff",
     "tendency": "Tendency",
-    "noData": "No ranking data available yet."
+    "noData": "No ranking data available yet.",
+    "rulesTitle": "Scoring Rules",
+    "rulesExact": "Exact result",
+    "rulesGoalDiff": "Correct goal difference",
+    "rulesTendency": "Correct tendency",
+    "rulesPts": "pts"
   },
   "preferences": {
     "title": "Preferences",

@@ -81,8 +81,14 @@
     "player": "Spieler",
     "points": "Punkte",
     "exact": "Exakt",
+    "goalDiff": "Torverhältnis",
     "tendency": "Tendenz",
-    "noData": "Noch keine Rangliste verfügbar."
+    "noData": "Noch keine Rangliste verfügbar.",
+    "rulesTitle": "Punkteregeln",
+    "rulesExact": "Exaktes Ergebnis",
+    "rulesGoalDiff": "Richtiges Torverhältnis",
+    "rulesTendency": "Richtige Tendenz",
+    "rulesPts": "Pkt."
   },
   "preferences": {
     "title": "Einstellungen",

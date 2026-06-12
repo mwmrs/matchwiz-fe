@@ -59,6 +59,12 @@
             <td mat-cell *matCellDef="let entry">{{ entry.exactPredictions }}</td>
           </ng-container>
 
+          <!-- Goal difference column -->
+          <ng-container matColumnDef="goalDiff">
+            <th mat-header-cell *matHeaderCellDef>{{ t('rankings.goalDiff') }}</th>
+            <td mat-cell *matCellDef="let entry">{{ entry.goalDifferencePredictions ?? 0 }}</td>
+          </ng-container>
+
           <!-- Tendency column -->
           <ng-container matColumnDef="tendency">
             <th mat-header-cell *matHeaderCellDef>{{ t('rankings.tendency') }}</th>
@@ -72,6 +78,26 @@
             [class.highlight-row]="isCurrentUser(row.userId)"
           ></tr>
         </table>
+      </div>
+    }
+
+    @if (scoringRule(); as rule) {
+      <div class="rules-section">
+        <h2 class="rules-title">{{ t('rankings.rulesTitle') }}</h2>
+        <div class="rules-list">
+          <div class="rule-item">
+            <span class="rule-label">{{ t('rankings.rulesExact') }}</span>
+            <span class="rule-pts">{{ rule.exactResultPoints }} {{ t('rankings.rulesPts') }}</span>
+          </div>
+          <div class="rule-item">
+            <span class="rule-label">{{ t('rankings.rulesGoalDiff') }}</span>
+            <span class="rule-pts">{{ rule.goalDifferencePoints }} {{ t('rankings.rulesPts') }}</span>
+          </div>
+          <div class="rule-item">
+            <span class="rule-label">{{ t('rankings.rulesTendency') }}</span>
+            <span class="rule-pts">{{ rule.tendencyPoints }} {{ t('rankings.rulesPts') }}</span>
+          </div>
+        </div>
       </div>
     }
   </div>
