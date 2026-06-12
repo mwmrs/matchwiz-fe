@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { forkJoin } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
@@ -34,9 +35,9 @@ export class DashboardComponent implements OnInit {
   protected readonly allGroups = signal<Group[]>([]);
   protected readonly memberships = signal<GroupMembership[]>([]);
   protected readonly competition = signal<Competition | null>(null);
-  protected readonly upcomingMatchday = signal<Matchday | null>(null);
-  protected readonly matches = signal<Match[]>([]);
-  protected readonly existingPredictions = signal<Prediction[]>([]);
+  protected readonly allMatchdays = signal<Matchday[]>([]);
+  protected readonly allMatches = signal<Match[]>([]);
+  protected readonly allPredictions = signal<Prediction[]>([]);
 
   protected readonly myGroups = computed(() => {
     const approved = new Set(
@@ -65,20 +66,22 @@ export class DashboardComponent implements OnInit {
 
   protected readonly missingPredictionsCount = computed(() => {
     const now = new Date();
-    const openMatches = this.matches().filter(
-      (m) => m.status === 'SCHEDULED' && new Date(m.kickoffTime) > now,
-    );
-    return Math.max(0, openMatches.length - this.existingPredictions().length);
+    const predicted = new Set(this.allPredictions().map((p) => p.matchId));
+    return this.allMatches().filter(
+      (m) => m.status === 'SCHEDULED' && new Date(m.kickoffTime) > now && !predicted.has(m.id),
+    ).length;
   });
 
   constructor() {
     effect(() => {
       const group = this.targetGroup();
-      const matchday = this.upcomingMatchday();
-      if (group && matchday) {
-        this.http
-          .get<Prediction[]>(`/api/matchdays/${matchday.id}/predictions?groupId=${group.id}`)
-          .subscribe((p) => this.existingPredictions.set(p));
+      const matchdays = this.allMatchdays();
+      if (group && matchdays.length > 0) {
+        forkJoin(
+          matchdays.map((md) =>
+            this.http.get<Prediction[]>(`/api/matchdays/${md.id}/predictions?groupId=${group.id}`),
+          ),
+        ).subscribe((results) => this.allPredictions.set(results.flat()));
       }
     });
   }
@@ -93,13 +96,11 @@ export class DashboardComponent implements OnInit {
         this.competition.set(active);
         this.http.get<Matchday[]>(`/api/matchdays?competitionId=${active.id}`).subscribe((mds) => {
           const sorted = mds.sort((a, b) => a.number - b.number);
-          const upcoming = sorted[sorted.length - 1];
-          if (upcoming) {
-            this.upcomingMatchday.set(upcoming);
-            this.http
-              .get<Match[]>(`/api/matchdays/${upcoming.id}/matches`)
-              .subscribe((ms) => this.matches.set(ms));
-          }
+          this.allMatchdays.set(sorted);
+          if (sorted.length === 0) return;
+          forkJoin(
+            sorted.map((md) => this.http.get<Match[]>(`/api/matchdays/${md.id}/matches`)),
+          ).subscribe((results) => this.allMatches.set(results.flat()));
         });
       }
     });

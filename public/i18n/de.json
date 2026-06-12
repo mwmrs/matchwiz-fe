@@ -43,7 +43,6 @@
     "welcome": "Willkommen zurück",
     "myGroups": "Meine Gruppen",
     "activeCompetition": "Aktiver Wettbewerb",
-    "upcomingMatchday": "Nächster Spieltag",
     "missingPredictions": "Fehlende Tipps",
     "missingPredictionsHint": "Du hast noch {{ count }} Tipps offen.",
     "submitNow": "Jetzt tippen",

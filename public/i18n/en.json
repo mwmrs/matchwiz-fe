@@ -43,7 +43,6 @@
     "welcome": "Welcome back",
     "myGroups": "My Groups",
     "activeCompetition": "Active Competition",
-    "upcomingMatchday": "Upcoming Matchday",
     "missingPredictions": "Missing Predictions",
     "missingPredictionsHint": "You still have {{ count }} predictions to submit.",
     "submitNow": "Submit now",
