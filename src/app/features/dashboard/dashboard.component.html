@@ -46,16 +46,23 @@
       } @else {
         <div class="groups-grid">
           @for (group of myGroups(); track group.id) {
-            <a class="group-card" [routerLink]="['/rankings', group.id]">
-              <mat-icon>group</mat-icon>
-              <div class="group-info">
-                <span class="group-name">{{ group.name }}</span>
-                @if (group.description) {
-                  <span class="group-desc">{{ group.description }}</span>
-                }
-              </div>
-              <mat-icon class="chevron">chevron_right</mat-icon>
-            </a>
+            <div class="group-card group-card--with-preview">
+              <a
+                class="group-card-header"
+                [routerLink]="['/rankings', group.id]"
+                [attr.aria-label]="t('rankings.title') + ': ' + group.name"
+              >
+                <mat-icon aria-hidden="true">group</mat-icon>
+                <div class="group-info">
+                  <span class="group-name">{{ group.name }}</span>
+                  @if (group.description) {
+                    <span class="group-desc">{{ group.description }}</span>
+                  }
+                </div>
+                <mat-icon class="chevron" aria-hidden="true">chevron_right</mat-icon>
+              </a>
+              <app-group-ranking-preview [groupId]="group.id" />
+            </div>
           }
           @for (group of pendingGroups(); track group.id) {
             <div class="group-card group-card--pending">

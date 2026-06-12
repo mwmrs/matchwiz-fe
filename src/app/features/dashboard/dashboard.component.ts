@@ -10,6 +10,7 @@ import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { AuthStore } from '../../core/auth/auth.store';
 import { NotificationStore } from '../../core/services/notification.store';
 import type { Group, Competition, Match, Matchday, Notification, GroupMembership, Prediction } from '../../core/api/models';
+import { GroupRankingPreviewComponent } from './group-ranking-preview/group-ranking-preview.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,6 +21,7 @@ import type { Group, Competition, Match, Matchday, Notification, GroupMembership
     MatChipsModule,
     MatSnackBarModule,
     TranslocoModule,
+    GroupRankingPreviewComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -88,13 +90,26 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.notificationStore.load(undefined);
-    this.http.get<GroupMembership[]>('/api/users/me/memberships').subscribe((m) => this.memberships.set(m));
-    this.http.get<Group[]>('/api/groups').subscribe((g) => this.allGroups.set(g));
-    this.http.get<Competition[]>('/api/competitions').subscribe((comps) => {
-      const active = comps.find((c) => c.status === 'ACTIVE') ?? comps[0];
-      if (active) {
-        this.competition.set(active);
-        this.http.get<Matchday[]>(`/api/matchdays?competitionId=${active.id}`).subscribe((mds) => {
+    forkJoin({
+      memberships: this.http.get<GroupMembership[]>('/api/users/me/memberships'),
+      groups: this.http.get<Group[]>('/api/groups'),
+      competitions: this.http.get<Competition[]>('/api/competitions'),
+    }).subscribe(({ memberships, groups, competitions }) => {
+      this.memberships.set(memberships);
+      this.allGroups.set(groups);
+
+      const approved = new Set(memberships.filter((m) => m.approved).map((m) => m.groupId));
+      const myCompIds = new Set(groups.filter((g) => approved.has(g.id)).map((g) => g.competitionId));
+
+      const best =
+        competitions.find((c) => c.status === 'ACTIVE' && myCompIds.has(c.id)) ??
+        competitions.find((c) => c.status === 'ACTIVE') ??
+        competitions[0] ??
+        null;
+
+      if (best) {
+        this.competition.set(best);
+        this.http.get<Matchday[]>(`/api/matchdays?competitionId=${best.id}`).subscribe((mds) => {
           const sorted = mds.sort((a, b) => a.number - b.number);
           this.allMatchdays.set(sorted);
           if (sorted.length === 0) return;
