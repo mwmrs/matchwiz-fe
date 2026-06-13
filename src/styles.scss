@@ -11,10 +11,38 @@ $mw-theme: mat.define-theme((
   ),
 ));
 
+$mw-light-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$green-palette,
+    tertiary: mat.$orange-palette,
+  ),
+  typography: (
+    use-system-variables: true,
+  ),
+));
+
 html {
   @include mat.all-component-themes($mw-theme);
   @include mat.system-level-colors($mw-theme);
   @include mat.system-level-typography($mw-theme);
+}
+
+html[data-theme="light"] {
+  @include mat.all-component-colors($mw-light-theme);
+  @include mat.system-level-colors($mw-light-theme);
+
+  --mw-bg: #f4f6f4;
+  --mw-surface: #ffffff;
+  --mw-surface-2: #e8ece8;
+  --mw-primary: #1b5e20;
+  --mw-accent: #558b2f;
+  --mw-accent-dark: #33691e;
+  --mw-warn: #e65100;
+  --mw-text: #1a1a1a;
+  --mw-text-muted: rgba(0, 0, 0, 0.6);
+  --mw-text-hint: rgba(0, 0, 0, 0.38);
+  --mw-green-light: #388e3c;
 }
 
 :root {
