@@ -53,7 +53,8 @@
     "joinRequestSent": "Beitrittsanfrage gesendet. Warte auf Genehmigung.",
     "notifications": "Benachrichtigungen",
     "noNotifications": "Keine Benachrichtigungen.",
-    "matchday": "Spieltag {{ number }}"
+    "matchday": "Spieltag {{ number }}",
+    "currentMatches": "Aktuelle Spiele"
   },
   "groupPicker": {
     "predictionsTitle": "Gruppe wählen — Tipps",

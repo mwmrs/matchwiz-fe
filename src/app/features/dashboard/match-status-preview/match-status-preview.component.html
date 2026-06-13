@@ -1,0 +1,36 @@
+<ng-container *transloco="let t">
+  <ol class="match-list" [attr.aria-label]="t('dashboard.currentMatches')">
+    @for (match of sortedMatches(); track match.id) {
+      <li class="match-row">
+        <span class="team team--home">{{ match.homeTeam?.shortName ?? '?' }}</span>
+
+        @if (match.status === 'LIVE' || match.status === 'FINISHED') {
+          <span
+            class="score"
+            [attr.aria-label]="(match.homeGoals ?? 0) + ' – ' + (match.awayGoals ?? 0)"
+          >
+            {{ match.homeGoals ?? '–' }} : {{ match.awayGoals ?? '–' }}
+          </span>
+        } @else {
+          <time class="kickoff" [attr.datetime]="match.kickoffTime">
+            {{ match.kickoffTime | date: 'HH:mm' }}
+          </time>
+        }
+
+        <span class="team team--away">{{ match.awayTeam?.shortName ?? '?' }}</span>
+
+        <span
+          class="status-pill"
+          [class]="'status-pill--' + match.status.toLowerCase()"
+          [attr.aria-label]="t('match.status.' + match.status)"
+        >
+          @if (match.status === 'LIVE') {
+            <span class="live-dot" aria-hidden="true"></span>LIVE
+          } @else if (match.status === 'FINISHED') {
+            FT
+          }
+        </span>
+      </li>
+    }
+  </ol>
+</ng-container>
