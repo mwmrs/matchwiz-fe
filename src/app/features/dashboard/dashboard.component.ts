@@ -11,6 +11,7 @@ import { AuthStore } from '../../core/auth/auth.store';
 import { NotificationStore } from '../../core/services/notification.store';
 import type { Group, Competition, Match, Matchday, Notification, GroupMembership, Prediction } from '../../core/api/models';
 import { GroupRankingPreviewComponent } from './group-ranking-preview/group-ranking-preview.component';
+import { MatchStatusPreviewComponent } from './match-status-preview/match-status-preview.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,6 +23,7 @@ import { GroupRankingPreviewComponent } from './group-ranking-preview/group-rank
     MatSnackBarModule,
     TranslocoModule,
     GroupRankingPreviewComponent,
+    MatchStatusPreviewComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -64,6 +66,19 @@ export class DashboardComponent implements OnInit {
     const comp = this.competition();
     if (!comp) return null;
     return this.myGroups().find((g) => g.competitionId === comp.id) ?? null;
+  });
+
+  protected readonly currentMatches = computed(() => {
+    const now = new Date();
+    const twoHoursAhead = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+    const threeHoursBefore = new Date(now.getTime() - 3 * 60 * 60 * 1000);
+    return this.allMatches().filter((m) => {
+      const kickoff = new Date(m.kickoffTime);
+      if (m.status === 'LIVE') return true;
+      if (m.status === 'SCHEDULED') return kickoff <= twoHoursAhead;
+      if (m.status === 'FINISHED') return kickoff >= threeHoursBefore;
+      return false;
+    });
   });
 
   protected readonly missingPredictionsCount = computed(() => {

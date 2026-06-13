@@ -102,14 +102,17 @@
         <h2 class="rules-title">{{ t('rankings.rulesTitle') }}</h2>
         <div class="rules-list">
           <div class="rule-item">
+            <mat-icon aria-hidden="true" class="col-icon">gps_fixed</mat-icon>
             <span class="rule-label">{{ t('rankings.rulesExact') }}</span>
             <span class="rule-pts">{{ rule.exactResultPoints }} {{ t('rankings.rulesPts') }}</span>
           </div>
           <div class="rule-item">
+            <mat-icon aria-hidden="true" class="col-icon">compare_arrows</mat-icon>
             <span class="rule-label">{{ t('rankings.rulesGoalDiff') }}</span>
             <span class="rule-pts">{{ rule.goalDifferencePoints }} {{ t('rankings.rulesPts') }}</span>
           </div>
           <div class="rule-item">
+            <mat-icon aria-hidden="true" class="col-icon">trending_up</mat-icon>
             <span class="rule-label">{{ t('rankings.rulesTendency') }}</span>
             <span class="rule-pts">{{ rule.tendencyPoints }} {{ t('rankings.rulesPts') }}</span>
           </div>

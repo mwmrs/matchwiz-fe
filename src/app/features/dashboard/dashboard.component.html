@@ -34,6 +34,9 @@
           <span class="status-badge" [class]="'status-' + competition()!.status.toLowerCase()">
             {{ t('competition.status.' + competition()!.status) }}
           </span>
+          @if (currentMatches().length > 0) {
+            <app-match-status-preview [matches]="currentMatches()" />
+          }
         </div>
       </section>
     }

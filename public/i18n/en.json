@@ -53,7 +53,8 @@
     "joinRequestSent": "Join request submitted. Waiting for approval.",
     "notifications": "Notifications",
     "noNotifications": "No notifications.",
-    "matchday": "Matchday {{ number }}"
+    "matchday": "Matchday {{ number }}",
+    "currentMatches": "Current matches"
   },
   "groupPicker": {
     "predictionsTitle": "Select Group — Predictions",
