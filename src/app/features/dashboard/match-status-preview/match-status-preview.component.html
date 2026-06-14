@@ -2,7 +2,12 @@
   <ol class="match-list" [attr.aria-label]="t('dashboard.currentMatches')">
     @for (match of sortedMatches(); track match.id) {
       <li class="match-row">
-        <span class="team team--home">{{ match.homeTeam?.shortName ?? '?' }}</span>
+        <span class="team team--home">
+          {{ match.homeTeam?.shortName ?? '?' }}
+          @if (match.homeTeam?.logoUrl) {
+            <img class="team-logo" [src]="match.homeTeam!.logoUrl" [alt]="match.homeTeam!.name" width="16" height="16">
+          }
+        </span>
 
         @if (match.status === 'LIVE' || match.status === 'FINISHED') {
           <span
@@ -17,7 +22,12 @@
           </time>
         }
 
-        <span class="team team--away">{{ match.awayTeam?.shortName ?? '?' }}</span>
+        <span class="team team--away">
+          @if (match.awayTeam?.logoUrl) {
+            <img class="team-logo" [src]="match.awayTeam!.logoUrl" [alt]="match.awayTeam!.name" width="16" height="16">
+          }
+          {{ match.awayTeam?.shortName ?? '?' }}
+        </span>
 
         <span
           class="status-pill"

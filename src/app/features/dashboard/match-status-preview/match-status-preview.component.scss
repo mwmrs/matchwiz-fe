@@ -16,18 +16,22 @@
 }
 
 .team {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   font-weight: 600;
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
 
-  &--home {
-    text-align: right;
-  }
+  &--home { justify-content: flex-end; }
+  &--away { justify-content: flex-start; }
+}
 
-  &--away {
-    text-align: left;
-  }
+.team-logo {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .score {
@@ -76,7 +80,7 @@
 
   &--scheduled {
     background: transparent;
-    color: var(--mw-text-muted);
+    color: #f59e0b;
   }
 }
 
