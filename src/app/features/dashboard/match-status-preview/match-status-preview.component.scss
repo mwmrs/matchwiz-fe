@@ -9,25 +9,29 @@
 
 .match-row {
   display: grid;
-  grid-template-columns: 1fr auto 1fr auto;
+  grid-template-columns: 1fr auto 1fr 48px;
   align-items: center;
   gap: var(--mw-spacing-sm);
   font-size: 13px;
 }
 
 .team {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   font-weight: 600;
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
 
-  &--home {
-    text-align: right;
-  }
+  &--home { justify-content: flex-end; }
+  &--away { justify-content: flex-start; }
+}
 
-  &--away {
-    text-align: left;
-  }
+.team-logo {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .score {
@@ -49,6 +53,7 @@
 .status-pill {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
   border-radius: 10px;
   padding: 2px 7px;
@@ -56,8 +61,12 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  min-width: 32px;
-  justify-content: center;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
 
   &--live {
     background: rgba(220, 38, 38, 0.15);
@@ -65,12 +74,13 @@
   }
 
   &--finished {
-    background: var(--mw-surface-2, rgba(255, 255, 255, 0.08));
-    color: var(--mw-text-muted);
+    background: transparent;
+    color: var(--mw-accent);
   }
 
   &--scheduled {
     background: transparent;
+    color: #f59e0b;
   }
 }
 
