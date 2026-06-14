@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
 import type { Match } from '../../../core/api/models';
 
@@ -7,7 +8,7 @@ const STATUS_ORDER: Record<string, number> = { LIVE: 0, SCHEDULED: 1, FINISHED: 
 
 @Component({
   selector: 'app-match-status-preview',
-  imports: [DatePipe, TranslocoModule],
+  imports: [DatePipe, MatIconModule, TranslocoModule],
   templateUrl: './match-status-preview.component.html',
   styleUrl: './match-status-preview.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -27,7 +27,9 @@
           @if (match.status === 'LIVE') {
             <span class="live-dot" aria-hidden="true"></span>LIVE
           } @else if (match.status === 'FINISHED') {
-            FT
+            <mat-icon aria-hidden="true">check_circle</mat-icon>
+          } @else if (match.status === 'SCHEDULED') {
+            <mat-icon aria-hidden="true">schedule</mat-icon>
           }
         </span>
       </li>
