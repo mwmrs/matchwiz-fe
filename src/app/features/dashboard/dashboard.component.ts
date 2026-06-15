@@ -38,6 +38,7 @@ export class DashboardComponent implements OnInit {
 
   protected readonly allGroups = signal<Group[]>([]);
   protected readonly memberships = signal<GroupMembership[]>([]);
+  private readonly allCompetitions = signal<Competition[]>([]);
   protected readonly competition = signal<Competition | null>(null);
   protected readonly allMatchdays = signal<Matchday[]>([]);
   protected readonly allMatches = signal<Match[]>([]);
@@ -59,7 +60,10 @@ export class DashboardComponent implements OnInit {
 
   protected readonly availableGroups = computed(() => {
     const joined = new Set(this.memberships().map((m) => m.groupId));
-    return this.allGroups().filter((g) => !joined.has(g.id));
+    const activeCompIds = new Set(
+      this.allCompetitions().filter((c) => c.status === 'ACTIVE').map((c) => c.id),
+    );
+    return this.allGroups().filter((g) => !joined.has(g.id) && activeCompIds.has(g.competitionId));
   });
 
   protected readonly targetGroup = computed(() => {
@@ -112,6 +116,7 @@ export class DashboardComponent implements OnInit {
     }).subscribe(({ memberships, groups, competitions }) => {
       this.memberships.set(memberships);
       this.allGroups.set(groups);
+      this.allCompetitions.set(competitions);
 
       const approved = new Set(memberships.filter((m) => m.approved).map((m) => m.groupId));
       const myCompIds = new Set(groups.filter((g) => approved.has(g.id)).map((g) => g.competitionId));
