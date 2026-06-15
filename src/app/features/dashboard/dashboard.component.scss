@@ -209,26 +209,26 @@
     font-size: 24px;
   }
 
-  .group-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .group-name {
-    font-weight: 600;
-    font-size: 15px;
-  }
-
-  .group-desc {
-    font-size: 12px;
-    color: var(--mw-text-muted);
-  }
-
   .chevron {
     color: var(--mw-text-hint);
   }
+}
+
+.group-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.group-name {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.group-desc {
+  font-size: 12px;
+  color: var(--mw-text-muted);
 }
 
 .group-card--pending {
