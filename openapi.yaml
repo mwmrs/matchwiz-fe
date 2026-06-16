@@ -732,9 +732,18 @@ paths:
           schema:
             type: integer
             format: int64
+        - name: userId
+          in: query
+          required: false
+          description: >
+            ID of the user whose predictions to return. Defaults to the current user.
+            When querying another user, only predictions for finished matches are returned.
+          schema:
+            type: integer
+            format: int64
       responses:
         '200':
-          description: User predictions for a matchday within a group
+          description: Predictions for a matchday within a group
           content:
             application/json:
               schema:

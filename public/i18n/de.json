@@ -206,6 +206,12 @@
     "loginCta": "Anmelden",
     "registerCta": "Konto erstellen"
   },
+  "memberPredictions": {
+    "title": "Tipps von {{ username }}",
+    "predictedHome": "Tipp Heimtore",
+    "predictedAway": "Tipp Auswärtstore",
+    "noData": "Keine fertigen Spieltipps gefunden."
+  },
   "common": {
     "loading": "Laden...",
     "error": "Ein Fehler ist aufgetreten. Bitte versuche es erneut.",

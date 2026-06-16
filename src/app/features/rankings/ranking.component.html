@@ -36,12 +36,15 @@
           <ng-container matColumnDef="player">
             <th mat-header-cell *matHeaderCellDef>{{ t('rankings.player') }}</th>
             <td mat-cell *matCellDef="let entry">
-              <span class="player-name" [class.current-user]="isCurrentUser(entry.userId)">
+              <a class="player-name"
+                 [class.current-user]="isCurrentUser(entry.userId)"
+                 [routerLink]="['/rankings', groupId(), 'member', entry.userId]"
+                 [queryParams]="{ username: entry.username }">
                 {{ entry.username }}
                 @if (isCurrentUser(entry.userId)) {
                   <span class="you-badge">You</span>
                 }
-              </span>
+              </a>
             </td>
           </ng-container>
 
