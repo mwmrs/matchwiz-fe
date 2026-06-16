@@ -206,6 +206,12 @@
     "loginCta": "Sign in",
     "registerCta": "Create account"
   },
+  "memberPredictions": {
+    "title": "{{ username }}'s Predictions",
+    "predictedHome": "Predicted Home Goals",
+    "predictedAway": "Predicted Away Goals",
+    "noData": "No finished match predictions found."
+  },
   "common": {
     "loading": "Loading...",
     "error": "An error occurred. Please try again.",

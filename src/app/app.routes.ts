@@ -72,6 +72,13 @@ export const routes: Routes = [
         children: [
           { path: '', component: GroupPickerComponent, data: { target: 'rankings' } },
           {
+            path: ':groupId/member/:userId',
+            loadComponent: () =>
+              import('./features/rankings/member-predictions.component').then(
+                (m) => m.MemberPredictionsComponent,
+              ),
+          },
+          {
             path: ':groupId',
             loadComponent: () =>
               import('./features/rankings/ranking.component').then((m) => m.RankingComponent),
