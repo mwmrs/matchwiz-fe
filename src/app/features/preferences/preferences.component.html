@@ -5,6 +5,15 @@
     </header>
 
     <form [formGroup]="form" (ngSubmit)="submit()" class="prefs-form">
+      <button
+        mat-flat-button
+        type="submit"
+        class="save-btn"
+        [disabled]="saving()"
+      >
+        {{ t('preferences.saveBtn') }}
+      </button>
+      
       <section class="prefs-section">
         <h2 class="section-title">Account</h2>
         <mat-form-field appearance="outline">
@@ -65,15 +74,6 @@
           <mat-slide-toggle formControlName="twoFactorEnabled" />
         </div>
       </section>
-
-      <button
-        mat-flat-button
-        type="submit"
-        class="save-btn"
-        [disabled]="saving()"
-      >
-        {{ t('preferences.saveBtn') }}
-      </button>
     </form>
   </div>
 </ng-container>
