@@ -35,7 +35,11 @@
             {{ t('competition.status.' + competition()!.status) }}
           </span>
           @if (currentMatches().length > 0) {
-            <app-match-status-preview [matches]="currentMatches()" />
+            <app-match-status-preview
+            [matches]="currentMatches()"
+            [isAdmin]="authStore.isAdmin()"
+            (editMatch)="openEditMatch($event)"
+          />
           }
         </div>
       </section>
