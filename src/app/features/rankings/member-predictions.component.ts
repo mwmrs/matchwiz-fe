@@ -1,12 +1,18 @@
-import { ChangeDetectionStrategy, Component, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, map, switchMap } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
 import type { Group, Match, Matchday, Prediction } from '../../core/api/models';
+
+interface MatchdayGroup {
+  matchdayNumber: number;
+  rows: PredictionRow[];
+}
 
 interface PredictionRow {
   matchdayNumber: number;
@@ -23,7 +29,7 @@ interface PredictionRow {
 
 @Component({
   selector: 'app-member-predictions',
-  imports: [RouterLink, MatButtonModule, MatProgressSpinnerModule, MatIconModule, TranslocoModule],
+  imports: [RouterLink, MatButtonModule, MatExpansionModule, MatProgressSpinnerModule, MatIconModule, TranslocoModule],
   templateUrl: './member-predictions.component.html',
   styleUrl: './member-predictions.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,6 +44,18 @@ export class MemberPredictionsComponent implements OnInit {
   protected readonly rows = signal<PredictionRow[]>([]);
   protected readonly loading = signal(true);
   protected readonly error = signal(false);
+
+  protected readonly groups = computed<MatchdayGroup[]>(() => {
+    const map = new Map<number, PredictionRow[]>();
+    for (const row of this.rows()) {
+      const bucket = map.get(row.matchdayNumber) ?? [];
+      bucket.push(row);
+      map.set(row.matchdayNumber, bucket);
+    }
+    return [...map.entries()]
+      .sort(([a], [b]) => a - b)
+      .map(([matchdayNumber, rows]) => ({ matchdayNumber, rows }));
+  });
 
   ngOnInit() {
     const groupId = this.groupId();
