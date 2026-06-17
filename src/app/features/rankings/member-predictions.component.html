@@ -13,47 +13,57 @@
       </div>
     } @else if (error()) {
       <p class="empty-msg">{{ t('common.error') }}</p>
-    } @else if (rows().length === 0) {
+    } @else if (groups().length === 0) {
       <p class="empty-msg">{{ t('memberPredictions.noData') }}</p>
     } @else {
-      <div class="table-wrapper">
-        <ol class="predictions-list" [attr.aria-label]="t('memberPredictions.title', { username: username() || userId() })">
-          @for (row of rows(); track row.matchdayNumber + '-' + row.homeTeamShortName) {
-            <li class="prediction-row">
-              <span class="matchday-num">{{ row.matchdayNumber }}</span>
+      <div class="matchday-groups">
+        @for (group of groups(); track group.matchdayNumber) {
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{ t('dashboard.matchday', { number: group.matchdayNumber }) }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
 
-              <span class="team team--home">
-                {{ row.homeTeamShortName }}
-                @if (row.homeTeamLogoUrl) {
-                  <img class="team-logo" [src]="row.homeTeamLogoUrl" [alt]="row.homeTeamShortName" width="16" height="16" />
-                }
-              </span>
+            <ol class="predictions-list">
+              @for (row of group.rows; track row.homeTeamShortName) {
+                <li class="prediction-row">
 
-              <span class="score result-score"
-                    [attr.aria-label]="(row.homeGoals ?? 0) + ' – ' + (row.awayGoals ?? 0)">
-                {{ row.homeGoals ?? '–' }} : {{ row.awayGoals ?? '–' }}
-              </span>
+                  <span class="team team--home">
+                    {{ row.homeTeamShortName }}
+                    @if (row.homeTeamLogoUrl) {
+                      <img class="team-logo" [src]="row.homeTeamLogoUrl" [alt]="row.homeTeamShortName" width="16" height="16" />
+                    }
+                  </span>
 
-              <span class="team team--away">
-                @if (row.awayTeamLogoUrl) {
-                  <img class="team-logo" [src]="row.awayTeamLogoUrl" [alt]="row.awayTeamShortName" width="16" height="16" />
-                }
-                {{ row.awayTeamShortName }}
-              </span>
+                  <span class="score result-score"
+                        [attr.aria-label]="(row.homeGoals ?? 0) + ' – ' + (row.awayGoals ?? 0)">
+                    {{ row.homeGoals ?? '–' }} : {{ row.awayGoals ?? '–' }}
+                  </span>
 
-              <span class="score predicted-score"
-                    [attr.aria-label]="t('memberPredictions.predictedHome') + ': ' + row.predictedHomeGoals + ', ' + t('memberPredictions.predictedAway') + ': ' + row.predictedAwayGoals">
-                {{ row.predictedHomeGoals }} : {{ row.predictedAwayGoals }}
-              </span>
+                  <span class="team team--away">
+                    @if (row.awayTeamLogoUrl) {
+                      <img class="team-logo" [src]="row.awayTeamLogoUrl" [alt]="row.awayTeamShortName" width="16" height="16" />
+                    }
+                    {{ row.awayTeamShortName }}
+                  </span>
 
-              <span class="points-cell">
-                @if (row.awardedPoints != null) {
-                  <span class="points-badge">+{{ row.awardedPoints }}</span>
-                }
-              </span>
-            </li>
-          }
-        </ol>
+                  <span class="score predicted-score"
+                        [attr.aria-label]="t('memberPredictions.predictedHome') + ': ' + row.predictedHomeGoals + ', ' + t('memberPredictions.predictedAway') + ': ' + row.predictedAwayGoals">
+                    {{ row.predictedHomeGoals }} : {{ row.predictedAwayGoals }}
+                  </span>
+
+                  <span class="points-cell">
+                    @if (row.awardedPoints != null) {
+                      <span class="points-badge">+{{ row.awardedPoints }}</span>
+                    }
+                  </span>
+
+                </li>
+              }
+            </ol>
+          </mat-expansion-panel>
+        }
       </div>
     }
   </div>

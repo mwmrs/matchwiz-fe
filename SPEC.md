@@ -1,6 +1,6 @@
 SPEC.md
 
-# MatchWiz - Software Specification (MVP)
+# MatchWiz - Software Specification
 
 ## 1. Vision
 
@@ -14,21 +14,23 @@ The application consists of:
 * Quarkus backend
 * PostgreSQL database
 
-The MVP focuses on simplicity, maintainability, and self-hosting on Raspberry Pi infrastructure.
+Designed for simplicity, maintainability, and self-hosting.
 
-## 2. UI-Design
+## 2. UI Design
 
-There is a design prototype on Google Stitch "Soccer Matchday Predictor". Use that to realize this Angular App's design which is supposed to be responsible and mobile first.
+There is a design prototype on Google Stitch "Soccer Matchday Predictor". The Angular app's design is responsive and mobile-first.
 
 ---
 
-# 2. Roles
+# 3. Roles
 
 ## Global Roles
 
+Stored as a single `global_role` column on the user record.
+
 ### USER
 
-Default role for registered users.
+Default role for all registered users.
 
 ### ADMIN
 
@@ -36,43 +38,41 @@ Global administrator.
 
 Permissions:
 
-* Create competitions
-* Manage competitions
-* Create groups
-* Manage groups
-* Manage teams
-* Manage matchdays
-* Manage matches
-* Promote users to group admins
+* Create and manage competitions
+* Create and manage groups
+* Manage teams, matchdays, matches, and results
+* Approve user registrations (activate accounts)
+* Approve group membership requests
 
 ---
 
 ## Group Roles
 
+Stored per group membership record.
+
 ### MEMBER
 
-Default group member.
+Default group role after membership is approved.
 
 Permissions:
 
-* Submit predictions
-* View rankings
-* View matchdays
-* Manage own preferences
+* Submit predictions (before kickoff)
+* View matchdays and match results
+* View group rankings
+* View other members' predictions on finished matches
 
 ### GROUP_ADMIN
 
-Additional role within a group.
+Elevated role within a group. The first member approved in a group is automatically promoted to GROUP_ADMIN. No explicit promote endpoint is needed.
 
-Permissions:
+Permissions (in addition to MEMBER):
 
-* Approve registrations for the group
-* Invite users via email
-* Manage group members
+* Approve group membership requests
+* Remove members from the group
 
 ---
 
-# 3. Competition Model
+# 4. Competition Model
 
 A competition represents exactly one season.
 
@@ -81,23 +81,15 @@ Examples:
 * Bundesliga 2026/27
 * World Cup 2026
 
-A competition can contain multiple groups.
+A competition can contain multiple groups. A group belongs to exactly one competition.
 
-A group belongs to exactly one competition.
-
-Example:
-
-Bundesliga 2026/27
-
-* Family Group
-* Company Group
-* Friends Group
+Groups can only be created while the competition is in ACTIVE status.
 
 ---
 
-# 4. Competition Lifecycle
+# 5. Competition Lifecycle
 
-Competition status:
+Competition statuses:
 
 * DRAFT
 * ACTIVE
@@ -106,70 +98,89 @@ Competition status:
 
 ## DRAFT
 
-Competition setup.
+Setup phase. No predictions allowed.
 
 ## ACTIVE
 
-Predictions allowed.
+Predictions allowed. Groups can be created and joined.
 
 ## CLOSED
 
-Competition finished.
+Competition finished. No further predictions.
 
 ## ARCHIVED
 
-Read-only historical data.
+Read-only historical data. No status transitions out of ARCHIVED.
+
+Transitions: DRAFT → ACTIVE → CLOSED → ARCHIVED (one-way only).
 
 ---
 
-# 5. User Registration
+# 6. User Registration & Approval
 
 ## Registration
 
 Required:
 
-* Username
-* Password
+* Username (unique)
+* Password (bcrypt-hashed)
 
 Optional:
 
 * Email address
 
-New registrations require approval. Until successful approval the user is not able to login!
+New users are created with `active = false`. They cannot log in until activated.
 
-Approval can be performed by:
+## Account Activation
 
-* ADMIN
-* GROUP_ADMIN
+Only ADMIN can activate a user account (`POST /api/users/{id}/approve`). This sets `active = true`.
+
+## Group Membership Approval
+
+After login, users browse available groups and request to join. Membership requests start as pending (`approved = false`). GROUP_ADMIN (or ADMIN) approves membership requests for their group.
+
+The first member approved in a group is automatically promoted to GROUP_ADMIN.
+
+## Approval Flow Summary
+
+1. User registers → account inactive
+2. ADMIN approves account → user can log in
+3. User requests group membership → pending
+4. GROUP_ADMIN (or ADMIN) approves membership → user can submit predictions
+
+## Password Reset
+
+Users can reset their password without logging in:
+
+1. Request a reset code via `POST /api/auth/password-reset/request` (email required)
+2. An 8-character alphanumeric code is sent by email (no-link, code-only)
+3. Submit code + new password via `POST /api/auth/password-reset/confirm`
+4. Code expires after 30 minutes and is single-use
+5. Requesting a new code invalidates any previous code
+
+To prevent email enumeration, the request endpoint always returns 204 regardless of whether the email exists.
 
 ## Email Verification
 
-Optional for MVP.
-
-Verification via email link.
+Planned, not yet implemented. The `email_verified` flag is stored on the user record.
 
 ## Two-Factor Authentication
 
-Optional.
-
-Method:
-
-* Email OTP
-
-Disabled by default.
+Planned, not yet implemented. The `two_factor_enabled` flag is stored on the user record. The intended method is EMAIL_OTP.
 
 ---
 
-# 6. Group Membership
+# 7. Group Membership
 
-Users may belong to multiple groups.
+Users may belong to multiple groups across one or more competitions.
 
-After a user is approved he can login and choose from a list of all available groups.
-Every selection must be approved by admin or a group admin (if already present).
+After account activation, users can browse all available groups and request to join any of them. Each join request must be approved by a GROUP_ADMIN (or ADMIN).
+
+Invitations via email are also supported. An invitation creates a pending membership upon acceptance.
 
 ---
 
-# 7. Prediction Rules
+# 8. Prediction Rules
 
 Default scoring:
 
@@ -182,17 +193,21 @@ Default scoring:
 
 Scoring rules are configurable per competition.
 
-Bonus questions are out of scope for MVP.
+Additional rules:
+
+* Predictions are scoped to (user, group, match) — the same user can predict independently in each group
+* Predictions can be updated (upsert) any number of times before match kickoff
+* Predictions submitted after kickoff are rejected
+* Points are awarded automatically when a match result is entered (status FINISHED or LIVE with goals set)
+* Rescoring is idempotent — updating a match result recalculates all predictions for that match
+
+Bonus questions are out of scope.
 
 ---
 
-# 8. Rankings
+# 9. Rankings
 
-Rankings exist on group level.
-
-Ranking calculation:
-
-Sum of awarded prediction points.
+Rankings exist at group level.
 
 Sorting:
 
@@ -200,180 +215,151 @@ Sorting:
 2. Exact predictions descending
 3. Username ascending
 
-Rankings remain available while the competition exists.
+Ranking entries include:
+
+* Rank
+* Username
+* Total points
+* Exact prediction count
+* Goal-difference prediction count
+* Tendency-only prediction count
+
+Only approved group members appear in rankings. Only finished and live matches contribute points.
+
+Rankings remain accessible as long as the competition exists.
 
 ---
 
-# 9. Notifications
+# 10. Notifications
 
-Notifications are displayed on the dashboard.
+In-app notifications are stored per user and displayed in the UI.
 
-Examples:
+Notification types:
 
-* Matchday starts tomorrow
-* Missing predictions
-* Registration approved
-* Invitation accepted
+* MATCHDAY_STARTS
+* MISSING_PREDICTIONS
+* REGISTRATION_APPROVED
+* INVITATION_ACCEPTED
 
-Email notifications are optional per user.
+Users can mark notifications as read. Notifications are returned ordered by creation time descending.
+
+Email delivery is not yet implemented. The `email_notifications` and `matchday_reminders` preference flags are stored but email sending for these events is pending.
 
 ---
 
-# 10. User Preferences
+# 11. User Preferences
 
 Supported preferences:
 
-* Language
+* Preferred language
 * Timezone
-* Theme
-
-  * Light
-  * Dark
-  * System
-* Notification settings
+* Theme (LIGHT / DARK / SYSTEM)
 * Email address
+* Two-factor authentication (flag only, not yet active)
+* Email notifications (flag only, sending not yet active)
+* Matchday reminders (flag only, sending not yet active)
 
 ---
 
-# 11. MVP Screens
+# 12. API Overview
 
-## Public
+Base path: `/api`. All endpoints except auth require a JWT Bearer token.
 
-### Landing Page
-
-* Login
-* Registration
-* Competition information
-* Invitation acceptance
-
-### Login
-
-* Username
-* Password
-
-### Registration
-
-* Username
-* Password
-* Optional email
+| Resource              | Path                                 | Notes                              |
+| --------------------- | ------------------------------------ | ---------------------------------- |
+| Auth                  | `/api/auth`                          | login, register, password reset    |
+| Users                 | `/api/users`                         | profile, preferences, approval     |
+| Competitions          | `/api/competitions`                  | CRUD, scoring rules                |
+| Groups                | `/api/groups`                        | CRUD, join request                 |
+| Group Members         | `/api/groups/{id}/members`           | list, approve, remove              |
+| Teams                 | `/api/teams`                         | CRUD                               |
+| Matchdays             | `/api/matchdays`                     | CRUD, filter by competition        |
+| Matchday Matches      | `/api/matchdays/{id}/matches`        | list and create matches            |
+| Matches               | `/api/matches/{id}`                  | update match / enter result        |
+| Predictions           | `/api/matchdays/{id}/predictions`    | submit batch, list own or others'  |
+| Rankings              | `/api/groups/{id}/rankings`          | group ranking table                |
+| Notifications         | `/api/notifications`                 | list, mark read                    |
 
 ---
 
-## Authenticated
+# 13. Database Model
 
-### Dashboard
+## AppUser
 
-Displays:
-
-* My groups
-* Active competition
-* Upcoming matchday
-* Missing predictions
-* Notifications
-
-### Matchday Prediction
-
-Displays all matches of a matchday.
-
-Users can submit predictions before kickoff.
-
-### Ranking
-
-Displays group ranking table.
-
-### Preferences
-
-User settings.
-
----
-
-## Administration
-
-### Competition Administration
-
-* Create competition
-* Edit competition
-* Change status
-
-### Group Administration
-
-* Create group
-* Invite users
-* Approve registrations
-* Manage members
-
-### Match Administration
-
-* Teams
-* Matchdays
-* Matches
-* Results
-
----
-
-# 12. Database Model
-
-## User
+Table: `app_user`
 
 * id
-* username
+* username (unique)
 * password_hash
 * email
-* email_verified
+* email_verified (default: false)
 * preferred_language
 * timezone
-* theme
-* two_factor_enabled
-* active
+* theme (LIGHT / DARK / SYSTEM, default: SYSTEM)
+* two_factor_enabled (default: false)
+* email_notifications (default: false)
+* matchday_reminders (default: false)
+* global_role (USER / ADMIN, default: USER)
+* active (default: false)
 * created_at
 
-## GlobalRole
-
-* user_id
-* role
-
 ## Competition
+
+Table: `competition`
 
 * id
 * name
 * season
-* status
+* status (DRAFT / ACTIVE / CLOSED / ARCHIVED, default: DRAFT)
 * start_date
 * end_date
 
 ## ScoringRule
 
+Table: `scoring_rule`
+
 * id
-* competition_id
-* exact_result_points
-* goal_difference_points
-* tendency_points
+* competition_id (FK → competition, unique)
+* exact_result_points (default: 5)
+* goal_difference_points (default: 3)
+* tendency_points (default: 2)
 
 ## Group
 
+Table: `app_group`
+
 * id
-* competition_id
+* competition_id (FK → competition)
 * name
 * description
 
 ## GroupMembership
 
+Table: `group_membership`
+
 * id
-* group_id
-* user_id
-* role
+* group_id (FK → app_group)
+* user_id (FK → app_user)
+* role (MEMBER / GROUP_ADMIN, default: MEMBER)
+* approved (default: false)
 * joined_at
+
+Unique constraint: (group_id, user_id)
 
 ## Invitation
 
+Table: `invitation`
+
 * id
-* group_id
+* group_id (FK → app_group)
 * email
-* token
-* expires_at
+* token (unique UUID)
+* expires_at (14 days from creation)
 * accepted_at
 
 ## Team
+
+Table: `team`
 
 * id
 * name
@@ -382,46 +368,78 @@ User settings.
 
 ## Matchday
 
+Table: `matchday`
+
 * id
-* competition_id
+* competition_id (FK → competition)
 * number
-* deadline
+
+Unique constraint: (competition_id, number)
 
 ## Match
 
+Table: `match`
+
 * id
-* matchday_id
-* home_team_id
-* away_team_id
+* matchday_id (FK → matchday)
+* home_team_id (FK → team)
+* away_team_id (FK → team)
 * kickoff_time
-* home_goals
-* away_goals
-* status
+* home_goals (nullable until result entered)
+* away_goals (nullable until result entered)
+* status (SCHEDULED / LIVE / FINISHED / CANCELLED, default: SCHEDULED)
+* stage (nullable — see MatchStage below)
+
+### MatchStage
+
+Used for tournament-style competitions. Values:
+
+Group stages: `A`, `B`, `C`, `D`, `E`, `F`, `G`, `H`, `I`, `J`, `K`, `L`
+
+Knockout rounds: `ROUND_32`, `ROUND_16`, `ROUND_8`, `SEMI_FINAL`, `FINAL`, `THIRD_PLACE`
 
 ## Prediction
 
+Table: `prediction`
+
 * id
-* user_id
-* group_id
-* match_id
+* user_id (FK → app_user)
+* group_id (FK → app_group)
+* match_id (FK → match)
 * predicted_home_goals
 * predicted_away_goals
-* awarded_points
+* awarded_points (nullable until match result entered)
 * submitted_at
+
+Unique constraint: (user_id, group_id, match_id)
 
 ## Notification
 
+Table: `notification`
+
 * id
-* user_id
-* type
+* user_id (FK → app_user)
+* type (MATCHDAY_STARTS / MISSING_PREDICTIONS / REGISTRATION_APPROVED / INVITATION_ACCEPTED)
 * title
 * message
-* read
+* read (default: false)
+* created_at
+
+## VerificationToken
+
+Table: `verification_token`
+
+* id
+* user_id (FK → app_user)
+* token_hash (SHA-256 of the plaintext code, unique — plaintext never stored)
+* type (PASSWORD_RESET — LOGIN_OTP planned)
+* expires_at
+* used_at (nullable — set on redemption)
 * created_at
 
 ---
 
-# 13. Frontend Architecture
+# 14. Frontend Architecture
 
 ## Technology Stack
 
@@ -437,46 +455,38 @@ User settings.
 
 ## Project Structure
 
+```
 src/app
-
-* core
-
-  * auth
-  * api
-  * guards
-  * interceptors
-  * services
-
-* shared
-
-  * components
-  * pipes
-  * directives
-  * models
-
-* features
-
-  * auth
-  * dashboard
-  * competitions
-  * groups
-  * predictions
-  * rankings
-  * notifications
-  * administration
-  * preferences
-
-* layouts
-
-* app.routes.ts
+├── core
+│   ├── auth
+│   ├── api
+│   ├── guards
+│   ├── interceptors
+│   └── services
+├── shared
+│   ├── components
+│   ├── pipes
+│   ├── directives
+│   └── models
+├── features
+│   ├── auth
+│   ├── dashboard
+│   ├── competitions
+│   ├── groups
+│   ├── predictions
+│   ├── rankings
+│   ├── notifications
+│   ├── administration
+│   └── preferences
+├── layouts
+└── app.routes.ts
+```
 
 ---
 
 ## State Management
 
-Principle:
-
-Prefer Angular Signals.
+Prefer Angular Signals for local component state.
 
 Use Signal Store only for shared application state.
 
@@ -485,82 +495,108 @@ Initial stores:
 * AuthStore
 * NotificationStore
 
-All other features should use:
-
-* Generated OpenAPI services
-* Local component signals
-
-Avoid premature state management complexity.
+All other features use generated OpenAPI services and local component signals.
 
 ---
 
-# 14. Backend Architecture
+# 15. Backend Architecture
 
 ## Technology Stack
 
-* Quarkus 3.x
+* Quarkus 3.36
+* Java 21
 * PostgreSQL
 * Hibernate ORM + Panache
-* Flyway
-* JWT Authentication
-* OpenAPI
-* Testcontainers
+* Flyway (5 migrations, runs at startup)
+* SmallRye JWT (RSA-signed, 24h duration)
+* Quarkus Mailer (SMTP in production, mock in dev/test)
+* Bucket4j rate limiting
+* Jakarta Bean Validation
+* SmallRye OpenAPI
+* Testcontainers (dev services + integration tests)
 
----
+## Project Package Structure
+
+```
+de.mwmrs
+├── bootstrap/      (AdminSeeder, TestDataSeeder, WorldCup2026Seeder)
+├── dto/            (request/response DTOs)
+├── entity/         (JPA/Panache entities + enums)
+├── exception/      (BusinessException, ExceptionMappers)
+├── resource/       (JAX-RS REST resources)
+├── security/       (TokenService, CurrentUser, GroupAuthz, PasswordService, RateLimitFilter, VerificationCodes)
+└── service/        (business logic)
+```
+
+## Security
+
+* JWT Bearer token, RSA keys, 24h expiry
+* Rate limiting: `/api/auth/login` — 10 requests/min per IP; `/api/auth/password-reset/*` — 5 requests/15min per IP
+* JWT `groups` claim carries only global role (USER/ADMIN)
+* Group role (MEMBER/GROUP_ADMIN) resolved per-request from DB via `GroupAuthz` service
+* Bcrypt password hashing
+
+## Email
+
+Production delivery via SMTP, configured through environment variables. In development and tests, email is mocked (captured via `MockMailbox`).
+
+## Environment Variables
+
+| Variable | Description |
+| --- | --- |
+| `MATCHWIZ_DB_URL` | PostgreSQL JDBC URL |
+| `MATCHWIZ_DB_USER` | Database user |
+| `MATCHWIZ_DB_PASSWORD` | Database password |
+| `MATCHWIZ_JWT_PRIVATE_KEY_LOCATION` | Path to RSA private key PEM |
+| `MATCHWIZ_JWT_PUBLIC_KEY_LOCATION` | Path to RSA public key PEM |
+| `MATCHWIZ_CORS_ORIGINS` | Allowed CORS origins |
+| `MATCHWIZ_ADMIN_USERNAME` | Bootstrap admin username |
+| `MATCHWIZ_ADMIN_PASSWORD` | Bootstrap admin password |
+| `MATCHWIZ_SMTP_HOST` | SMTP server host |
+| `MATCHWIZ_SMTP_PORT` | SMTP server port |
+| `MATCHWIZ_SMTP_USER` | SMTP username |
+| `MATCHWIZ_SMTP_PASSWORD` | SMTP password |
+| `MATCHWIZ_SMTP_STARTTLS` | Enable STARTTLS (true/false) |
+| `MATCHWIZ_NOTIFY_EMAIL` | From-address for outgoing mail |
 
 ## Match Import
 
-MVP:
-
-* Manual administration
-
-Future option:
-
-* External football API import
-
-Manual maintenance must always remain available as fallback.
+Manual administration via the REST API. An external football API import is a future option; manual maintenance remains the fallback.
 
 ---
 
-# 15. Deployment
+# 16. Deployment
 
 ## Environment
 
-Frontend:
+| Component | Hosting |
+| --- | --- |
+| Angular frontend | Docker container |
+| Quarkus backend | Docker container |
+| PostgreSQL | Docker container |
+| Reverse proxy | nginx |
 
-* Docker container
-
-Backend:
-
-* Docker container
-
-Database:
-
-* PostgreSQL Docker container on dedicated Raspberry Pi 5
-
-Hosting:
-
-* Raspberry Pi 4 (4 GB)
-
----
 
 ## Docker Setup
 
 * nginx reverse proxy
-* Angular frontend
-* Quarkus backend
+* Angular frontend container
+* Quarkus backend container
 * PostgreSQL (external host)
-* automated backups
+* Automated backups
 
 ---
 
-# 16. Future Enhancements
+# 17. Future Enhancements
 
+* 2FA via EMAIL_OTP (flag already in place)
+* Email verification flow (flag already in place)
+* Email notifications for matchday reminders and missing predictions (preferences already stored)
 * Social login
 * Competition-wide rankings
 * Bonus questions
 * Push notifications
-* External football data providers
+* External football data provider import
 * Mobile app
 * Advanced statistics
 * Public competition pages
