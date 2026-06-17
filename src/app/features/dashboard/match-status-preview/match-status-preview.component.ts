@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@jsverse/transloco';
 import type { Match } from '../../../core/api/models';
@@ -8,13 +9,15 @@ const STATUS_ORDER: Record<string, number> = { LIVE: 0, SCHEDULED: 1, FINISHED: 
 
 @Component({
   selector: 'app-match-status-preview',
-  imports: [DatePipe, MatIconModule, TranslocoModule],
+  imports: [DatePipe, MatButtonModule, MatIconModule, TranslocoModule],
   templateUrl: './match-status-preview.component.html',
   styleUrl: './match-status-preview.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MatchStatusPreviewComponent {
   readonly matches = input.required<Match[]>();
+  readonly isAdmin = input<boolean>(false);
+  readonly editMatch = output<Match>();
 
   readonly sortedMatches = computed(() =>
     [...this.matches()].sort((a, b) => {

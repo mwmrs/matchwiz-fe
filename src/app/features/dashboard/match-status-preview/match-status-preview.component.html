@@ -42,6 +42,16 @@
             <mat-icon aria-hidden="true">schedule</mat-icon>
           }
         </span>
+        @if (isAdmin()) {
+          <button
+            mat-icon-button
+            class="edit-btn"
+            (click)="editMatch.emit(match)"
+            [attr.aria-label]="t('admin.edit') + ': ' + (match.homeTeam?.shortName ?? '?') + ' vs ' + (match.awayTeam?.shortName ?? '?')"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+        }
       </li>
     }
   </ol>

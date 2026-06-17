@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -12,12 +13,14 @@ import { NotificationStore } from '../../core/services/notification.store';
 import type { Group, Competition, Match, Matchday, Notification, GroupMembership, Prediction } from '../../core/api/models';
 import { GroupRankingPreviewComponent } from './group-ranking-preview/group-ranking-preview.component';
 import { MatchStatusPreviewComponent } from './match-status-preview/match-status-preview.component';
+import { MatchEditDialogComponent } from '../../shared/components/match-edit-dialog/match-edit-dialog.component';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
     RouterLink,
     MatButtonModule,
+    MatDialogModule,
     MatIconModule,
     MatChipsModule,
     MatSnackBarModule,
@@ -33,6 +36,7 @@ export class DashboardComponent implements OnInit {
   protected readonly authStore = inject(AuthStore);
   protected readonly notificationStore = inject(NotificationStore);
   private readonly http = inject(HttpClient);
+  private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
   private readonly transloco = inject(TranslocoService);
 
@@ -138,6 +142,23 @@ export class DashboardComponent implements OnInit {
           ).subscribe((results) => this.allMatches.set(results.flat()));
         });
       }
+    });
+  }
+
+  protected openEditMatch(match: Match) {
+    const dialogRef = this.dialog.open(MatchEditDialogComponent, {
+      data: match,
+      width: '340px',
+      panelClass: 'mw-dialog',
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (!result) return;
+      this.http.patch<Match>(`/api/matches/${match.id}`, result).subscribe({
+        next: (saved) => {
+          this.allMatches.update((list) => list.map((m) => (m.id === saved.id ? saved : m)));
+          this.snackBar.open(this.transloco.translate('admin.save') + ' ✓', '', { duration: 2000 });
+        },
+      });
     });
   }
 
