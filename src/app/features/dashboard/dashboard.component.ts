@@ -74,13 +74,13 @@ export class DashboardComponent implements OnInit {
 
   protected readonly currentMatches = computed(() => {
     const now = new Date();
-    const twoHoursAhead = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-    const threeHoursBefore = new Date(now.getTime() - 3 * 60 * 60 * 1000);
+    const hoursAhead = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+    const hoursBefore = new Date(now.getTime() - 8 * 60 * 60 * 1000);
     return this.allMatches().filter((m) => {
       const kickoff = new Date(m.kickoffTime);
       if (m.status === 'LIVE') return true;
-      if (m.status === 'SCHEDULED') return kickoff <= twoHoursAhead;
-      if (m.status === 'FINISHED') return kickoff >= threeHoursBefore;
+      if (m.status === 'SCHEDULED') return kickoff <= hoursAhead;
+      if (m.status === 'FINISHED') return kickoff >= hoursBefore;
       return false;
     });
   });
