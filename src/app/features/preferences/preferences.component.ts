@@ -56,7 +56,7 @@ export class PreferencesComponent implements OnInit {
     preferredLanguage: ['de'],
     timezone: ['Europe/Berlin'],
     theme: ['DARK'],
-    emailNotifications: [{ value: false, disabled: true }],
+    emailNotifications: [false],
     matchdayReminders: [{ value: false, disabled: true }],
     twoFactorEnabled: [{ value: false, disabled: true }],
   });
