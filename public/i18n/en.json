@@ -83,6 +83,7 @@
     "exact": "Exact",
     "goalDiff": "Goal Diff",
     "tendency": "Tendency",
+    "bonus": "Bonus",
     "noData": "No ranking data available yet.",
     "rulesTitle": "Scoring Rules",
     "rulesExact": "Exact result",

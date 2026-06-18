@@ -28,7 +28,7 @@ export class RankingComponent implements OnInit {
   protected readonly scoringRule = signal<ScoringRule | null>(null);
   protected readonly loading = signal(true);
 
-  protected readonly displayedColumns = ['rank', 'player', 'points', 'exact', 'goalDiff', 'tendency'];
+  protected readonly displayedColumns = ['rank', 'player', 'points', 'exact', 'goalDiff', 'tendency', 'bonus'];
 
   ngOnInit() {
     const id = this.groupId();

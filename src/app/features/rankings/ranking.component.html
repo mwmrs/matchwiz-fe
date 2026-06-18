@@ -53,7 +53,7 @@
             <th mat-header-cell *matHeaderCellDef
                 [attr.aria-label]="t('rankings.points')"
                 [matTooltip]="t('rankings.points')">
-              <mat-icon aria-hidden="true" class="col-icon">star</mat-icon>
+              <mat-icon aria-hidden="true" class="col-icon">functions</mat-icon>
             </th>
             <td mat-cell *matCellDef="let entry">
               <span class="points-value">{{ entry.totalPoints }}</span>
@@ -88,6 +88,16 @@
               <mat-icon aria-hidden="true" class="col-icon">trending_up</mat-icon>
             </th>
             <td mat-cell *matCellDef="let entry">{{ entry.tendencyPredictions }}</td>
+          </ng-container>
+
+          <!-- Bonus points column -->
+          <ng-container matColumnDef="bonus">
+            <th mat-header-cell *matHeaderCellDef
+                [attr.aria-label]="t('rankings.bonus')"
+                [matTooltip]="t('rankings.bonus')">
+              <mat-icon aria-hidden="true" class="col-icon">star</mat-icon>
+            </th>
+            <td mat-cell *matCellDef="let entry">{{ entry.bonusPoints ?? 0 }}</td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
