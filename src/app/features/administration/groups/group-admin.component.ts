@@ -12,6 +12,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import type { Group, Competition, GroupMembership } from '../../../core/api/models';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { BonusDialogComponent } from '../../../shared/components/bonus-dialog/bonus-dialog.component';
 
 @Component({
   selector: 'app-group-admin',
@@ -125,6 +126,16 @@ export class GroupAdminComponent implements OnInit {
           this.members.update((list) => list.filter((m) => m.userId !== userId));
         },
       });
+    });
+  }
+
+  openBonusDialog(member: GroupMembership) {
+    const group = this.selectedGroup();
+    if (!group) return;
+    this.dialog.open(BonusDialogComponent, {
+      data: { member, groupId: group.id },
+      width: '420px',
+      panelClass: 'mw-dialog',
     });
   }
 

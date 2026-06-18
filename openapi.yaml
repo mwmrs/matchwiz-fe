@@ -19,6 +19,7 @@ tags:
   - name: matches
   - name: predictions
   - name: rankings
+  - name: bonuses
   - name: notifications
 
 paths:
@@ -501,6 +502,87 @@ paths:
                 $ref: '#/components/schemas/GroupMembership'
         '409':
           description: Already a member or join request pending
+
+  /groups/{id}/manual-bonuses:
+    post:
+      tags: [bonuses]
+      operationId: awardManualBonus
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManualBonusRequest'
+      responses:
+        '201':
+          description: Manual bonus awarded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManualBonus'
+        '403':
+          description: Group admin role required
+        '404':
+          description: Group or member not found
+    get:
+      tags: [bonuses]
+      operationId: listManualBonuses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Manual bonuses for the group
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ManualBonus'
+        '403':
+          description: Group admin role required
+
+  /groups/{id}/manual-bonuses/{bonusId}:
+    delete:
+      tags: [bonuses]
+      operationId: removeManualBonus
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: bonusId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Manual bonus removed
+        '403':
+          description: Group admin role required
+        '404':
+          description: Manual bonus not found
 
   /teams:
     get:
@@ -1281,9 +1363,43 @@ components:
         predictedAwayGoals:
           type: integer
 
+    ManualBonusRequest:
+      type: object
+      required: [userId, points]
+      properties:
+        userId:
+          type: integer
+          format: int64
+        points:
+          type: integer
+        reason:
+          type: string
+
+    ManualBonus:
+      type: object
+      required: [id, userId, username, points, awardedBy, awardedAt]
+      properties:
+        id:
+          type: integer
+          format: int64
+        userId:
+          type: integer
+          format: int64
+        username:
+          type: string
+        points:
+          type: integer
+        reason:
+          type: string
+        awardedBy:
+          type: string
+        awardedAt:
+          type: string
+          format: date-time
+
     RankingEntry:
       type: object
-      required: [rank, userId, username, totalPoints, exactPredictions, tendencyPredictions]
+      required: [rank, userId, username, totalPoints, exactPredictions, tendencyPredictions, bonusPoints]
       properties:
         rank:
           type: integer
@@ -1299,6 +1415,8 @@ components:
         goalDifferencePredictions:
           type: integer
         tendencyPredictions:
+          type: integer
+        bonusPoints:
           type: integer
 
     Notification:

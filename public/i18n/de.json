@@ -83,6 +83,7 @@
     "exact": "Exakt",
     "goalDiff": "Torverhältnis",
     "tendency": "Tendenz",
+    "bonus": "Bonus",
     "noData": "Noch keine Rangliste verfügbar.",
     "rulesTitle": "Punkteregeln",
     "rulesExact": "Exaktes Ergebnis",
@@ -155,7 +156,15 @@
     "goalDifferencePoints": "Richtiges Torverhältnis (Punkte)",
     "tendencyPoints": "Richtige Tendenz (Punkte)",
     "stage": "Phase",
-    "removeMemberConfirm": "{{ username }} aus dieser Gruppe entfernen?"
+    "removeMemberConfirm": "{{ username }} aus dieser Gruppe entfernen?",
+    "manageBonus": "Bonuspunkte verwalten",
+    "bonusPoints": "Bonuspunkte",
+    "bonusReason": "Grund (optional)",
+    "awardBonus": "Bonus vergeben",
+    "bonusAwarded": "Bonus vergeben ✓",
+    "noBonuses": "Noch keine Bonuspunkte vergeben.",
+    "removeBonusConfirm": "Diesen Bonus entfernen?",
+    "awardedBy": "Vergeben von"
   },
   "competition": {
     "status": {

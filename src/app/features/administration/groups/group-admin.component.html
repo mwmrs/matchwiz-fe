@@ -95,9 +95,14 @@
                     }
                   </span>
                 </div>
-                <button mat-icon-button (click)="removeMember(member.userId)" [attr.aria-label]="t('admin.delete')">
-                  <mat-icon>person_remove</mat-icon>
-                </button>
+                <div class="member-actions">
+                  <button mat-icon-button (click)="openBonusDialog(member)" [attr.aria-label]="t('admin.manageBonus')">
+                    <mat-icon>stars</mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="removeMember(member.userId)" [attr.aria-label]="t('admin.delete')">
+                    <mat-icon>person_remove</mat-icon>
+                  </button>
+                </div>
               </div>
             }
           </div>

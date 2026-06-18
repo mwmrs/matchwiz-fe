@@ -12,6 +12,11 @@
   gap: 8px;
 }
 
+.member-actions {
+  display: flex;
+  align-items: center;
+}
+
 .invite-form {
   display: flex;
   gap: var(--mw-spacing-sm);
