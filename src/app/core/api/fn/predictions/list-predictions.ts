@@ -12,6 +12,11 @@ import { Prediction } from '../../models/prediction';
 export interface ListPredictions$Params {
   id: number;
   groupId: number;
+
+/**
+ * ID of the user whose predictions to return. Defaults to the current user. When querying another user, only predictions for finished matches are returned.
+ */
+  userId?: number;
 }
 
 export function listPredictions(http: HttpClient, rootUrl: string, params: ListPredictions$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Prediction>>> {
@@ -19,6 +24,7 @@ export function listPredictions(http: HttpClient, rootUrl: string, params: ListP
   if (params) {
     rb.path('id', params.id, {});
     rb.query('groupId', params.groupId, {});
+    rb.query('userId', params.userId, {});
   }
 
   return http.request(
