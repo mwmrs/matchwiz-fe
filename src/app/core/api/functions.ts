@@ -49,6 +49,12 @@ export type { DeleteGroup$Params as DeleteGroup$Params } from './fn/groups/delet
 export { deleteGroup as deleteGroup } from './fn/groups/delete-group';
 export type { UpdateGroup$Params as UpdateGroup$Params } from './fn/groups/update-group';
 export { updateGroup as updateGroup } from './fn/groups/update-group';
+export type { ListManualBonuses$Params as ListManualBonuses$Params } from './fn/bonuses/list-manual-bonuses';
+export { listManualBonuses as listManualBonuses } from './fn/bonuses/list-manual-bonuses';
+export type { AwardManualBonus$Params as AwardManualBonus$Params } from './fn/bonuses/award-manual-bonus';
+export { awardManualBonus as awardManualBonus } from './fn/bonuses/award-manual-bonus';
+export type { RemoveManualBonus$Params as RemoveManualBonus$Params } from './fn/bonuses/remove-manual-bonus';
+export { removeManualBonus as removeManualBonus } from './fn/bonuses/remove-manual-bonus';
 export type { ListTeams$Params as ListTeams$Params } from './fn/teams/list-teams';
 export { listTeams as listTeams } from './fn/teams/list-teams';
 export type { CreateTeam$Params as CreateTeam$Params } from './fn/teams/create-team';

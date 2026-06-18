@@ -146,9 +146,9 @@ export const mockPredictions: Prediction[] = [
 ];
 
 export const mockRankings: RankingEntry[] = [
-  { rank: 1, userId: 2, username: 'alice', totalPoints: 42, exactPredictions: 5, goalDifferencePredictions: 8, tendencyPredictions: 10 },
-  { rank: 2, userId: 1, username: 'admin', totalPoints: 35, exactPredictions: 3, goalDifferencePredictions: 7, tendencyPredictions: 9 },
-  { rank: 3, userId: 3, username: 'bob', totalPoints: 28, exactPredictions: 2, goalDifferencePredictions: 5, tendencyPredictions: 8 },
+  { rank: 1, userId: 2, username: 'alice', totalPoints: 42, exactPredictions: 5, goalDifferencePredictions: 8, tendencyPredictions: 10, bonusPoints: 0 },
+  { rank: 2, userId: 1, username: 'admin', totalPoints: 35, exactPredictions: 3, goalDifferencePredictions: 7, tendencyPredictions: 9, bonusPoints: 0 },
+  { rank: 3, userId: 3, username: 'bob', totalPoints: 28, exactPredictions: 2, goalDifferencePredictions: 5, tendencyPredictions: 8, bonusPoints: 0 },
 ];
 
 export const mockNotifications: Notification[] = [

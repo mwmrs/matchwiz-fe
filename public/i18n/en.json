@@ -155,7 +155,15 @@
     "goalDifferencePoints": "Correct goal difference (points)",
     "tendencyPoints": "Correct tendency (points)",
     "stage": "Stage",
-    "removeMemberConfirm": "Remove {{ username }} from this group?"
+    "removeMemberConfirm": "Remove {{ username }} from this group?",
+    "manageBonus": "Manage bonus points",
+    "bonusPoints": "Bonus points",
+    "bonusReason": "Reason (optional)",
+    "awardBonus": "Award bonus",
+    "bonusAwarded": "Bonus awarded ✓",
+    "noBonuses": "No bonus points awarded yet.",
+    "removeBonusConfirm": "Remove this bonus?",
+    "awardedBy": "Awarded by"
   },
   "competition": {
     "status": {
