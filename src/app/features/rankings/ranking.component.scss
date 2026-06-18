@@ -108,6 +108,14 @@
   display: block;
 }
 
+.mat-column-points,
+.mat-column-exact,
+.mat-column-goalDiff,
+.mat-column-tendency,
+.mat-column-bonus {
+  text-align: right;
+}
+
 .points-value {
   font-size: 18px;
   font-weight: 800;
