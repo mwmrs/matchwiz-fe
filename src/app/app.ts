@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/cor
 import { RouterOutlet } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { AuthStore } from './core/auth/auth.store';
-import { ThemeService } from './core/theme/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +12,6 @@ import { ThemeService } from './core/theme/theme.service';
 export class App {
   private readonly authStore = inject(AuthStore);
   private readonly transloco = inject(TranslocoService);
-  private readonly themeService = inject(ThemeService);
 
   constructor() {
     effect(() => {
