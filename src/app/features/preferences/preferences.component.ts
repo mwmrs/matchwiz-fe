@@ -39,6 +39,7 @@ export class PreferencesComponent implements OnInit {
   protected readonly languages = [
     { value: 'en', label: 'English' },
     { value: 'de', label: 'Deutsch' },
+    { value: 'es', label: 'Español' },
   ];
 
   protected readonly themes = [
