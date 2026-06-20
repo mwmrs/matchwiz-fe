@@ -99,6 +99,11 @@
   align-items: center;
 }
 
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
 .points-badge {
   background: rgba(198, 255, 0, 0.15);
   color: var(--mw-accent);
@@ -107,4 +112,10 @@
   font-size: 11px;
   font-weight: 700;
   white-space: nowrap;
+
+  &--live {
+    background: rgba(255, 165, 0, 0.15);
+    color: #dc2626;
+    animation: live-pulse 1.5s ease-in-out infinite;
+  }
 }

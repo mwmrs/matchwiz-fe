@@ -18,7 +18,7 @@
     } @else {
       <div class="matchday-groups">
         @for (group of groups(); track group.matchdayNumber) {
-          <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel [expanded]="$first">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 {{ t('dashboard.matchday', { number: group.matchdayNumber }) }}
@@ -54,8 +54,8 @@
                   </span>
 
                   <span class="points-cell">
-                    @if (row.awardedPoints != null) {
-                      <span class="points-badge">+{{ row.awardedPoints }}</span>
+                    @if (row.awardedPoints != null && row.awardedPoints > 0) {
+                      <span class="points-badge" [class.points-badge--live]="row.isLive">+{{ row.awardedPoints }}</span>
                     }
                   </span>
 

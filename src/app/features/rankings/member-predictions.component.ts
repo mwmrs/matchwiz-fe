@@ -25,6 +25,7 @@ interface PredictionRow {
   predictedHomeGoals: number;
   predictedAwayGoals: number;
   awardedPoints: number | undefined;
+  isLive: boolean;
 }
 
 @Component({
@@ -53,7 +54,7 @@ export class MemberPredictionsComponent implements OnInit {
       map.set(row.matchdayNumber, bucket);
     }
     return [...map.entries()]
-      .sort(([a], [b]) => a - b)
+      .sort(([a], [b]) => b - a)
       .map(([matchdayNumber, rows]) => ({ matchdayNumber, rows }));
   });
 
@@ -81,7 +82,7 @@ export class MemberPredictionsComponent implements OnInit {
         const rows: PredictionRow[] = [];
         for (const { matchday, matches, predictions } of results) {
           for (const match of matches) {
-            if (match.status !== 'FINISHED') continue;
+            if (!(match.status === 'FINISHED' || match.status === 'LIVE')) continue;
             const prediction = predictions.find(p => p.matchId === match.id);
             if (!prediction) continue;
             rows.push({
@@ -95,6 +96,7 @@ export class MemberPredictionsComponent implements OnInit {
               predictedHomeGoals: prediction.predictedHomeGoals,
               predictedAwayGoals: prediction.predictedAwayGoals,
               awardedPoints: prediction.awardedPoints,
+              isLive: match.status === 'LIVE',
             });
           }
         }

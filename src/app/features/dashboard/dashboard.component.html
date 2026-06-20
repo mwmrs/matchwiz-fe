@@ -28,12 +28,13 @@
         <h2 class="section-title">{{ t('dashboard.activeCompetition') }}</h2>
         <div class="info-card">
           <div class="comp-info">
-            <span class="comp-name">{{ competition()!.name }}</span>
-            <span class="comp-season">{{ competition()!.season }}</span>
-          </div>
-          <span class="status-badge" [class]="'status-' + competition()!.status.toLowerCase()">
-            {{ t('competition.status.' + competition()!.status) }}
-          </span>
+            <span class="comp-name">{{ competition()!.name }}
+              <span class="status-badge" [class]="'status-' + competition()!.status.toLowerCase()">
+                {{ t('competition.status.' + competition()!.status) }}
+              </span>
+            </span>
+            <span class="comp-season">{{ competition()!.season }}</span>            
+          </div>          
           @if (currentMatches().length > 0) {
             <app-match-status-preview
             [matches]="currentMatches()"
