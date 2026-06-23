@@ -87,3 +87,7 @@ export type { ListNotifications$Params as ListNotifications$Params } from './fn/
 export { listNotifications as listNotifications } from './fn/notifications/list-notifications';
 export type { MarkNotificationRead$Params as MarkNotificationRead$Params } from './fn/notifications/mark-notification-read';
 export { markNotificationRead as markNotificationRead } from './fn/notifications/mark-notification-read';
+export type { GetLegalNotice$Params as GetLegalNotice$Params } from './fn/legal-notice/get-legal-notice';
+export { getLegalNotice as getLegalNotice } from './fn/legal-notice/get-legal-notice';
+export type { UpdateLegalNotice$Params as UpdateLegalNotice$Params } from './fn/legal-notice/update-legal-notice';
+export { updateLegalNotice as updateLegalNotice } from './fn/legal-notice/update-legal-notice';

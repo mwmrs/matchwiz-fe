@@ -1,0 +1,35 @@
+<ng-container *transloco="let t">
+  <div class="impressum-page">
+    <mat-card class="impressum-card">
+      <mat-card-header>
+        <mat-card-title>{{ t('impressum.title') }}</mat-card-title>
+        <mat-card-subtitle>{{ t('impressum.legalNotice') }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        @if (legalNotice() === undefined) {
+          <div class="impressum-spinner">
+            <mat-spinner diameter="32" />
+          </div>
+        } @else if (legalNotice() === null) {
+          <p class="impressum-error">{{ t('common.error') }}</p>
+        } @else {
+          <dl class="impressum-list">
+            <dt>{{ t('impressum.name') }}</dt>
+            <dd>{{ legalNotice()!.name }}</dd>
+
+            <dt>{{ t('impressum.address') }}</dt>
+            <dd>{{ legalNotice()!.address }}</dd>
+
+            <dt>{{ t('impressum.telephone') }}</dt>
+            <dd>{{ legalNotice()!.telephone }}</dd>
+
+            <dt>{{ t('impressum.email') }}</dt>
+            <dd>{{ legalNotice()!.email }}</dd>
+          </dl>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <a mat-button routerLink="/" class="back-link">{{ t('common.back') }}</a>
+  </div>
+</ng-container>

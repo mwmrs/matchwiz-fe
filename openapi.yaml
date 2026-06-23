@@ -21,6 +21,7 @@ tags:
   - name: rankings
   - name: bonuses
   - name: notifications
+  - name: legal-notice
 
 paths:
   /auth/login:
@@ -955,6 +956,41 @@ paths:
               schema:
                 $ref: '#/components/schemas/Notification'
 
+  /legal-notice:
+    get:
+      tags: [legal-notice]
+      operationId: getLegalNotice
+      summary: Public endpoint returning the legal notice (Impressum)
+      responses:
+        '200':
+          description: Legal notice data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalNotice'
+    put:
+      tags: [legal-notice]
+      operationId: updateLegalNotice
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LegalNotice'
+      responses:
+        '200':
+          description: Updated legal notice
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegalNotice'
+        '400':
+          description: Validation error (blank fields)
+        '403':
+          description: Admin role required
+
 components:
   securitySchemes:
     bearerAuth:
@@ -1440,3 +1476,17 @@ components:
         createdAt:
           type: string
           format: date-time
+
+    LegalNotice:
+      type: object
+      required: [name, address, telephone, email]
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+        telephone:
+          type: string
+        email:
+          type: string
+          format: email

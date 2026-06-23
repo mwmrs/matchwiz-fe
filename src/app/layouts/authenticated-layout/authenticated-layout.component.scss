@@ -47,6 +47,20 @@
   }
 }
 
+.impressum-link {
+  display: block;
+  padding: 4px 16px 8px;
+  font-size: 11px;
+  color: var(--mw-text-muted);
+  text-decoration: none;
+  opacity: 0.5;
+
+  &:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+}
+
 ::ng-deep .active-link {
   background: rgba(198, 255, 0, 0.12) !important;
   color: var(--mw-accent) !important;

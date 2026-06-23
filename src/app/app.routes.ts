@@ -136,5 +136,18 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'impressum',
+    component: PublicLayoutComponent,
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/impressum/impressum.component').then(
+            (m) => m.ImpressumComponent
+          ),
+      },
+    ],
+  },
   { path: '**', redirectTo: 'login' },
 ];

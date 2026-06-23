@@ -221,6 +221,14 @@
     "predictedAway": "Predicted Away Goals",
     "noData": "No finished match predictions found."
   },
+  "impressum": {
+    "title": "Impressum",
+    "legalNotice": "Information according to § 5 DDG",
+    "name": "Name",
+    "address": "Address",
+    "telephone": "Phone",
+    "email": "Email"
+  },
   "common": {
     "loading": "Loading...",
     "error": "An error occurred. Please try again.",
