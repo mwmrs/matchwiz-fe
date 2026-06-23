@@ -90,6 +90,13 @@
   &.current-user {
     color: var(--mw-accent);
   }
+
+  .nav-hint {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
 }
 
 .you-badge {
@@ -120,6 +127,7 @@
   font-size: 18px;
   font-weight: 800;
   font-family: 'Inter', sans-serif;
+  font-variant-numeric: tabular-nums;
   color: var(--mw-accent);
 }
 
