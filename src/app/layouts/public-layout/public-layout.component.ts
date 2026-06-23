@@ -1,21 +1,27 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-public-layout',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RouterLink, TranslocoModule],
   template: `
-    <div class="public-shell">
-      <header class="public-header">
-        <div class="logo">
-          <span class="logo-icon">⚽</span>
-          <span class="logo-text">MatchWiz</span>
-        </div>
-      </header>
-      <main class="public-content">
-        <router-outlet />
-      </main>
-    </div>
+    <ng-container *transloco="let t">
+      <div class="public-shell">
+        <header class="public-header">
+          <div class="logo">
+            <span class="logo-icon">⚽</span>
+            <span class="logo-text">MatchWiz</span>
+          </div>
+        </header>
+        <main class="public-content">
+          <router-outlet />
+        </main>
+        <footer class="public-footer">
+          <a routerLink="/impressum">{{ t('impressum.title') }}</a>
+        </footer>
+      </div>
+    </ng-container>
   `,
   styles: [`
     .public-shell {
@@ -55,6 +61,23 @@ import { RouterOutlet } from '@angular/router';
       align-items: center;
       justify-content: center;
       padding: var(--mw-spacing-md);
+    }
+
+    .public-footer {
+      padding: var(--mw-spacing-md);
+      text-align: center;
+
+      a {
+        font-size: 12px;
+        color: var(--mw-text-muted);
+        text-decoration: none;
+        opacity: 0.6;
+
+        &:hover {
+          opacity: 1;
+          text-decoration: underline;
+        }
+      }
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,

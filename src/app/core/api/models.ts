@@ -12,6 +12,7 @@ export type { GlobalRole } from './models/global-role';
 export type { Group } from './models/group';
 export type { GroupMembership } from './models/group-membership';
 export type { GroupRole } from './models/group-role';
+export type { LegalNotice } from './models/legal-notice';
 export type { LoginRequest } from './models/login-request';
 export type { LoginResponse } from './models/login-response';
 export type { ManualBonus } from './models/manual-bonus';

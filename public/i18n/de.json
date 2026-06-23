@@ -221,6 +221,14 @@
     "predictedAway": "Tipp Auswärtstore",
     "noData": "Keine fertigen Spieltipps gefunden."
   },
+  "impressum": {
+    "title": "Impressum",
+    "legalNotice": "Angaben gemäß § 5 DDG",
+    "name": "Name",
+    "address": "Adresse",
+    "telephone": "Telefon",
+    "email": "E-Mail"
+  },
   "common": {
     "loading": "Laden...",
     "error": "Ein Fehler ist aufgetreten. Bitte versuche es erneut.",
