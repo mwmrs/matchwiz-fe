@@ -11,12 +11,18 @@ import { RankingEntry } from '../../models/ranking-entry';
 
 export interface GetGroupRankings$Params {
   id: number;
+
+/**
+ * When provided, returns rankings computed only for the specified matchday. When omitted, returns the overall cumulative rankings.
+ */
+  matchdayId?: number;
 }
 
 export function getGroupRankings(http: HttpClient, rootUrl: string, params: GetGroupRankings$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<RankingEntry>>> {
   const rb = new RequestBuilder(rootUrl, getGroupRankings.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
+    rb.query('matchdayId', params.matchdayId, {});
   }
 
   return http.request(

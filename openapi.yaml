@@ -909,6 +909,15 @@ paths:
           schema:
             type: integer
             format: int64
+        - name: matchdayId
+          in: query
+          required: false
+          description: >
+            When provided, returns rankings computed only for the specified matchday.
+            When omitted, returns the overall cumulative rankings.
+          schema:
+            type: integer
+            format: int64
       responses:
         '200':
           description: Group rankings

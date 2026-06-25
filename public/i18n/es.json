@@ -89,7 +89,9 @@
     "rulesExact": "Resultado exacto",
     "rulesGoalDiff": "Diferencia de goles correcta",
     "rulesTendency": "Tendencia correcta",
-    "rulesPts": "PTS"
+    "rulesPts": "PTS",
+    "filterMatchday": "Jornada",
+    "allMatchdays": "Todas las jornadas"
   },
   "preferences": {
     "title": "Configuración",
