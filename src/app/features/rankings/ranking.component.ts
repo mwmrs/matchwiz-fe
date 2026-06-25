@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, map, switchMap } from 'rxjs';
@@ -9,11 +9,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoModule } from '@jsverse/transloco';
 import { AuthStore } from '../../core/auth/auth.store';
-import type { Group, RankingEntry, ScoringRule } from '../../core/api/models';
+import { MatchdayFilterComponent } from './matchday-filter.component';
+import type { Group, Matchday, RankingEntry, ScoringRule } from '../../core/api/models';
 
 @Component({
   selector: 'app-ranking',
-  imports: [RouterLink, MatButtonModule, MatTableModule, MatProgressSpinnerModule, MatIconModule, MatTooltipModule, TranslocoModule],
+  imports: [RouterLink, MatButtonModule, MatTableModule, MatProgressSpinnerModule, MatIconModule, MatTooltipModule, TranslocoModule, MatchdayFilterComponent],
   templateUrl: './ranking.component.html',
   styleUrl: './ranking.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,6 +28,10 @@ export class RankingComponent implements OnInit {
   protected readonly rankings = signal<RankingEntry[]>([]);
   protected readonly scoringRule = signal<ScoringRule | null>(null);
   protected readonly loading = signal(true);
+  protected readonly matchdays = signal<Matchday[]>([]);
+  protected readonly filteredRankings = signal<RankingEntry[] | null>(null);
+
+  protected readonly displayedRankings = computed(() => this.filteredRankings() ?? this.rankings());
 
   protected readonly displayedColumns = ['rank', 'player', 'points', 'exact', 'goalDiff', 'tendency', 'bonus'];
 
@@ -37,14 +42,16 @@ export class RankingComponent implements OnInit {
       group: this.http.get<Group>(`/api/groups/${id}`),
     }).pipe(
       switchMap(({ rankings, group }) =>
-        this.http.get<ScoringRule>(`/api/competitions/${group.competitionId}/scoring-rules`).pipe(
-          map(scoringRule => ({ rankings, scoringRule }))
-        )
+        forkJoin({
+          scoringRule: this.http.get<ScoringRule>(`/api/competitions/${group.competitionId}/scoring-rules`),
+          matchdays: this.http.get<Matchday[]>(`/api/matchdays`, { params: { competitionId: group.competitionId } }),
+        }).pipe(map(rest => ({ rankings, ...rest })))
       )
     ).subscribe({
-      next: ({ rankings, scoringRule }) => {
+      next: ({ rankings, scoringRule, matchdays }) => {
         this.rankings.set(rankings);
         this.scoringRule.set(scoringRule);
+        this.matchdays.set(matchdays);
         this.loading.set(false);
       },
       error: () => this.loading.set(false),

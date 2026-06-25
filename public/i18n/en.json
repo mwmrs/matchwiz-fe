@@ -89,7 +89,9 @@
     "rulesExact": "Exact result",
     "rulesGoalDiff": "Correct goal difference",
     "rulesTendency": "Correct tendency",
-    "rulesPts": "pts"
+    "rulesPts": "pts",
+    "filterMatchday": "Matchday",
+    "allMatchdays": "All matchdays"
   },
   "preferences": {
     "title": "Preferences",

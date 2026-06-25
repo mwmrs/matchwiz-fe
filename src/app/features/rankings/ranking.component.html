@@ -14,8 +14,15 @@
     } @else if (rankings().length === 0) {
       <p class="empty-msg">{{ t('rankings.noData') }}</p>
     } @else {
+      <div class="filter-row">
+        <app-matchday-filter
+          [matchdays]="matchdays()"
+          [groupId]="groupId()"
+          (rankingsChange)="filteredRankings.set($event)"
+        />
+      </div>
       <div class="table-wrapper">
-        <table mat-table [dataSource]="rankings()" class="rankings-table" aria-label="Group rankings">
+        <table mat-table [dataSource]="displayedRankings()" class="rankings-table" aria-label="Group rankings">
           <!-- Rank column -->
           <ng-container matColumnDef="rank">
             <th mat-header-cell *matHeaderCellDef>{{ t('rankings.rank') }}</th>

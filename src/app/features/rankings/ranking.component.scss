@@ -27,6 +27,16 @@
   font-size: 14px;
 }
 
+.filter-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--mw-spacing-md);
+
+  mat-form-field {
+    min-width: 180px;
+  }
+}
+
 .table-wrapper {
   background: var(--mw-surface);
   border-radius: var(--mw-radius-lg);
