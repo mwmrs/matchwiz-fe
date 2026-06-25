@@ -153,3 +153,7 @@ mat-form-field {
   background: var(--mw-surface-2);
   border-radius: var(--mw-radius-lg) !important;
 }
+
+.snack-success .mdc-snackbar__label {
+  text-align: center;
+}

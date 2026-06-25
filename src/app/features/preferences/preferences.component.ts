@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { take } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -110,8 +111,9 @@ export class PreferencesComponent implements OnInit {
         if (value.preferredLanguage) {
           this.transloco.setActiveLang(value.preferredLanguage);
         }
-        const msg = this.transloco.translate('preferences.saved');
-        this.snackBar.open(msg, '', { duration: 3000, panelClass: 'snack-success' });
+        this.transloco.selectTranslate('preferences.saved').pipe(take(1)).subscribe(msg => {
+          this.snackBar.open(msg, '', { duration: 3000, panelClass: 'snack-success', horizontalPosition: 'center' });
+        });
       },
       error: () => this.saving.set(false),
     });
