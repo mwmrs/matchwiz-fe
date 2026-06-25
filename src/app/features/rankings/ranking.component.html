@@ -47,7 +47,7 @@
                  [class.current-user]="isCurrentUser(entry.userId)"
                  [routerLink]="['/rankings', groupId(), 'member', entry.userId]"
                  [queryParams]="{ username: entry.username }">
-                <mat-icon class="nav-hint" aria-hidden="true">chevron_right</mat-icon>
+                <mat-icon class="nav-hint" aria-hidden="true">account_circle</mat-icon>
                 {{ entry.username }}
                 @if (isCurrentUser(entry.userId)) {
                   <span class="you-badge">You</span>
