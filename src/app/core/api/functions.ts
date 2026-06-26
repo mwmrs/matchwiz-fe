@@ -9,6 +9,10 @@ export type { RequestPasswordReset$Params as RequestPasswordReset$Params } from 
 export { requestPasswordReset as requestPasswordReset } from './fn/auth/request-password-reset';
 export type { ConfirmPasswordReset$Params as ConfirmPasswordReset$Params } from './fn/auth/confirm-password-reset';
 export { confirmPasswordReset as confirmPasswordReset } from './fn/auth/confirm-password-reset';
+export type { RequestEmailVerification$Params as RequestEmailVerification$Params } from './fn/auth/request-email-verification';
+export { requestEmailVerification as requestEmailVerification } from './fn/auth/request-email-verification';
+export type { ConfirmEmailVerification$Params as ConfirmEmailVerification$Params } from './fn/auth/confirm-email-verification';
+export { confirmEmailVerification as confirmEmailVerification } from './fn/auth/confirm-email-verification';
 export type { ListUsers$Params as ListUsers$Params } from './fn/users/list-users';
 export { listUsers as listUsers } from './fn/users/list-users';
 export type { ApproveUser$Params as ApproveUser$Params } from './fn/users/approve-user';

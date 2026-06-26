@@ -106,7 +106,18 @@
     "matchdayReminders": "Spieltag-Erinnerungen",
     "twoFactor": "Zwei-Faktor-Authentifizierung",
     "saveBtn": "Änderungen speichern",
-    "saved": "Einstellungen gespeichert."
+    "saved": "Einstellungen gespeichert.",
+    "emailVerification": "E-Mail-Verifizierung",
+    "emailVerified": "E-Mail-Adresse verifiziert",
+    "emailNotVerified": "E-Mail-Adresse nicht verifiziert",
+    "emailNotVerifiedBanner": "Deine E-Mail-Adresse ist nicht verifiziert.",
+    "verifyNow": "Jetzt verifizieren",
+    "verifyEmailBtn": "Bestätigungscode senden",
+    "verifyEmailCodeSent": "Ein Bestätigungscode wurde an deine E-Mail-Adresse gesendet.",
+    "verifyEmailCode": "Bestätigungscode",
+    "confirmVerifyBtn": "Bestätigen",
+    "verifyInvalidCode": "Dieser Code ist ungültig oder abgelaufen.",
+    "noEmailToVerify": "Füge zuerst eine E-Mail-Adresse hinzu, um die Verifizierung zu aktivieren."
   },
   "admin": {
     "title": "Verwaltung",

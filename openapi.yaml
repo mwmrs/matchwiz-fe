@@ -96,6 +96,36 @@ paths:
         '400':
           description: Invalid or expired code
 
+  /auth/verify-email/request:
+    post:
+      tags: [auth]
+      operationId: requestEmailVerification
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Verification code sent to the account's email address
+        '400':
+          description: No email address on account
+
+  /auth/verify-email/confirm:
+    post:
+      tags: [auth]
+      operationId: confirmEmailVerification
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyEmailRequest'
+      responses:
+        '204':
+          description: Email address verified
+        '400':
+          description: Invalid or expired code
+
   /users:
     get:
       tags: [users]
@@ -1053,6 +1083,13 @@ components:
         code:
           type: string
         newPassword:
+          type: string
+
+    VerifyEmailRequest:
+      type: object
+      required: [code]
+      properties:
+        code:
           type: string
 
     UpdateUserRequest:

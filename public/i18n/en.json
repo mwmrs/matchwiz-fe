@@ -106,7 +106,18 @@
     "matchdayReminders": "Matchday reminders",
     "twoFactor": "Two-factor authentication",
     "saveBtn": "Save changes",
-    "saved": "Preferences saved."
+    "saved": "Preferences saved.",
+    "emailVerification": "Email verification",
+    "emailVerified": "Email address verified",
+    "emailNotVerified": "Email address not verified",
+    "emailNotVerifiedBanner": "Your email address is not verified.",
+    "verifyNow": "Verify now",
+    "verifyEmailBtn": "Send verification code",
+    "verifyEmailCodeSent": "A verification code has been sent to your email address.",
+    "verifyEmailCode": "Verification code",
+    "confirmVerifyBtn": "Confirm",
+    "verifyInvalidCode": "This verification code is invalid or has expired.",
+    "noEmailToVerify": "Add an email address first to enable email verification."
   },
   "admin": {
     "title": "Administration",

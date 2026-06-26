@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { take } from 'rxjs';
@@ -8,8 +8,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { AuthStore } from '../../core/auth/auth.store';
+import { AuthService } from '../../core/auth/auth.service';
 import type { UpdateUserRequest, User } from '../../core/api/models';
 
 @Component({
@@ -22,6 +25,8 @@ import type { UpdateUserRequest, User } from '../../core/api/models';
     MatButtonModule,
     MatSlideToggleModule,
     MatSnackBarModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
     TranslocoModule,
   ],
   templateUrl: './preferences.component.html',
@@ -33,9 +38,17 @@ export class PreferencesComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly snackBar = inject(MatSnackBar);
   private readonly transloco = inject(TranslocoService);
+  private readonly authService = inject(AuthService);
   protected readonly authStore = inject(AuthStore);
 
   protected readonly saving = signal(false);
+  protected readonly verifyStep = signal<'idle' | 'sent' | 'done'>('idle');
+  protected readonly verifyLoading = signal(false);
+  protected readonly verifyError = signal<string | null>(null);
+
+  protected readonly isVerified = computed(
+    () => this.authStore.user()?.emailVerified === true || this.verifyStep() === 'done',
+  );
 
   protected readonly languages = [
     { value: 'en', label: 'English' },
@@ -63,6 +76,10 @@ export class PreferencesComponent implements OnInit {
     twoFactorEnabled: [{ value: false, disabled: true }],
   });
 
+  protected readonly verifyCodeForm = this.fb.group({
+    code: ['', Validators.required],
+  });
+
   ngOnInit() {
     const user = this.authStore.user();
     if (user) {
@@ -82,6 +99,9 @@ export class PreferencesComponent implements OnInit {
     if (this.form.invalid) return;
     this.saving.set(true);
     const value = this.form.getRawValue();
+    const currentUser = this.authStore.user();
+    const emailChanged = value.email !== (currentUser?.email ?? '');
+
     const payload: UpdateUserRequest = {
       email: value.email ?? undefined,
       preferredLanguage: value.preferredLanguage ?? undefined,
@@ -95,11 +115,11 @@ export class PreferencesComponent implements OnInit {
     this.http.patch('/api/users/me', payload).subscribe({
       next: () => {
         this.saving.set(false);
-        const currentUser = this.authStore.user();
         if (currentUser) {
           this.authStore.setUser({
             ...currentUser,
             email: value.email ?? currentUser.email,
+            emailVerified: emailChanged ? false : currentUser.emailVerified,
             preferredLanguage: value.preferredLanguage ?? currentUser.preferredLanguage,
             timezone: value.timezone ?? currentUser.timezone,
             theme: (value.theme as User['theme']) ?? currentUser.theme,
@@ -107,6 +127,10 @@ export class PreferencesComponent implements OnInit {
             matchdayReminders: value.matchdayReminders ?? currentUser.matchdayReminders,
             twoFactorEnabled: value.twoFactorEnabled ?? currentUser.twoFactorEnabled,
           });
+        }
+        if (emailChanged) {
+          this.verifyStep.set('idle');
+          this.verifyError.set(null);
         }
         if (value.preferredLanguage) {
           this.transloco.setActiveLang(value.preferredLanguage);
@@ -116,6 +140,42 @@ export class PreferencesComponent implements OnInit {
         });
       },
       error: () => this.saving.set(false),
+    });
+  }
+
+  requestVerification() {
+    this.verifyLoading.set(true);
+    this.verifyError.set(null);
+    this.authService.requestEmailVerification().subscribe({
+      next: () => {
+        this.verifyLoading.set(false);
+        this.verifyStep.set('sent');
+        this.verifyCodeForm.reset();
+      },
+      error: () => {
+        this.verifyLoading.set(false);
+        this.verifyError.set('common.error');
+      },
+    });
+  }
+
+  confirmVerification() {
+    if (this.verifyCodeForm.invalid) return;
+    this.verifyLoading.set(true);
+    this.verifyError.set(null);
+    const code = this.verifyCodeForm.getRawValue().code!;
+    this.authService.confirmEmailVerification(code).subscribe({
+      next: () => {
+        this.authService.getMe().pipe(take(1)).subscribe(user => {
+          this.authStore.setUser(user);
+          this.verifyLoading.set(false);
+          this.verifyStep.set('done');
+        });
+      },
+      error: (err: { status?: number }) => {
+        this.verifyLoading.set(false);
+        this.verifyError.set(err.status === 400 ? 'preferences.verifyInvalidCode' : 'common.error');
+      },
     });
   }
 }
