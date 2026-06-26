@@ -59,7 +59,7 @@ export class PreferencesComponent implements OnInit {
     timezone: ['Europe/Berlin'],
     theme: ['DARK'],
     emailNotifications: [false],
-    matchdayReminders: [{ value: false, disabled: true }],
+    matchdayReminders: [false],
     twoFactorEnabled: [{ value: false, disabled: true }],
   });
 
