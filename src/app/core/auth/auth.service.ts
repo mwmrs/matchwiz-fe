@@ -25,4 +25,12 @@ export class AuthService {
   confirmPasswordReset(req: PasswordResetConfirmRequest) {
     return this.http.post<void>('/api/auth/password-reset/confirm', req);
   }
+
+  requestEmailVerification() {
+    return this.http.post<void>('/api/auth/verify-email/request', {});
+  }
+
+  confirmEmailVerification(code: string) {
+    return this.http.post<void>('/api/auth/verify-email/confirm', { code });
+  }
 }

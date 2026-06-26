@@ -122,6 +122,35 @@
   }
 }
 
+.email-verify-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--mw-spacing-sm);
+  padding: var(--mw-spacing-sm) var(--mw-spacing-md);
+  background: rgba(255, 109, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 109, 0, 0.3);
+  font-size: 14px;
+  color: var(--mw-warn);
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  span {
+    flex: 1;
+  }
+
+  a {
+    color: var(--mw-warn);
+    font-weight: 700;
+    text-decoration: underline;
+    white-space: nowrap;
+  }
+}
+
 /* Bottom navigation — mobile only */
 .bottom-nav {
   position: fixed;

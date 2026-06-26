@@ -68,6 +68,13 @@
       </mat-toolbar>
 
       <div class="content-area">
+        @if (authStore.user()?.email && authStore.user()?.emailVerified === false) {
+          <div class="email-verify-banner" role="alert">
+            <mat-icon aria-hidden="true">warning</mat-icon>
+            <span>{{ t('preferences.emailNotVerifiedBanner') }}</span>
+            <a routerLink="/preferences">{{ t('preferences.verifyNow') }}</a>
+          </div>
+        }
         <router-outlet />
       </div>
 

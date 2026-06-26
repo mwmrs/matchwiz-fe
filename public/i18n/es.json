@@ -106,7 +106,18 @@
     "matchdayReminders": "Recordatorios de jornada",
     "twoFactor": "Verificación en dos pasos",
     "saveBtn": "Guardar cambios",
-    "saved": "¡Configuraciones guardadas!"
+    "saved": "¡Configuraciones guardadas!",
+    "emailVerification": "Verificación de correo electrónico",
+    "emailVerified": "Dirección electrónica verificada",
+    "emailNotVerified": "Dirección electrónica no verificada",
+    "emailNotVerifiedBanner": "Tu dirección electrónica no está verificada.",
+    "verifyNow": "Verificar ahora",
+    "verifyEmailBtn": "Enviar código de verificación",
+    "verifyEmailCodeSent": "Se ha enviado un código de verificación a tu dirección electrónica.",
+    "verifyEmailCode": "Código de verificación",
+    "confirmVerifyBtn": "Confirmar",
+    "verifyInvalidCode": "Este código de verificación no es válido o ha expirado.",
+    "noEmailToVerify": "Añade primero una dirección electrónica para activar la verificación."
   },
   "admin": {
     "title": "Administración",

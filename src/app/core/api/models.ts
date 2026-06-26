@@ -36,3 +36,4 @@ export type { UpdateCompetitionRequest } from './models/update-competition-reque
 export type { UpdateMatchRequest } from './models/update-match-request';
 export type { UpdateUserRequest } from './models/update-user-request';
 export type { User } from './models/user';
+export type { VerifyEmailRequest } from './models/verify-email-request';
