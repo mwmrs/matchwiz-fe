@@ -20,7 +20,7 @@
 #   docker compose pull && docker compose up -d
 #   (add --profile localdb if you are running a local database)
 #
-# With Lighttpd reverse proxy: the frontend is reachable on http://<pi-ip>/matchwiz/
+# With Lighttpd reverse proxy: the frontend is reachable on https://matchwiz.mwmrs.de/
 # Without reverse proxy: directly on http://<pi-ip>:<MATCHWIZ_FRONTEND_PORT>
 
 services:
