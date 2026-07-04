@@ -69,7 +69,8 @@ services:
 
       MATCHWIZ_NOTIFY_EMAIL:  ${MATCHWIZ_NOTIFY_EMAIL}
 
-      # CORS — only needed for direct backend access; nginx proxy removes the need.
+      # CORS — Quarkus' CORS filter returns 403 for any non-listed Origin,
+      # even same-origin POSTs via the proxy. Must list the public host.
       MATCHWIZ_CORS_ORIGINS: ${MATCHWIZ_CORS_ORIGINS:-http://localhost}
 
       # JWT keys — mounted from the secrets/ directory (see prerequisites above).

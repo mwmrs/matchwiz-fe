@@ -33,7 +33,7 @@ export class MatchdayListComponent implements OnInit {
       }),
     ).subscribe({
       next: (matchdays) => {
-        const sorted = [...matchdays].sort((a, b) => a.number - b.number);
+        const sorted = [...matchdays].sort((a, b) => b.number - a.number);
         this.matchdays.set(sorted);
         this.loading.set(false);
       },
