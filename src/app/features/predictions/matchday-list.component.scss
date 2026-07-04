@@ -1,4 +1,6 @@
 .matchday-list {
+  max-width: 720px;
+  margin: 0 auto;
   padding: 24px;
 }
 
@@ -42,7 +44,6 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-width: 600px;
 }
 
 .matchday-card {
