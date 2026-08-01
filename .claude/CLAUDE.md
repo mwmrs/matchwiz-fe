@@ -51,5 +51,5 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 ## Services
 
 - Design services around a single responsibility
-- Use the `providedIn: 'root'` option for singleton services
+- Use the `providedIn: 'root'` option for singleton services, `@Service`for Angular v22+
 - Use the `inject()` function instead of constructor injection
